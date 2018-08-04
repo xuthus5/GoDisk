@@ -1,0 +1,19 @@
+.example {
+	@include has-shadow;
+	@include has-radius;
+	background-color: #fff;
+	padding: 1.5rem;
+	margin-bottom: 3.5rem;
+}
+
+.example p:last-child {
+	margin-bottom: 0;
+}
+
+
+.example-color {
+	@include has-radius;
+	@include has-shadow;
+	padding: 1rem;
+}
+

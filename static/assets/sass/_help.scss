@@ -1,0 +1,128 @@
+
+/* 辅助器 */
+
+.has-radius {
+  border-radius: 2px!important;
+}
+.no-radius {
+  border-radius: 0!important;
+}
+.has-shadow {
+  box-shadow: 0 10px 60px 0 rgba(29,29,31,.09)!important;
+}
+.has-border {
+  border: 1px solid $border-color!important;
+}
+/* 图片响应式 */
+.img-response {
+    display: inline-block;
+    height: auto;
+    max-width: 100%;
+}
+
+/* 圆图 */
+.img-circle {
+  border-radius:50% ;
+}
+/* 方图 */
+.img-round {
+  border-radius:2px;
+}
+
+
+
+/* flex弹性布局 */
+
+.flex {
+  display: flex;
+}
+
+.space-between{
+  justify-content: space-between;
+}
+
+/* 浮动 */
+
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}
+
+/* 字体居中 */
+
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
+}
+
+
+/* 扩展背景色 */
+.bg-body {
+  background-color: $bg-body;
+}
+
+
+/* 浮动 */
+
+@for $i from 1 through 40
+{
+
+  .mg#{$i}
+  {
+    margin:(1px * $i);
+  }
+
+  .pd#{$i}
+  {
+    margin:(1px * $i);
+  }
+
+  .mgt#{$i}
+  {
+    margin-top:(1px * $i);
+  }
+
+  .mgl#{$i}
+  {
+    margin:(1px * $i);
+  }
+
+  .mgr#{$i}
+  {
+    margin:(1px * $i);
+  }
+
+  .mgb#{$i}
+  {
+    margin:(1px * $i);
+  }
+
+
+  .pdt#{$i}
+  {
+    margin-top:(1px* $i);
+  }
+
+  .pdl#{$i}
+  {
+    margin:(1px * $i);
+  }
+
+  .pdr#{$i}
+  {
+    margin:(1px * $i);
+  }
+
+  .pdb#{$i}
+  {
+    margin:(1px * $i);
+  }
+
+}

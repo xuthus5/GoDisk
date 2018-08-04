@@ -1,0 +1,269 @@
+<style>
+    .thumb {
+        margin-left: 5px;
+        margin-top: 15px;
+        height: 128px
+    }
+
+    #preview {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        display: none;
+    }
+
+    #show {
+        max-width: 70%;
+        max-height: 80%;
+        margin: 10px auto
+    }
+</style>
+<div class="admin-menu fold">
+    <p class="admin-menu-f" id="admin-menu-f"><i class="layui-icon layui-icon-more"></i></p>
+    <ul>
+        <li class="menu-item">
+            <a href="/admin"><i class="layui-icon layui-icon-console "></i><span class="wb-nav-title"> 仪表盘</span> </a>
+            <span class="menu-item-tip">仪表盘</span>
+        </li>
+        <li class="menu-item ">
+            <a href="/classify"><i class="layui-icon layui-icon-table"></i> <span class="wb-nav-title"> 分类管理</span> </a>
+            <span class="menu-item-tip">分类管理</span>
+        </li>
+        <li class="menu-item active">
+            <a href="/filemanager"><i class="layui-icon layui-icon-template-1 "></i><span
+                    class="wb-nav-title"> 附件管理</span> </a>
+            <span class="menu-item-tip">附件管理</span>
+        </li>
+        <li class="menu-item">
+            <a href="/setting"><i class="layui-icon  layui-icon-set"></i><span class="wb-nav-title"> 系统设置</span></a>
+            <span class="menu-item-tip">系统设置</span>
+        </li>
+    </ul>
+</div>
+<div class="admin-submenu">
+    <div style="width: 100%; height: 100%">
+        <div class="submenu-scene">
+            仪表盘
+        </div>
+        <div class="submenu-item">文件管理</div>
+        <ul>
+            <li><a href="#"> 上传文件</a></li>
+            <li class="active"><a href="#">文件操作</a></li>
+        </ul>
+        <div id="admin-submenu-c">
+            <i class="layui-icon layui-icon-prev"></i>
+        </div>
+    </div>
+</div>
+<div class="admin-content">
+    <div class="layui-row layui-col-space30">
+        <div class="layui-col-md12">
+            <div class="adminpageheader">
+                <h2 class="adminpagetitle">当前位置：<a href="">文件管理</a></h2>
+            </div>
+            <div class="admin-block">
+                <div class="block">
+                    <div class="example">
+                        <form class="layui-form" action="" lay-filter="component-form-element" enctype="multipart/form-data">
+                            <div class="layui-row">
+                                <div class="layui-col-md12">
+                                    <div class="admin-lr">
+                                        <div class="layui-row  layui-form-item">
+                                            <div class="layui-col-md5">
+                                                <label class="layui-form-label">
+                                                    <span class="text-red">*</span>自定义文件名称
+                                                    <span class="lr-info"> (不填充默认文件名) </span>
+                                                </label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" name="name" id="name" placeholder="请输入自定义文件名称" autocomplete="off" class="layui-input">
+                                                </div>
+
+                                                <label class="layui-form-label">
+                                                    <span class="text-red">*</span>选择文件分类
+                                                    <span class="lr-info"> (便于附件管理) </span>
+                                                </label>
+                                                <div class="layui-input-block">
+                                                    <link rel="stylesheet" href="static/assets/formSelects-v4.css">
+                                                    <div class="layui-form">
+                                                        <select name="mark" id="mark" xm-select="select13" xm-select-radio="">
+                                                        {{range .classify}}
+                                                            <option value="{{.Mark}}">{{.Label}}</option>
+                                                        {{end}}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-col-md5 layui-col-md-offset2">
+                                                <label class="layui-form-label">
+                                                    <span class="text-red">*</span>选择文件
+                                                    <span class="lr-info">（请确保合法,当前只允许上传图片）</span>
+                                                </label>
+                                                <div class="layui-input-block">
+                                                    <div class="layui-upload">
+                                                        <button type="button" class="layui-btn layui-btn-normal"
+                                                                id="chooseFile"><i class="layui-icon"></i> 选择文件
+                                                        </button>
+                                                        <input type="hidden" name="filename" id="filename">
+                                                        <button type="button" class="layui-btn" id="upload" lay-filter="upload" lay-submit>开始上传
+                                                        </button>
+                                                        <div class='layui-input-block' id='div_prev' title=''></div>
+                                                        <div class="layui-upload-list" id="preview">
+                                                            <img id="show">
+                                                        </div>
+                                                        <p id="showError"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <h1 class="heading-mi">标签列表</h1>
+                    <table class="layui-table" lay-size="lg">
+                        <colgroup>
+                            <col width="50">
+                            <col width="150">
+                            <col width="150">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>名称</th>
+                            <th>分类</th>
+                            <th>路径</th>
+                            <th>上传时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range .list}}
+                        <tr>
+                            <td>{{.Id}}</td>
+                            <td>{{.Name}}</td>
+                            <td>{{.Mark}}</td>
+                            <td>{{.Path}}</td>
+                            <td>{{.Created}}</td>
+                        </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //全局定义一次, 加载formSelects
+    layui.config({
+        base: 'static/assets/' //此处路径请自行处理, 可以使用绝对路径
+    }).extend({
+        formSelects: 'formSelects-v4'
+    });
+    //加载模块
+    layui.use(['jquery', 'formSelects', 'upload', 'layer'], function () {
+        var $ = layui.jquery
+                , upload = layui.upload
+                , layer = layui.layer
+                ,form = layui.form;
+        //选完文件后自动上传
+        var uploadInst = upload.render({
+            elem: '#chooseFile', //绑定元素
+            accept: 'images', //允许上传的文件类型
+            //multiple: true, //允许多文件上传
+            auto: true, //选完文件后不要自动上传
+            size: 20480, //限制文件大小，单位 KB
+            //bindAction: '#upload', //指定一个按钮触发上传
+            //data: {"name": name, "mark": mark},//额外的参数
+            url: '/api/upload/', //上传接口
+            choose: function (obj) {
+                var files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //图像预览，如果是多文件，会逐个添加。(不支持ie8/9)
+                obj.preview(function (index, file, result) {
+                    var imgobj = new Image(); //创建新img对象
+                    imgobj.src = result; //指定数据源
+                    imgobj.className = 'thumb';
+                    imgobj.onclick = function (result) {
+                        //单击预览
+                        show.src = this.src;
+                        var w = $(window).width() - 42, h = $(window).height() - 42;
+                        layer.open({
+                            title: '预览',
+                            type: 1,
+                            area: [w, h], //宽高
+                            content: $('#preview')
+                        });
+                    };
+                    document.getElementById("div_prev").appendChild(imgobj); //添加到预览区域
+                });
+            },
+            done: function (res) {
+                //上传完毕回调
+                console.log(res);
+                if(res.Code === 1){
+                    document.getElementById("filename").value = res.FileName;
+                    return layer.msg('文件就绪，请上传');
+                }
+            },
+            error: function () {
+                //请求异常回调
+                //演示失败状态，并实现重传
+                var demoText = $('#showError');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+        //表单提交
+        form.on('submit(upload)', function (data) {
+            console.log(data.field);
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            var name = data.field.name;
+            var mark = data.field.mark;
+            var filename = data.field.filename;
+
+            xmlhttp.onreadystatechange = state_Change;
+            xmlhttp.open("POST", "/api/saveFile", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("name=" + name + "&mark=" + mark + "&filename=" + filename);
+
+            function state_Change() {
+                if (xmlhttp.readyState == 4) {// 4 = "loaded"
+                    if (xmlhttp.status == 200) {// 200 = "OK"
+                        var result = JSON.parse(xmlhttp.response);
+                        //输出弹窗 重定向到个人中心
+                        layer.open({
+                            title: result.Title
+                            , content: result.Msg,
+                            yes: function(index){
+                                if (result.Code==1){
+                                    window.location.href="/filemanager";
+                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                }else{
+                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                }
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: '服务器无响应'
+                            , content: "服务器开小差啦！！"
+                        });
+                    }
+                }
+            }
+            return false;
+        });
+    });
+</script>

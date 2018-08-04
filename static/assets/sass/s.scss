@@ -1,0 +1,39 @@
+/*  变量，第三方插件开发引入变量就可以了，基础效果都有 */
+@import "variables";
+
+/* Layui 最新版本 */
+@import "layui";
+
+/* 演示Demo，正式环境可以不添加此类 */
+@import "example";
+
+/* 辅助类 */
+@import "help";
+
+/* 基础文本 */
+@import "typo";
+
+/* 基础按钮 */
+@import "button";
+
+/* head头 */
+@import "heading";
+
+/* 底部菜单 */
+@import "footer";
+
+/* 颜色 */
+@import "color";
+
+/* 面板 */
+@import "panel";
+
+/* 表单 */
+@import "form";
+
+/* 表格 */
+@import "table";
+
+/* 后台模板 */
+@import "admin";
+

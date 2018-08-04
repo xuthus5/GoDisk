@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>GoD - admin！ </title>
+    <link rel="shortcut icon" href="static/assets/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="static/assets/favicon.ico" type="image/x-icon"/>
+    <meta name="keywords" content="layui,ui,ui框架,前端框架,JS组件,Simple">
+    <meta name="description" content="Simple 是一个基于layui框架，一个轻量，简约，包含丰富模块化前端框架，帮您快速构建网站。">
+    <link rel="stylesheet" href="static/assets/css/s.css">
+    <link rel="stylesheet" href="static/assets/css/style.css">
+    <script src="static/assets/layui.js"></script>
+</head>
+<body>
+
+
+<div class="admin-header">
+    <div class="header-logo ">
+        <img src="static/assets/img/logo/logoadmin.png" alt="">
+    </div>
+
+    <ul class="header-left">
+        <li><a href=""><i class="layui-icon layui-icon-website" ></i></a></li>
+        <li><a href=""><i class="layui-icon layui-icon-flag"></i></a></li>
+        <li><a href=""><i class="layui-icon layui-icon-search"></i></a></li>
+    </ul>
+
+
+    <ul class="layui-nav header-right">
+        <li class="layui-nav-item  header-right-item">
+            <a href="" ><img src="static/assets/img/faces/tx.png" class="layui-nav-img">{{.Username}}</a>
+            <dl class="layui-nav-child">
+                <dd><a href="/modify-password">修改密码</a></dd>
+                <dd><a href="/logout">退出</a></dd>
+            </dl>
+        </li>
+
+        <li class="layui-nav-item header-right-item">
+            <a href=""><i class="layui-icon layui-icon-close"></i></a>
+        </li>
+
+    </ul>
+    <div class="layui-clear"></div>
+</div>
+
+
+{{.LayoutContent}}
+
+
+<div class="admin-panel">
+    <div class="layui-collapse">
+
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title panel-item"><i class="layui-icon layui-icon-face-smile-fine"></i> <span class="sfqt">后台播报</span>   </h2>
+            <div class="layui-colla-content layui-show item-color">
+                <ul>
+                    <li>更新了后台整体布局代码，剔除行内样式 </li>
+                    <li>冲突样式放低优先级，不影响样式覆盖 </li>
+                    <li>修复菜单搜索文字弹跳的Bug </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-colla-item ">
+            <h2 class="layui-colla-title panel-item"><i class="layui-icon layui-icon-notice"></i>  <span class="sfqt">系统更新</span></h2>
+            <div class="layui-colla-content item-color">
+                <ul>
+                    <li>暂无</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title panel-item"><i class="layui-icon layui-icon-about" ></i>  <span class="sfqt">联系我们</span></h2>
+            <div class="layui-colla-content item-color">暂无</div>
+        </div>
+    </div>
+
+    <div class="admin-panel-a">
+        <div id="admin-panel-c"><i class="layui-icon layui-icon-spread-left"></i> 收起面板</div>
+    </div>
+
+</div>
+
+<script>
+    layui.use(['element','form', 'layer', 'jquery'], function () {
+
+        var element = layui.element;
+        var form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
+
+
+
+        /* 左侧收缩hover效果 */
+        $('.menu-item').mouseover(function () {
+
+            if($('.admin-menu.fold').length>0){
+                $(this).find('.menu-item-tip').show();
+            }
+        });
+        $('.menu-item').mouseout(function () {
+
+            if($('.admin-menu.fold').length>0){
+                $(this).find('.menu-item-tip').hide();
+            }
+
+        });
+
+        /* 左菜单控制 */
+        $('#admin-menu-f').click(function () {
+            if ($('.admin-menu').hasClass('open')) {
+                $('.header-logo').toggleClass('open');
+                $('.admin-menu').toggleClass('open');
+                $('.admin-menu').addClass('fold');
+                if ($('.admin-submenu').hasClass('out')) {
+                    $('.admin-content').css({"margin-left": "60px"});
+                } else {
+                    $('.admin-content').css({"margin-left": "170px"});
+                }
+            } else {
+                $('.header-logo').toggleClass('open');
+                $('.admin-menu').toggleClass('open');
+                $('.admin-menu').removeClass('fold');
+                if ($('.admin-submenu').hasClass('out')) {
+                    $('.admin-content').css({"margin-left": "130px"});
+                } else {
+                    $('.admin-content').css({"margin-left": "240px"});
+                }
+            }
+        });
+
+        /* 子菜单控制 */
+        $('#admin-submenu-c').click(function () {
+            if (!$(this).hasClass('out')) {
+                $(this).toggleClass('out');
+                $('.admin-submenu').addClass('out');
+                if ($('.admin-menu').hasClass('fold')) {
+                    $('.admin-content').css({"margin-left": "60px"});
+                } else {
+                    $('.admin-content').css({"margin-left": "130px"});
+                }
+            } else {
+                $('.admin-submenu').removeClass('out');
+                $(this).toggleClass('out');
+                if ($('.admin-menu').hasClass('fold')) {
+                    $('.admin-content').css({"margin-left": "170px"});
+                } else {
+                    $('.admin-content').css({"margin-left": "240px"});
+                }
+            }
+        });
+
+        /* 侧边栏控制面板 */
+        $('#admin-panel-c').click(function () {
+            if (!$(this).hasClass('out')) {
+                $(this).html('<i class="layui-icon layui-icon-tips"></i> 消息看板');
+                $('.admin-panel').addClass('out');
+                $(this).toggleClass('out');
+                $('.admin-content').css({"margin-right": "0"});
+            } else {
+                $(this).html('<i class="layui-icon layui-icon-spread-left"></i> 收起面板');
+                $('.admin-panel').removeClass('out');
+                $(this).toggleClass('out');
+                $('.admin-content').css({"margin-right": "170px"});
+            }
+        });
+    });
+</script>
+</body>
+</html>

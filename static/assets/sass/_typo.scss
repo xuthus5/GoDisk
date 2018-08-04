@@ -1,0 +1,105 @@
+/* 全局设置段落 */
+p {
+  line-height: 1.6;
+  text-align: justify;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  color: $title-color;
+}
+
+
+
+h1,.h1 {
+  font-size: 1.5rem;   //24
+}
+
+h2,.h2 {
+  font-size: 1.375rem;  //22
+}
+
+h3,.h3{
+  font-size: 1.125rem;  //18
+}
+h4,.h4 {
+  font-size: 1rem;  //16
+}
+
+h5,.h5 {
+  font-size: .875rem;  //14
+}
+
+h6,.h6{
+  font-size: .75rem;  //12
+}
+
+
+/* 排版容器，正文排版等，请在容器上添加此类，自动格式化 */
+.typo {
+
+  h1 {
+    font-size: 1.5rem;   //24
+  }
+
+  h2 {
+    font-size: 1.375rem;  //22
+  }
+
+  h3{
+    font-size: 1.125rem;  //18
+  }
+  h4 {
+    font-size: 1rem;  //16
+  }
+
+  h5 {
+    font-size: .875rem;  //14
+  }
+
+  h6 {
+    font-size: .75rem;  //12
+  }
+
+  /* 标题间距 */
+
+  h1,h2,h3,h4,h5,h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: $title-color;
+  }
+
+  /* 粗体 */
+
+  h1,h2,h3,h4 {
+    font-weight: bold;
+  }
+
+  /* 段落字体间距 */
+
+  p {
+    margin-bottom:  1rem;
+    line-height: 2;
+  }
+
+  ol li {
+    list-style-type: decimal;
+    margin-left: 1rem;
+    line-height: 2;
+  }
+
+  ul li{
+    list-style-type: disc;
+    margin-left: 1rem;
+    line-height: 2;
+  }
+
+  img {
+      display: inline-block;
+      height: auto;
+      max-width: 100%;
+  }
+}
+
+
+
+

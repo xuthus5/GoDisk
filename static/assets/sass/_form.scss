@@ -1,0 +1,149 @@
+
+// 覆盖layui  form 设置
+
+// 调整表单元素整体底部间距
+
+.layui-form-item {
+  margin-bottom: 1.5rem;
+}
+
+.layui-form-label {
+  font-weight: bold;
+  color: #393d49;
+  width: 110px;
+}
+
+.layui-input-block {
+  margin-left: 140px;
+  min-height: 36px;
+}
+
+/* placeholder 颜色 */
+
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #c3c3c3;
+}
+input:-moz-placeholder, textarea:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #c3c3c3;
+}
+input::-moz-placeholder, textarea::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #c3c3c3;
+}
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #c3c3c3;
+}
+
+
+/* 输入框图标 */
+
+.input-icon {
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  width: 38px;
+  line-height: 36px;
+  text-align: center;
+  color: #c3c3c3;
+}
+
+.input-icon +input{
+  padding-left: 38px;
+}
+
+/* 输入框左边不带label，定头开始 */
+
+.no-label {
+  margin-left: 0;
+}
+
+
+/* 输入提示 */
+.input-tip {
+  margin-top: 4px;
+  color: #bfbfbf;
+  font-size: 12px;
+}
+
+/* 单图上传的框 */
+.layui-upload {
+  margin-top: 5px;
+}
+.layui-upload-img {
+  border: 1px solid $border-color;
+}
+
+
+/* 左右布局 */
+
+
+.admin-lr {
+  .layui-form-label {
+    float: none;
+    width: 300px;
+    padding: 9px 8px;
+    text-align: left;
+  }
+
+  .layui-input-block {
+    margin-bottom: 2rem;
+    margin-left: 5px;
+  }
+
+  .lr-info {
+    font-weight: normal;
+    color: #bfbfbf;
+    font-size: 12px;
+  }
+
+
+}
+
+.lr-btn.layui-input-block{
+  margin-left: 10px !important;
+}
+
+
+
+
+
+/* 列表数据表格重写 */
+
+.admin-list .layui-table td{
+  border-left:none;
+  border-right: none;
+  text-align: center;
+}
+.admin-list .layui-form{
+  border-left:none;
+  border-right: none;
+
+}
+.admin-list .layui-table thead tr {
+  background-color: #fff;
+}
+
+.admin-list .layui-table tr {
+  height: 50px;
+}
+
+.admin-list .layui-table th {
+  border-right: none;
+  font-size: 12px;
+  text-align: center;
+}
+.admin-list .layui-table-cell{
+  height: auto;
+}
+
+.admin-list .layui-table img{
+  max-width: 72px;
+}
+
+.admin-list .layui-table-body {
+  overflow-x: hidden;
+}

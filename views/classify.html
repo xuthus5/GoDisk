@@ -1,0 +1,145 @@
+<div class="admin-menu fold">
+    <p class="admin-menu-f" id="admin-menu-f"><i class="layui-icon layui-icon-more"></i></p>
+    <ul>
+        <li class="menu-item">
+            <a href="/admin"><i class="layui-icon layui-icon-console " ></i><span class="wb-nav-title"> 仪表盘</span> </a>
+            <span class="menu-item-tip">仪表盘</span>
+        </li>
+        <li class="menu-item active">
+            <a href="/classify"><i class="layui-icon layui-icon-table" ></i> <span class="wb-nav-title"> 分类管理</span> </a>
+            <span class="menu-item-tip">分类管理</span>
+        </li>
+        <li class="menu-item">
+            <a href="/filemanager"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
+            <span class="menu-item-tip">附件管理</span>
+        </li>
+        <li class="menu-item" >
+            <a href="/setting"><i class="layui-icon  layui-icon-set" ></i><span class="wb-nav-title"> 系统设置</span></a>
+            <span class="menu-item-tip">系统设置</span>
+        </li>
+    </ul>
+</div>
+<div class="admin-submenu">
+    <div style="width: 100%; height: 100%">
+        <div class="submenu-scene">
+            分类管理
+        </div>
+        <div class="submenu-item">附件</div>
+        <ul>
+            <li class="active"><a href="#">分类</a></li>
+        </ul>
+        <div id="admin-submenu-c">
+            <i class="layui-icon layui-icon-prev"></i>
+        </div>
+    </div>
+</div>
+<div class="admin-content">
+    <div class="layui-row layui-col-space30">
+        <div class="layui-col-md12">
+            <div class="adminpageheader">
+                <h2 class="adminpagetitle">当前位置：<a href="">分类管理</a></h2>
+            </div>
+            <div class="admin-block">
+                <div class="block">
+                    <div class="example">
+                        <form class="layui-form" action="/classify">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">标签名：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="label" id="label" required  lay-verify="required" placeholder="请输入标签名" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">英文标识：</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="mark" id="mark" required  lay-verify="required" placeholder="请输入英文标识" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">立即提交</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <h1 class="heading-mi">标签列表</h1>
+                    <table class="layui-table" lay-size="lg">
+                        <colgroup>
+                            <col width="150">
+                            <col width="150">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>标识</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{range .list}}
+                        <tr>
+                            <td>{{.Label}}</td>
+                            <td>{{.Mark}}</td>
+                        </tr>
+                        {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['form'], function () {
+        // 操作对象
+        var form = layui.form;
+        form.on('submit(submit)', function(data){
+            console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+            //登录
+            //调用后台登录验证的方法
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            var label = data.field.label;
+            var mark = data.field.mark;
+
+            xmlhttp.onreadystatechange = state_Change;
+            xmlhttp.open("POST", "/classify", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("label=" + label + "&mark=" + mark);
+
+            function state_Change() {
+                if (xmlhttp.readyState == 4) {// 4 = "loaded"
+                    if (xmlhttp.status == 200) {// 200 = "OK"
+                        var result = JSON.parse(xmlhttp.response);
+                        //输出弹窗 重定向到个人中心
+                        layer.open({
+                            title: result.Title
+                            , content: result.Msg,
+                            yes: function(index){
+                                if (result.Code==1){
+                                    window.location.href="/classify";
+                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                }else{
+                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                }
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: '服务器无响应'
+                            , content: "服务器开小差啦！！"
+                        });
+                    }
+                }
+            }
+            return false;
+        })
+    });
+</script>

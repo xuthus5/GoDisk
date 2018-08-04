@@ -1,0 +1,9 @@
+/* 给表格加点阴影 */
+.layui-table {
+  @include has-shadow;
+}
+
+/* @cover table的上下间距 */
+.layui-table th, .layui-table td {
+  padding: 0.8rem 15px;
+}

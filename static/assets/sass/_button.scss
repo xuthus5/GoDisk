@@ -1,0 +1,14 @@
+/* 所有按钮添加阴影 */
+.layui-btn {
+  box-shadow: 0 5px 10px 0 rgba(29,29,31,.09);
+}
+
+/* @cover 单独的图标按钮显示不和谐，图标和文字，请使用空格隔开 */
+.layui-btn .layui-icon {
+  margin-right: 0 !important;
+}
+
+/* @cover 按钮组隔开颜色边框 */
+.layui-btn-group .layui-btn {
+  border-left: 1px solid rgba(51, 51, 51, 0.1);
+}

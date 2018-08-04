@@ -1,0 +1,146 @@
+/* 前台主菜单头 */
+.s-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 30px;
+  border-bottom: $bottom-border;
+  background-color: #fff;
+  position: relative;
+  .s-header-a {
+    display: inline-block;
+    margin-right: 20px;
+  }
+  .s-header-r {
+    margin-left: auto!important;
+    .s-header-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%
+    }
+  }
+  .s-header-logo {
+    width: 60px;
+    height: 44px;
+    margin-right: 20px;
+  }
+  .s-header-menu {
+    display: flex;
+    align-items: center;
+    li{
+      margin-left: 40px;
+      a {
+        color: #c8c8c8;
+      }
+      a:hover {
+        color: #666;
+      }
+      a.active{
+        color: #666;
+      }
+    }
+
+  }
+}
+
+/* 前台子菜单头 */
+.s-subheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 30px;
+  box-shadow:$bottom-shadow;
+  background-color: #fff;
+  margin-bottom: 2rem;
+
+  li a{
+    display: inline-block;
+    margin: 0 15px 0 0;
+    padding: 10px 4px;
+    color: #b2b2b2;
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  li a:hover{
+    color: #757575;
+  }
+
+  li a.active{
+    color: #757575;
+  }
+}
+
+
+/* 区块标题描述总结头 */
+.heading-block {
+  margin: 50px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h1 {
+    margin: 0;
+    color: $title-color;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+  }
+  p{
+    text-align: center;
+    color: $grey;
+    font-size: 16px;
+    max-width: 60%;
+    line-height: 2;
+  }
+}
+
+
+
+/* 小米头 */
+.heading-mi {
+  font-size: 22px;
+  font-weight: 200;
+  line-height: 58px;
+  color: $title-color;
+  margin: 1.5rem 0 .3rem 0;
+}
+
+
+/* 面包屑 间隔 */
+
+.heading {
+  margin-bottom: 1.5rem;
+  color: $title-color;
+  font-size: 1.1rem;
+  padding-bottom: 8px;
+  border-bottom: 1px solid $border-color;
+}
+
+.layui-col-space* h2.heading {
+  margin-bottom: 0;
+}
+
+
+
+.pageheader {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: $title-color;
+  border-left:4px solid $blue;
+  padding-left: 10px;
+  line-height: 18px;
+}
+
+.pagetitle {
+  font-size: 1.1rem;
+}
+
+
+
+
+
+
+
+
