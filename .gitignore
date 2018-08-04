@@ -1,3 +1,5 @@
 GoDisk
 /tests
 /static/db/*
+/static/db/*
+!**/.gitkeep
