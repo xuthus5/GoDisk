@@ -10,17 +10,6 @@ type MainController struct {
 	beego.Controller
 }
 
-func (this *MainController) Install() {
-	//安装初始化
-	user := &models.User{Username:"admin",Password:tools.StringToMd5("admin"),Created:tools.TimeToString()}
-	classify := &models.Classify{Label:"默认",Mark:"default"}
-	if models.Register(user) == 0 || models.AddClassify(classify) == 0{
-		this.Ctx.WriteString("error")
-	}else{
-		this.Ctx.WriteString("ok")
-	}
-}
-
 func (this *MainController) Get() {
 	this.TplName = "index.html"
 }
@@ -51,7 +40,7 @@ func (this *MainController) Classify() {
 		info := &models.Classify{Label:label,Mark:mark}
 		code := models.AddClassify(info)
 		var data *ResultData
-		if code == 0 {
+		if code == false {
 			data = &ResultData{Code:0,Title:"结果:",Msg:"操作失败！"}
 		}else{
 			tools.DirCreate("data/"+mark)

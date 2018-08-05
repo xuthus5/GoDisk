@@ -5,7 +5,9 @@ import (
 	"log"
 	"GoDisk/tools"
 	"GoDisk/models"
-		)
+	"path"
+	"strings"
+)
 
 type ApiController struct {
 	beego.Controller
@@ -44,14 +46,20 @@ func (this *ApiController) SaveFile() {
 	tempName := this.GetString("filename")	//临时文件名
 	saveName := ""								//文件存储名
 	saveMark := ""								//文件存储分类
-	if fileName == ""{
+		if fileName == ""{
 		saveName = tempName
+	}else{
+		fileSuffix := path.Ext(tempName)		//得到文件后缀
+		fileName = strings.Replace(fileName,".","",-1)
+		saveName = fileName+fileSuffix
 	}
 	if fileMark == ""{
 		saveMark = "default"
+	}else{
+		saveMark = fileMark
 	}
 	savePath := "data/"+saveMark+"/"+saveName
-	err := tools.FileMove("data/temporary/"+saveName,savePath)
+	err := tools.FileMove("data/temporary/"+tempName,savePath)
 	var data *ResultData
 	if err == true {
 		//写入数据库

@@ -8,7 +8,6 @@ import (
 func init() {
 	//页面路由
     beego.Router("/", &controllers.MainController{})
-    beego.Router("/install",&controllers.MainController{},"*:Install")
 	beego.Router("/admin",&controllers.MainController{},"*:Admin")
     beego.Router("/classify",&controllers.MainController{},"*:Classify")
     beego.Router("/setting",&controllers.MainController{},"*:Setting")

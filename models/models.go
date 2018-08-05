@@ -5,7 +5,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/jmoiron/sqlx"
 		"log"
-	)
+	"GoDisk/tools"
+)
 
 type User struct {
 	Id          int
@@ -45,15 +46,29 @@ func init() {
 
 	dbc = orm.NewOrm()
 	dbc.Using("default")
+	//安装初始化
+	CheckInstall()
+}
+
+// 检测是否初始化数据库
+func CheckInstall(){
+	user := &User{Username:"admin"}
+	err := dbc.Read(user,"Username")
+	if err != nil {
+		user = &User{Username:"admin",Password:tools.StringToMd5("admin"),Created:tools.TimeToString()}
+		classify := &Classify{Label:"默认",Mark:"default"}
+		Register(user)
+		AddClassify(classify)
+	}
 }
 
 //注册
-func Register(user *User) (Code int64){
-	id, err := dbc.Insert(user)
+func Register(user *User) bool{
+	_, err := dbc.Insert(user)
 	if err == nil {
-		return id	//操作成功 返回id
+		return true
 	}else {
-		return 0	//操作 失败 返回0
+		return false
 	}
 }
 
@@ -68,12 +83,12 @@ func Login(user *User) (Code int64,Msg string){
 }
 
 //添加分类
-func AddClassify(info *Classify) int64 {
-	id,err := dbc.Insert(info)
+func AddClassify(info *Classify) bool {
+	_,err := dbc.Insert(info)
 	if err == nil{
-		return id
+		return true
 	}else{
-		return 0
+		return false
 	}
 }
 
