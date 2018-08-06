@@ -20,6 +20,8 @@ func (this *MainController) Admin(){
 		this.Redirect("/login",302)
 	}
 	this.Data["Username"] = sess
+	this.Data["File"] = models.FindNumber("file")
+	this.Data["Classify"] = models.FindNumber("classify")
 	this.Layout = "layout.html"
 	this.TplName = "admin.html"
 }

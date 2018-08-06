@@ -44,7 +44,7 @@
                                 <div class="widget3-trending text-cyan ">
                                     <i class="layui-icon layui-icon-upload-drag"></i>
                                 </div>
-                                <div class="widget3-value">27</div>
+                                <div class="widget3-value">{{range .File}}{{.Num}}{{end}}</div>
                                 <div class="widget3-label">附件数</div>
                             </a>
                         </div>
@@ -53,7 +53,7 @@
                                 <div class="widget3-trending  text-orange">
                                     <i class="layui-icon layui-icon-download-circle"></i>
                                 </div>
-                                <div class="widget3-value">1,801</div>
+                                <div class="widget3-value">nil</div>
                                 <div class="widget3-label">下载数</div>
                             </a>
                         </div>
@@ -62,7 +62,7 @@
                                 <div class="widget3-trending text-green">
                                     <i class="layui-icon layui-icon-component"></i>
                                 </div>
-                                <div class="widget3-value">138</div>
+                                <div class="widget3-value">{{range .Classify}}{{.Num}}{{end}}</div>
                                 <div class="widget3-label">分类数</div>
                             </a>
                         </div>
@@ -71,7 +71,7 @@
                                 <div class="widget3-trending text-cyan ">
                                     <i class="layui-icon layui-icon-user"></i>
                                 </div>
-                                <div class="widget3-value">27</div>
+                                <div class="widget3-value">nil</div>
                                 <div class="widget3-label">访问数</div>
                             </a>
                         </div>

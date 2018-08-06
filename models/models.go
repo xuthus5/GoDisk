@@ -6,7 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 		"log"
 	"GoDisk/tools"
-)
+	)
 
 type User struct {
 	Id          int
@@ -29,7 +29,13 @@ type File struct {
 	Created 	string	`orm:"size(10)"`
 }
 
+//获取数据表数据
+type Count struct {
+	Num string
+}
+
 var dbc orm.Ormer
+var dbx *sqlx.DB
 
 func init() {
 	// 注册驱动
@@ -48,6 +54,13 @@ func init() {
 	dbc.Using("default")
 	//安装初始化
 	CheckInstall()
+
+	//sqlx
+	dbx,_ = sqlx.Open("sqlite3","static/db/data.db")
+	//if err != nil {
+	//	log.Fatal(err.Error())
+	//}
+	//defer dbx.Close()
 }
 
 // 检测是否初始化数据库
@@ -94,13 +107,8 @@ func AddClassify(info *Classify) bool {
 
 //获取分类列表
 func ApiClassifyList() *[]Classify{
-	db,err := sqlx.Open("sqlite3","static/db/data.db")
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	defer db.Close()
-	list := []Classify{}
-	err = db.Select(&list, "select * from classify")
+		list := []Classify{}
+	err := dbx.Select(&list, "select * from classify")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -109,13 +117,8 @@ func ApiClassifyList() *[]Classify{
 
 //获取文件列表
 func ApiFileList() *[]File{
-	db,err := sqlx.Open("sqlite3","static/db/data.db")
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-	defer db.Close()
 	list := []File{}
-	err = db.Select(&list, "select * from File")
+	err := dbx.Select(&list, "select * from File")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -130,4 +133,14 @@ func FileSave(info *File) bool {
 	}else{
 		return false
 	}
+}
+
+//统计数据表的内容数量
+func FindNumber(table string) *[]Count {
+	num := []Count{}
+	err := dbx.Select(&num,"select count(*) `num` from "+table)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return &num
 }

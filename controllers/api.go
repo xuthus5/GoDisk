@@ -19,7 +19,6 @@ type UploadData struct {
 	FileName 	string
 }
 
-
 func (this *ApiController) Upload() {
 	/*
 	备忘 文件与表单异步提交
