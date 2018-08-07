@@ -15,6 +15,8 @@ go get github.com/jmoiron/sqlx
 go get -u github.com/qiniu/api.v7
 ```
 
+假若无法使用以上命令，请单独下载source.zip资源包，直接解压放到 ```$GOPATH/``` 目录下即可，里面包含有所有的依赖
+
 &ensp; 3. 启动项目
 
 &ensp;&ensp; 进入项目 执行 go run main.go 即可启动项目
