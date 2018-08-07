@@ -6,12 +6,13 @@
 
 &ensp; 1. 首先，确认已经安装好golang语言环境
 
-&ensp; 2. 执行一下命令，安装一些依赖包与框架
+&ensp; 2. 执行一下命令，安装一些依赖包与框架(建议使用gopm进行包管理)
 
 ```bash
 go get github.com/astaxie/beego
 go get github.com/mattn/go-sqlite3
 go get github.com/jmoiron/sqlx
+go get -u github.com/qiniu/api.v7
 ```
 
 &ensp; 3. 启动项目
@@ -24,3 +25,17 @@ go get github.com/jmoiron/sqlx
 # 安装bee工具
 go get github.com/beego/bee
 ```
+
+&ensp;&ensp; 浏览器输入 http://ip:8080 访问
+
+# 演示地址
+
+[官网](http://xblogs.cn:8080)----------------[demo](http://xblogs.cn:8080/login)
+
+# 演示截图
+
+![首页](./static/assets/img/preview/index.png)
+![首页](./static/assets/img/preview/admin.png)
+![首页](./static/assets/img/preview/classify.png)
+![首页](./static/assets/img/preview/upload.png)
+![首页](./static/assets/img/preview/qiniu.png)
