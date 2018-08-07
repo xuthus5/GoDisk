@@ -7,6 +7,7 @@ import (
 	"GoDisk/models"
 	"path"
 	"strings"
+	"os"
 )
 
 type ApiController struct {
@@ -45,7 +46,7 @@ func (this *ApiController) SaveFile() {
 	tempName := this.GetString("filename")	//临时文件名
 	saveName := ""								//文件存储名
 	saveMark := ""								//文件存储分类
-		if fileName == ""{
+	if fileName == ""{
 		saveName = tempName
 	}else{
 		fileSuffix := path.Ext(tempName)		//得到文件后缀
@@ -74,6 +75,28 @@ func (this *ApiController) SaveFile() {
 	this.ServeJSON()
 }
 
-func (this *ApiController) Download() {
-	//下载文件
+func (this *ApiController) QiniuUpload() {
+	//七牛文件上传处理
+	//文件存储 表单提交
+	fileName := this.GetString("name")		//自定义文件名
+	tempName := this.GetString("filename")	//临时文件名
+	saveName := ""								//文件存储名
+	if fileName == ""{
+		saveName = tempName
+	}else{
+		fileSuffix := path.Ext(tempName)		//得到文件后缀
+		fileName = strings.Replace(fileName,".","",-1)
+		saveName = fileName+fileSuffix
+	}
+	filePath := "data/temporary/"+tempName
+	err := tools.QiniuApi(filePath,saveName,models.SiteConfigMap())
+	var data *ResultData
+	if err == true {
+		os.Remove(filePath)
+		data = &ResultData{Code:1,Title:"结果:",Msg:"上传成功！但是你可能需要前往七牛云官网查看，预览功能还没有写"}
+	}else{
+		data = &ResultData{Code:0,Title:"结果:",Msg:"上传失败！请重试"}
+	}
+	this.Data["json"] = data
+	this.ServeJSON()
 }

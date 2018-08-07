@@ -4,11 +4,19 @@ import (
 	"github.com/astaxie/beego"
 	"GoDisk/models"
 	"GoDisk/tools"
-)
+	)
 
 type MainController struct {
 	beego.Controller
 }
+
+type QiniuConfig struct {
+	Accesskey		string
+	Secretkey 		string
+	Bucket			string
+	Zone 			string
+}
+
 
 func (this *MainController) Get() {
 	this.TplName = "index.html"
@@ -63,7 +71,22 @@ func (this *MainController) Setting() {
 	this.TplName = "setting.html"
 }
 
-func (this *MainController) FileManager() {
+func (this *MainController) PostSetting() {
+	config := &QiniuConfig{}
+	if err := this.ParseForm(config);
+	err != nil {
+		data := &ResultData{Code:0,Title:"结果:",Msg:"数据更新失败！"}
+		this.Data["json"] = data
+		this.ServeJSON()
+	}else{
+		models.SiteConfig(*config)
+		data := &ResultData{Code:1,Title:"结果:",Msg:"数据更新成功！"}
+		this.Data["json"] = data
+		this.ServeJSON()
+	}
+}
+
+func (this *MainController) LocalUpload() {
 	sess := this.GetSession("Username")
 	if sess == nil{
 		this.Redirect("/login",302)
@@ -72,5 +95,15 @@ func (this *MainController) FileManager() {
 	this.Data["classify"] = models.ApiClassifyList()
 	this.Data["list"] = models.ApiFileList()
 	this.Layout = "layout.html"
-	this.TplName = "filemanager.html"
+	this.TplName = "localUpload.html"
+}
+
+func (this *MainController) QiniuUpload() {
+	sess := this.GetSession("Username")
+	if sess == nil{
+		this.Redirect("/login",302)
+	}
+	this.Data["Username"] = sess
+	this.Layout = "layout.html"
+	this.TplName = "qiniuUpload.html"
 }

@@ -10,8 +10,12 @@
             <span class="menu-item-tip">分类管理</span>
         </li>
         <li class="menu-item">
-            <a href="/filemanager"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
+            <a href="/localUpload"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
             <span class="menu-item-tip">附件管理</span>
+        </li>
+        <li class="menu-item">
+            <a href="/qiniuUpload"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
+            <span class="menu-item-tip">上传七牛云</span>
         </li>
         <li class="menu-item active" >
             <a href="/setting"><i class="layui-icon  layui-icon-set" ></i><span class="wb-nav-title"> 系统设置</span></a>
@@ -122,7 +126,80 @@
                                 </div>
                                 <div class="layui-tab-item">
                                     <div class="block-body">
-                                        <p>毛都没有...</p>
+                                        <div class="block-table">
+                                            <div class="layui-row">
+                                                <div class="layui-col-md2">
+                                                    <div class="layui-form-group">七牛云密钥设置</div>
+                                                </div>
+                                                <div class="layui-col-md10">
+                                                    <form class="layui-form" action="" lay-filter="setting">
+
+                                                        <div class="layui-row  layui-form-item">
+                                                            <div class="layui-col-md12">
+                                                                <label class="layui-form-label"><span
+                                                                        class="text-red">*</span>AccessKey：</label>
+                                                                <div class="layui-input-block">
+                                                                    <input type="text" name="Accesskey"
+                                                                           lay-verify="required"
+                                                                           autocomplete="off" class="layui-input"
+                                                                           value="WFerS_A1va0IoiWNv0uIepULZKPK-C1aKeeUvqPa">
+                                                                    <div class="input-tip">访问密钥</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="layui-row  layui-form-item">
+                                                            <div class="layui-col-md12">
+                                                                <label class="layui-form-label"><span
+                                                                        class="text-red">*</span>SecretKey：</label>
+                                                                <div class="layui-input-block">
+                                                                    <input type="password" name="Secretkey"
+                                                                           lay-verify="required"
+                                                                           autocomplete="off" class="layui-input" value="6oYEsrSF3fkEo0K4v3coBBFXQHJyAyE6SxB1wQ5Q">
+                                                                    <div class="input-tip">密钥</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="layui-row  layui-form-item">
+                                                            <div class="layui-col-md12">
+                                                                <label class="layui-form-label"><span
+                                                                        class="text-red">*</span>Bucket：</label>
+                                                                <div class="layui-input-block">
+                                                                    <input type="text" name="Bucket"
+                                                                           lay-verify="required"
+                                                                           autocomplete="off" class="layui-input" value="xuthus">
+                                                                    <div class="input-tip">存储空间名称</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="layui-row  layui-form-item">
+                                                            <div class="layui-col-md12">
+                                                                <label class="layui-form-label"><span
+                                                                        class="text-red">*</span>Zone：</label>
+                                                                <div class="layui-input-block">
+                                                                    <select name="Zone" lay-verify="">
+                                                                        <option value="storage.ZoneHuadong">华东</option>
+                                                                        <option value="storage.ZoneHuabei" selected>华北</option>
+                                                                        <option value="storage.ZoneHuanan">华南</option>
+                                                                        <option value="storage.ZoneBeimei">北美</option>
+                                                                    </select>
+                                                                    <div class="input-tip">机房位置</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="layui-form-item">
+                                                            <div class="layui-input-block">
+                                                                <button class="layui-btn" lay-submit
+                                                                        lay-filter="setting">保存
+                                                                </button>
+                                                                <button type="reset"
+                                                                        class="layui-btn layui-btn-primary">重置
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -133,3 +210,61 @@
     </div>
 </div>
 </div>
+<script src="static/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['form'], function () {
+        // 操作对象
+        var form = layui.form;
+        form.on('submit(setting)', function(data){
+            console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+            //登录
+            //调用后台登录验证的方法
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            var Accesskey = data.field.Accesskey;
+            var Secretkey = data.field.Secretkey;
+            var Bucket = data.field.Bucket;
+            var Zone = data.field.Zone;
+            console.log(Accesskey,Secretkey,Bucket,Zone);
+
+            xmlhttp.onreadystatechange = state_Change;
+            xmlhttp.open("POST", "/postSetting", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xmlhttp.send("Accesskey=" + Accesskey + "&Secretkey=" + Secretkey + "&Bucket=" + Bucket + "&Zone=" + Zone);
+
+            function state_Change() {
+                if (xmlhttp.readyState == 4) {// 4 = "loaded"
+                    if (xmlhttp.status == 200) {// 200 = "OK"
+                        var result = JSON.parse(xmlhttp.response);
+                        //输出弹窗 重定向到个人中心
+                        layer.open({
+                            title: result.Title
+                            , content: result.Msg,
+                            yes: function(index){
+                                if (result.Code==1){
+                                    window.location.href="/admin";
+                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                }else{
+                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                                }
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            title: '服务器无响应'
+                            , content: "服务器开小差啦！！"
+                        });
+                    }
+                }
+            }
+            return false;
+        })
+    });
+</script>

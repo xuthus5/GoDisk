@@ -30,9 +30,13 @@
             <span class="menu-item-tip">分类管理</span>
         </li>
         <li class="menu-item active">
-            <a href="/filemanager"><i class="layui-icon layui-icon-template-1 "></i><span
+            <a href="/localUpload"><i class="layui-icon layui-icon-template-1 "></i><span
                     class="wb-nav-title"> 附件管理</span> </a>
             <span class="menu-item-tip">附件管理</span>
+        </li>
+        <li class="menu-item">
+            <a href="/qiniuUpload"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
+            <span class="menu-item-tip">上传七牛云</span>
         </li>
         <li class="menu-item">
             <a href="/setting"><i class="layui-icon  layui-icon-set"></i><span class="wb-nav-title"> 系统设置</span></a>
@@ -43,12 +47,11 @@
 <div class="admin-submenu">
     <div style="width: 100%; height: 100%">
         <div class="submenu-scene">
-            仪表盘
+            文件管理
         </div>
         <div class="submenu-item">文件管理</div>
         <ul>
-            <li><a href="#"> 上传文件</a></li>
-            <li class="active"><a href="#">文件操作</a></li>
+            <li class="active"><a href="#"> 上传文件</a></li>
         </ul>
         <div id="admin-submenu-c">
             <i class="layui-icon layui-icon-prev"></i>
@@ -163,7 +166,7 @@
         formSelects: 'formSelects-v4'
     });
     //加载模块
-    layui.use(['jquery', 'formSelects', 'upload', 'layer'], function () {
+    layui.use(['jquery', 'formSelects', 'upload', 'layer', 'form'], function () {
         var $ = layui.jquery
                 , upload = layui.upload
                 , layer = layui.layer
@@ -248,7 +251,7 @@
                             , content: result.Msg,
                             yes: function(index){
                                 if (result.Code==1){
-                                    window.location.href="/filemanager";
+                                    window.location.href="/localUpload";
                                     layer.close(index); //如果设定了yes回调，需进行手工关闭
                                 }else{
                                     layer.close(index); //如果设定了yes回调，需进行手工关闭

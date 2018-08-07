@@ -2,10 +2,11 @@ package models
 
 import (
 		"github.com/astaxie/beego/orm"
-	_ "github.com/mattn/go-sqlite3"
-	"github.com/jmoiron/sqlx"
+		_ "github.com/mattn/go-sqlite3"
+		"github.com/jmoiron/sqlx"
 		"log"
-	"GoDisk/tools"
+		"GoDisk/tools"
+		"reflect"
 	)
 
 type User struct {
@@ -29,6 +30,13 @@ type File struct {
 	Created 	string	`orm:"size(10)"`
 }
 
+type Config struct {
+	Id			int
+	Option 		string	`orm:"size(64)"`
+	Value 		string	`orm:"size(64)"`
+}
+
+
 //获取数据表数据
 type Count struct {
 	Num string
@@ -44,7 +52,7 @@ func init() {
 	// 备注：此处第一个参数必须设置为“default”（因为我现在只有一个数据库），否则编译报错说：必须有一个注册DB的别名为 default
 	orm.RegisterDataBase("default", "sqlite3", "static/db/data.db")
 	// 需要在init中注册定义的model
-	orm.RegisterModel(new(User),new(Classify),new(File))
+	orm.RegisterModel(new(User),new(Classify),new(File),new(Config))
 	// 开启 orm 调试模式：开发过程中建议打开，release时需要关闭
 	orm.Debug = true
 	// 自动建表
@@ -57,10 +65,6 @@ func init() {
 
 	//sqlx
 	dbx,_ = sqlx.Open("sqlite3","static/db/data.db")
-	//if err != nil {
-	//	log.Fatal(err.Error())
-	//}
-	//defer dbx.Close()
 }
 
 // 检测是否初始化数据库
@@ -143,4 +147,32 @@ func FindNumber(table string) *[]Count {
 		log.Fatal(err.Error())
 	}
 	return &num
+}
+
+//网站配置
+func SiteConfig(data interface{}) bool {
+	t := reflect.TypeOf(data)	//类型
+	v := reflect.ValueOf(data)	//值
+	for i := 0; i < t.NumField(); i++ {
+		config := &Config{Option:t.Field(i).Name,Value:v.Field(i).String()}
+		_,err := dbc.Insert(config)
+		if err != nil{
+			return false
+		}
+	}
+	return true
+}
+
+//返回网站配置信息为map
+func SiteConfigMap() map[string]string {
+	config := []Config{}
+	err := dbx.Select(&config,"select * from config")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	var data = make(map[string]string)
+	for _,v := range config{
+		data[v.Option] = v.Value
+	}
+	return data
 }
