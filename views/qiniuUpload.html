@@ -92,7 +92,7 @@
                                                         <button type="button" class="layui-btn layui-btn-normal"
                                                                 id="chooseFile"><i class="layui-icon"></i> 选择文件
                                                         </button>
-                                                        <input type="hidden" name="filename" id="filename">
+                                                        <input type="hidden" name="filename" id="filename" lay-verify="requiredFile">
                                                         <button type="button" class="layui-btn" id="upload" lay-filter="upload" lay-submit>开始上传
                                                         </button>
                                                         <div class='layui-input-block' id='div_prev' title=''></div>
@@ -170,6 +170,16 @@
                 });
             }
         });
+
+        //自定义表单验证
+        form.verify({
+            requiredFile: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(value.length===0){
+                    return '请选择文件路径';
+                }
+            }
+        });
+
         //表单提交
         form.on('submit(upload)', function (data) {
             //console.log(data.field);

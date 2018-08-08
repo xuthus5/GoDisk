@@ -92,11 +92,11 @@ func (this *ApiController) QiniuUpload() {
 	err := tools.QiniuApi(filePath,saveName,models.SiteConfigMap())
 	var data *ResultData
 	if err == true {
-		os.Remove(filePath)
 		data = &ResultData{Code:1,Title:"结果:",Msg:"上传成功！但是你可能需要前往七牛云官网查看，预览功能还没有写"}
 	}else{
-		data = &ResultData{Code:0,Title:"结果:",Msg:"上传失败！请重试"}
+		data = &ResultData{Code:0,Title:"结果:",Msg:"认证失败！请确保配置信息正确"}
 	}
+	os.Remove(filePath)
 	this.Data["json"] = data
 	this.ServeJSON()
 }

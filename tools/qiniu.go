@@ -4,9 +4,10 @@ import (
 	"github.com/qiniu/api.v7/storage"
 	"github.com/qiniu/api.v7/auth/qbox"
 	"context"
-	"log"
-)
+		)
 
+
+//上传接口
 func QiniuApi(filePath,fileName string,config map[string]string) bool {
 	var (
 		Accesskey = config["Accesskey"]
@@ -52,8 +53,11 @@ func QiniuApi(filePath,fileName string,config map[string]string) bool {
 	}
 	err := formUploader.PutFile(context.Background(), &ret, upToken, key, localFile, &putExtra)
 	if err != nil {
-		log.Fatal(err.Error())
 		return false
 	}
 	return true
 }
+
+//管理凭证生成
+
+//获取Bucket空间名称
