@@ -10,14 +10,6 @@ type MainController struct {
 	beego.Controller
 }
 
-type QiniuConfig struct {
-	Accesskey		string
-	Secretkey 		string
-	Bucket			string
-	Zone 			string
-}
-
-
 func (this *MainController) Get() {
 	this.TplName = "index.html"
 }
@@ -67,12 +59,13 @@ func (this *MainController) Setting() {
 		this.Redirect("/login",302)
 	}
 	this.Data["Username"] = sess
+	this.Data["Qiniu"] = models.SiteConfigMap()
 	this.Layout = "layout.html"
 	this.TplName = "setting.html"
 }
 
 func (this *MainController) PostSetting() {
-	config := &QiniuConfig{}
+	config := &models.QiniuConfig{}
 	if err := this.ParseForm(config);
 	err != nil {
 		data := &ResultData{Code:0,Title:"结果:",Msg:"数据更新失败！"}

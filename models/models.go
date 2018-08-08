@@ -7,21 +7,23 @@ import (
 		"log"
 		"GoDisk/tools"
 		"reflect"
-	)
 
+		)
+
+//用户表
 type User struct {
 	Id          int
 	Username    string	`orm:"size(16)"`
 	Password    string	`orm:"size(32)"`
 	Created     string	`orm:"size(10)"`
 }
-
+//分类表
 type Classify struct {
 	Id			int
 	Label 		string	`orm:"size(64)"`
 	Mark 		string  `orm:"size(64)"`
 }
-
+//文件存储表
 type File struct {
 	Id			int
 	Name 		string
@@ -29,13 +31,20 @@ type File struct {
 	Path 		string
 	Created 	string	`orm:"size(10)"`
 }
-
+//配置表
 type Config struct {
 	Id			int
 	Option 		string	`orm:"size(64)"`
 	Value 		string	`orm:"size(64)"`
 }
 
+//七牛云配置
+type QiniuConfig struct {
+	Accesskey		string
+	Secretkey 		string
+	Bucket			string
+	Zone 			string
+}
 
 //获取数据表数据
 type Count struct {
@@ -74,6 +83,14 @@ func CheckInstall(){
 	if err != nil {
 		user = &User{Username:"admin",Password:tools.StringToMd5("admin"),Created:tools.TimeToString()}
 		classify := &Classify{Label:"默认",Mark:"default"}
+		//默认七牛云配置信息写入数据库
+		qiniuConfig := QiniuConfig{}
+		t := reflect.TypeOf(qiniuConfig)
+		v := reflect.ValueOf(qiniuConfig)
+		for i := 0; i < t.NumField(); i++ {
+			config := &Config{Option:t.Field(i).Name,Value:v.Field(i).String()}
+			AddConfig(config)
+		}
 		Register(user)
 		AddClassify(classify)
 	}
@@ -109,9 +126,29 @@ func AddClassify(info *Classify) bool {
 	}
 }
 
+//添加配置信息
+func AddConfig(info *Config) bool{
+	_,err := dbc.Insert(info)
+	if err == nil{
+		return true
+	}else{
+		return false
+	}
+}
+
+//更新配置信息
+//func UpdateConfig(info *Config) bool{
+//	if dbc.Read(&info) == nil {
+//		user.Name = "MyName"
+//		if num, err := dbc.Update(&user); err == nil {
+//			fmt.Println(num)
+//		}
+//	}
+//}
+
 //获取分类列表
 func ApiClassifyList() *[]Classify{
-		list := []Classify{}
+	list := []Classify{}
 	err := dbx.Select(&list, "select * from classify")
 	if err != nil {
 		log.Fatal(err.Error())
@@ -149,15 +186,17 @@ func FindNumber(table string) *[]Count {
 	return &num
 }
 
-//网站配置
+//网站配置更新
 func SiteConfig(data interface{}) bool {
 	t := reflect.TypeOf(data)	//类型
 	v := reflect.ValueOf(data)	//值
 	for i := 0; i < t.NumField(); i++ {
 		config := &Config{Option:t.Field(i).Name,Value:v.Field(i).String()}
-		_,err := dbc.Insert(config)
-		if err != nil{
-			return false
+		if dbc.Read(config,"Option") == nil{
+			_, err := dbc.Raw("UPDATE config SET Value = ? where Option = ?", v.Field(i).String(),t.Field(i).Name).Exec()
+			if err != nil {
+				return false
+			}
 		}
 	}
 	return true
