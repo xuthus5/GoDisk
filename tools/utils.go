@@ -7,18 +7,24 @@ import (
 	"os"
 	"io"
 	"log"
-	)
+	"github.com/axgle/mahonia"
+)
 
 /*
 时间转字符串
 */
-func TimeToString() string{
-	//timeLayout := "2006-01-02 15:04:05"                  //时间模板-精确
-	timeLayout := "2006-01-02"
+func TimeToString(accurate bool) string{
+	var timeLayout string
+	if accurate == true{
+		timeLayout = "2006-01-02 15:04:05"					//时间模板-精确
+	}else{
+		timeLayout = "2006-01-02"
+	}
 	nowTime := time.Now().Unix()                         //当前时间
 	dateTime := time.Unix(nowTime, 0).Format(timeLayout) //转换当前时间戳为时间模板格式
 	return dateTime	//返回时间字符串
 }
+
 /*
 字符串转md5
 */
@@ -84,4 +90,27 @@ func DirCreate(path string) bool {
 		}
 	}
 	return true
+}
+
+/*
+字符串编码转换
+ */
+func ConvertToString(src string, srcCode string, tagCode string) string {
+	/*
+	src 字符串
+	srcCode 字符串当前编码
+	tagCode 要转换的编码
+	 */
+	srcCoder := mahonia.NewDecoder(srcCode)
+	srcResult := srcCoder.ConvertString(src)
+	tagCoder := mahonia.NewDecoder(tagCode)
+	_, cdata, _ := tagCoder.Translate([]byte(srcResult), true)
+	result := string(cdata)
+	return result
+	/*
+	调用实例
+	str := "乱码的字符串变量"
+	str  = ConvertToString(str, "gbk", "utf-8")
+	fmt.Println(str)
+	 */
 }

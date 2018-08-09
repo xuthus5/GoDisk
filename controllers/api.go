@@ -63,7 +63,7 @@ func (this *ApiController) SaveFile() {
 	var data *ResultData
 	if err == true {
 		//写入数据库
-		info := &models.File{Name:saveName,Path:savePath,Mark:saveMark,Created:tools.TimeToString()}
+		info := &models.File{Name:saveName,Path:savePath,Mark:saveMark,Created:tools.TimeToString(true)}
 		code := models.FileSave(info)
 		if code == false {
 			data = &ResultData{Code:0,Title:"结果:",Msg:"上传失败！"}
@@ -92,7 +92,7 @@ func (this *ApiController) QiniuUpload() {
 	err := tools.QiniuApi(filePath,saveName,models.SiteConfigMap())
 	var data *ResultData
 	if err == true {
-		data = &ResultData{Code:1,Title:"结果:",Msg:"上传成功！但是你可能需要前往七牛云官网查看，预览功能还没有写"}
+		data = &ResultData{Code:1,Title:"结果:",Msg:"上传成功！"}
 	}else{
 		data = &ResultData{Code:0,Title:"结果:",Msg:"认证失败！请确保配置信息正确"}
 	}

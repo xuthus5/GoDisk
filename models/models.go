@@ -81,7 +81,7 @@ func CheckInstall(){
 	user := &User{Username:"admin"}
 	err := dbc.Read(user,"Username")
 	if err != nil {
-		user = &User{Username:"admin",Password:tools.StringToMd5("admin"),Created:tools.TimeToString()}
+		user = &User{Username:"admin",Password:tools.StringToMd5("admin"),Created:tools.TimeToString(false)}
 		classify := &Classify{Label:"默认",Mark:"default"}
 		//默认七牛云配置信息写入数据库
 		qiniuConfig := QiniuConfig{}
@@ -135,16 +135,6 @@ func AddConfig(info *Config) bool{
 		return false
 	}
 }
-
-//更新配置信息
-//func UpdateConfig(info *Config) bool{
-//	if dbc.Read(&info) == nil {
-//		user.Name = "MyName"
-//		if num, err := dbc.Update(&user); err == nil {
-//			fmt.Println(num)
-//		}
-//	}
-//}
 
 //获取分类列表
 func ApiClassifyList() *[]Classify{

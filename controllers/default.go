@@ -4,7 +4,9 @@ import (
 	"github.com/astaxie/beego"
 	"GoDisk/models"
 	"GoDisk/tools"
-	)
+	"regexp"
+	"strings"
+		)
 
 type MainController struct {
 	beego.Controller
@@ -97,6 +99,21 @@ func (this *MainController) QiniuUpload() {
 		this.Redirect("/login",302)
 	}
 	this.Data["Username"] = sess
+	data := models.SiteConfigMap()
+	data["Host"] = "api.qiniu.com"
+	data["Parameter"] = "/v6/domain/list?tbl="+data["Bucket"]
+	data["Url"] = "http://"+data["Host"]+data["Parameter"]
+	Bucket := tools.GetBucketData(data)
+	r,_ := regexp.Compile("\"([^\"]*)\"")
+	match := r.FindString(Bucket)
+	match = strings.Replace(match,"\"","",-1)
+	this.Data["Bucket"] = match
+	data["Host"] = "rsf.qbox.me"
+	data["Parameter"] = "/list?bucket="+data["Bucket"]+"&limit=1000&prefix="
+	data["Url"] = "http://"+data["Host"]+data["Parameter"]
+	list := tools.GetBucketData(data)
+	list = tools.ConvertToString(list,"GB18030","gbk")
+	this.Data["list"] = list
 	this.Layout = "layout.html"
 	this.TplName = "qiniuUpload.html"
 }
