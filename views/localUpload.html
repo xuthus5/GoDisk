@@ -204,7 +204,7 @@
             },
             done: function (res) {
                 //上传完毕回调
-                console.log(res);
+                //console.log(res);
                 if(res.Code === 1){
                     document.getElementById("filename").value = res.FileName;
                     return layer.msg('文件就绪，请上传');
@@ -232,7 +232,7 @@
 
         //表单提交
         form.on('submit(upload)', function (data) {
-            console.log(data.field);
+            //console.log(data.field);
             var xmlhttp;
             if (window.XMLHttpRequest) {
                 //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码

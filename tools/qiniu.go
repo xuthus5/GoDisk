@@ -7,8 +7,7 @@ import (
 	"net/http"
 		"os"
 	"io/ioutil"
-	"fmt"
-	"log"
+		"log"
 )
 
 
@@ -78,34 +77,28 @@ func GeneratingVoucher(data map[string]string) string{
 }
 
 //获取Bucket的数据
-func GetBucketData(data map[string]string) string{
+func GetBucketData(data map[string]string) []byte{
 	client := &http.Client{}
-	reqest, err := http.NewRequest("GET", data["Url"], nil) //建立一个请求
+	request, err := http.NewRequest("GET", data["Url"], nil) //建立一个请求
 	if err != nil {
-		fmt.Println("Fatal error ", err.Error())
+		log.Println("Fatal error ", err.Error())
 		os.Exit(0)
 	}
 
 	//获取凭证
 	sign := GeneratingVoucher(data)
 
-	log.Println(data["Host"])
-	log.Println(data["Url"])
-	log.Println(data["Parameter"])
-	log.Println("QBox "+sign)
-
 	//Add 头协议
-	reqest.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-	reqest.Header.Add("User-Agent","Go-http-client/1.1")
-	reqest.Header.Add("Accept-Encoding","gzip")
-	reqest.Header.Add("Host",data["Host"])
-	reqest.Header.Add("Authorization", "QBox "+sign)
-	response, err := client.Do(reqest) //提交
+	request.Header.Add("Host",data["Host"])
+	request.Header.Add("User-Agent","Go-http-client/1.1")
+	request.Header.Add("Authorization", "QBox "+sign)
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	response, err := client.Do(request) //提交
 	defer response.Body.Close()
 
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	return string(body) //网页源码
+	return body //网页源码
 }

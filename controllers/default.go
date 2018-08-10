@@ -4,12 +4,28 @@ import (
 	"github.com/astaxie/beego"
 	"GoDisk/models"
 	"GoDisk/tools"
+			"encoding/json"
+	"log"
 	"regexp"
 	"strings"
-		)
+)
 
 type MainController struct {
 	beego.Controller
+}
+
+//七牛云资源列表
+type List struct {
+	Key 	string `json:"key"`
+	Hash  	string `json:"hash"`
+	Fsize	int64 `json:"fsize"`
+	MimeType	string `json:"mimeType"`
+	PutTime	int64 `json:"putTime"`
+	Type	int64 `json:"type"`
+	Status	int64 `json:"status"`
+}
+type Response struct {
+	Items	[]List	`json:"items"`
 }
 
 func (this *MainController) Get() {
@@ -105,15 +121,19 @@ func (this *MainController) QiniuUpload() {
 	data["Url"] = "http://"+data["Host"]+data["Parameter"]
 	Bucket := tools.GetBucketData(data)
 	r,_ := regexp.Compile("\"([^\"]*)\"")
-	match := r.FindString(Bucket)
+	match := r.FindString(string(Bucket))
 	match = strings.Replace(match,"\"","",-1)
 	this.Data["Bucket"] = match
 	data["Host"] = "rsf.qbox.me"
-	data["Parameter"] = "/list?bucket="+data["Bucket"]+"&limit=1000&prefix="
+	data["Parameter"] = "/list?bucket="+data["Bucket"]
 	data["Url"] = "http://"+data["Host"]+data["Parameter"]
-	list := tools.GetBucketData(data)
-	list = tools.ConvertToString(list,"GB18030","gbk")
-	this.Data["list"] = list
+	body := tools.GetBucketData(data)
+	var res Response
+	err := json.Unmarshal([]byte(body), &res)
+	if err != nil {
+		log.Printf("err was %v", err)
+	}
+	this.Data["list"] = res.Items
 	this.Layout = "layout.html"
 	this.TplName = "qiniuUpload.html"
 }

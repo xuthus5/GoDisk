@@ -216,7 +216,7 @@
         // 操作对象
         var form = layui.form;
         form.on('submit(setting)', function(data){
-            console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+            //console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
             //登录
             //调用后台登录验证的方法
             var xmlhttp;
@@ -232,7 +232,7 @@
             var Secretkey = data.field.Secretkey;
             var Bucket = data.field.Bucket;
             var Zone = data.field.Zone;
-            console.log(Accesskey,Secretkey,Bucket,Zone);
+            //console.log(Accesskey,Secretkey,Bucket,Zone);
 
             xmlhttp.onreadystatechange = state_Change;
             xmlhttp.open("POST", "/postSetting", true);

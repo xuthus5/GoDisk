@@ -119,24 +119,23 @@
                         </colgroup>
                         <thead>
                         <tr>
-                            <th>ID</th>
                             <th>名称</th>
-                            <th>分类</th>
                             <th>路径</th>
-                            <th>上传时间</th>
+                            <th>类型</th>
+                            {{/*<th>大小</th>*/}}
+                            {{/*<th>上传时间</th>*/}}
                         </tr>
                         </thead>
                         <tbody>
-                        {{.list}}
-                        {{/*{{range .list}}*/}}
-                        {{/*<tr>*/}}
-                            {{/*<td>{{.Id}}</td>*/}}
-                            {{/*<td>{{.Name}}</td>*/}}
-                            {{/*<td>{{.Mark}}</td>*/}}
-                            {{/*<td><a href="./{{.Path}}" class="text-purple">{{.Path}}</a></td>*/}}
-                            {{/*<td>{{.Created}}</td>*/}}
-                        {{/*</tr>*/}}
-                        {{/*{{end}}*/}}
+                        {{range .list}}
+                        <tr>
+                            <td>{{.Key}}</td>
+                            <td><a href="http://{{$.Bucket}}/{{.Key}}" class="text-purple">{{$.Bucket}}/{{.Key}}</a></td>
+                            <td>{{.MimeType}}</td>
+                            {{/*<td>{{.Fsize}}</td>*/}}
+                            {{/*<td>{{.PutTime}}</td>*/}}
+                        </tr>
+                        {{end}}
                         </tbody>
                     </table>
                 </div>
@@ -184,7 +183,7 @@
             },
             done: function (res) {
                 //上传完毕回调
-                console.log(res);
+                //console.log(res);
                 if(res.Code === 1){
                     document.getElementById("filename").value = res.FileName;
                     return layer.msg('文件就绪，请上传');
@@ -224,7 +223,7 @@
 
             var name = data.field.name;
             var filename = data.field.filename;
-            console.log(name,filename);
+            //console.log(name,filename);
 
             xmlhttp.onreadystatechange = state_Change;
             xmlhttp.open("POST", "/api/qiniu", true);

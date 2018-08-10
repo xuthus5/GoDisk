@@ -7,7 +7,7 @@ import (
 	"os"
 	"io"
 	"log"
-	"github.com/axgle/mahonia"
+		"strconv"
 )
 
 /*
@@ -24,6 +24,18 @@ func TimeToString(accurate bool) string{
 	dateTime := time.Unix(nowTime, 0).Format(timeLayout) //转换当前时间戳为时间模板格式
 	return dateTime	//返回时间字符串
 }
+
+/*
+字符串时间戳转字符串
+ */
+func UnixTimeToString(stamp string) string{
+	stamp = stamp[:10]
+	base,_ := strconv.ParseInt(stamp,10,64)
+	timeLayout := "2006-01-02 15:04:05"
+	dateTime := time.Unix(base, 0).Format(timeLayout)
+	return dateTime
+}
+
 
 /*
 字符串转md5
@@ -93,24 +105,10 @@ func DirCreate(path string) bool {
 }
 
 /*
-字符串编码转换
+字节转兆
  */
-func ConvertToString(src string, srcCode string, tagCode string) string {
-	/*
-	src 字符串
-	srcCode 字符串当前编码
-	tagCode 要转换的编码
-	 */
-	srcCoder := mahonia.NewDecoder(srcCode)
-	srcResult := srcCoder.ConvertString(src)
-	tagCoder := mahonia.NewDecoder(tagCode)
-	_, cdata, _ := tagCoder.Translate([]byte(srcResult), true)
-	result := string(cdata)
-	return result
-	/*
-	调用实例
-	str := "乱码的字符串变量"
-	str  = ConvertToString(str, "gbk", "utf-8")
-	fmt.Println(str)
-	 */
+func ByteToMegabyte(data string) string{
+	base,_ := strconv.Atoi(data)
+	result := float64(base)/(1024*1024)
+	return strconv.FormatFloat(result,'f',2,32)
 }
