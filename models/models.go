@@ -7,8 +7,7 @@ import (
 		"log"
 		"GoDisk/tools"
 		"reflect"
-
-		)
+)
 
 //用户表
 type User struct {
@@ -59,7 +58,7 @@ func init() {
 	orm.RegisterDriver("sqlite", orm.DRSqlite)
 	// 注册默认数据库
 	// 备注：此处第一个参数必须设置为“default”（因为我现在只有一个数据库），否则编译报错说：必须有一个注册DB的别名为 default
-	orm.RegisterDataBase("default", "sqlite3", "static/db/data.db")
+	orm.RegisterDataBase("default", "sqlite3", "data.db")
 	// 需要在init中注册定义的model
 	orm.RegisterModel(new(User),new(Classify),new(File),new(Config))
 	// 开启 orm 调试模式：开发过程中建议打开，release时需要关闭
@@ -73,7 +72,7 @@ func init() {
 	CheckInstall()
 
 	//sqlx
-	dbx,_ = sqlx.Open("sqlite3","static/db/data.db")
+	dbx,_ = sqlx.Open("sqlite3","data.db")
 }
 
 // 检测是否初始化数据库

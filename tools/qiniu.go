@@ -5,9 +5,9 @@ import (
 	"github.com/qiniu/api.v7/auth/qbox"
 	"context"
 	"net/http"
-		"os"
+	"os"
 	"io/ioutil"
-		"log"
+	"log"
 )
 
 

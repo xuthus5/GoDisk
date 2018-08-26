@@ -13,7 +13,6 @@ func init() {
     beego.Router("/setting",&controllers.MainController{},"*:Setting")
 	beego.Router("/postSetting",&controllers.MainController{},"post:PostSetting")
     beego.Router("/localUpload",&controllers.MainController{},"*:LocalUpload")
-	beego.Router("/qiniuUpload",&controllers.MainController{},"*:QiniuUpload")
 
     //用户模块
 	beego.Router("/login",&controllers.UserController{},"*:Login")
@@ -21,6 +20,9 @@ func init() {
 
     //接口Api
     beego.Router("/api/upload",&controllers.ApiController{},"post:Upload")
-    beego.Router("/api/qiniu",&controllers.ApiController{},"post:QiniuUpload")
 	beego.Router("/api/saveFile",&controllers.ApiController{},"post:SaveFile")
+
+    //七牛云模块
+    beego.Router("/qiniu",&controllers.QiNiuController{},"get:Index") //页面
+	beego.Router("/api/qiniu",&controllers.ApiController{},"post:QiniuUpload")//上传接口
 }
