@@ -87,5 +87,5 @@ func (this *MainController) LocalUpload() {
 	this.Data["classify"] = models.ApiClassifyList()
 	this.Data["list"] = models.ApiFileList()
 	this.Layout = "layout.html"
-	this.TplName = "localUpload.html"
+	this.TplName = "local.html"
 }
