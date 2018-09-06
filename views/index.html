@@ -113,32 +113,33 @@
     }
 
 </style>
+<div class="heading-block">
+
+    <h1>共享·文件列表</h1>
+</div>
 <div class="layui-container">
     <div class="layui-row">
-        <div class="layui-col-md12 main">
-            <span class="circle1"></span>
-            <span class="circle2"></span>
-            <span class="circle3"></span>
-            <span class="circle4"></span>
-            <div>
-                <img src="static/assets/img/logo/god.png" alt="">
-            </div>
-            <div class="text-center">
-                <p class="fl">
-                    <span>一个基于beego构建的web存储应用</span>
-                    <br>
-                    <span class="sl">帮你快速部署存储服务</span>
-                </p>
-            </div>
-            <div class="bbtn">
-                <a class="layui-btn layui-btn-primary  layui-btn-lg layui-btn-radius" style="width: 170px" href="https://gitee.com/xuthus5/GoDisk" target="_blank"><i
-                        class="layui-icon">&#xe656;</i> 下载
-                </a>
-                <a class="layui-btn layui-btn-warm  layui-btn-lg layui-btn-radius" style="width: 170px" href="./login"><i
-                        class="layui-icon">&#xe656;</i> DEMO
-                </a>
-            </div>
-        </div>
+        <table class="layui-table" lay-skin="line">
+            <colgroup>
+                <col width="150">
+                <col width="200">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>文件</th>
+                <th>链接</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range .list}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td><a href="./{{.Path}}" class="text-purple">{{.Path}}</a></td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="layui-col-md12">

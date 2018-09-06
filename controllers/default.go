@@ -11,6 +11,7 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
+	this.Data["list"] = models.ApiFileList()
 	this.TplName = "index.html"
 }
 
