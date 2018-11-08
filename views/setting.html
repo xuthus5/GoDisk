@@ -1,270 +1,274 @@
-<div class="admin-menu fold">
-    <p class="admin-menu-f" id="admin-menu-f"><i class="layui-icon layui-icon-more"></i></p>
-    <ul>
-        <li class="menu-item">
-            <a href="/admin"><i class="layui-icon layui-icon-console " ></i><span class="wb-nav-title"> 仪表盘</span> </a>
-            <span class="menu-item-tip">仪表盘</span>
-        </li>
-        <li class="menu-item ">
-            <a href="/classify"><i class="layui-icon layui-icon-table" ></i> <span class="wb-nav-title"> 分类管理</span> </a>
-            <span class="menu-item-tip">分类管理</span>
-        </li>
-        <li class="menu-item">
-            <a href="/localUpload"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
-            <span class="menu-item-tip">附件管理</span>
-        </li>
-        <li class="menu-item">
-            <a href="/qiniu"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
-            <span class="menu-item-tip">上传七牛云</span>
-        </li>
-        <li class="menu-item active" >
-            <a href="/setting"><i class="layui-icon  layui-icon-set" ></i><span class="wb-nav-title"> 系统设置</span></a>
-            <span class="menu-item-tip">系统设置</span>
-        </li>
-    </ul>
-</div>
-<div class="admin-submenu">
-    <div style="width: 100%; height: 100%">
-        <div class="submenu-scene">
-            仪表盘
-        </div>
-        <div class="submenu-item">配置</div>
-        <ul>
-            <li class="active"><a href="#"> 全局配置<span class="layui-badge-dot"></span></a></li>
-        </ul>
-        <div id="admin-submenu-c">
-            <i class="layui-icon layui-icon-prev"></i>
-        </div>
+<link href="/static/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>网站设置</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">首页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/admin">后台</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>网站设置</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
     </div>
 </div>
-<div class="admin-content">
-    <div class="layui-row layui-col-space30">
-        <div class="layui-col-md12">
-            <div class="adminpageheader">
-                <h2 class="adminpagetitle">当前位置：<a href="">后台空模板</a></h2>
-            </div>
-            <div class="admin-block">
-                <div class="block">
-                    <div class="block-tab">
-                        <div class="layui-tab layui-tab-brief" lay-filter="settingtab">
-                            <ul class="layui-tab-title">
-                                <li class="layui-this">网站设置</li>
-                                <li>秘钥配置</li>
-                            </ul>
-                            <div class="layui-tab-content">
-                                <div class="layui-tab-item layui-show">
-                                    <div class="block-body">
-                                        <div class="block-table">
-                                            <div class="layui-row">
-                                                <div class="layui-col-md2">
-                                                    <div class="layui-form-group">基础设置</div>
-                                                </div>
-                                                <div class="layui-col-md10">
-                                                    <form class="layui-form" action="" lay-filter="setting">
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>网站配置
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12 b-r">
+                            <p>网站全局配置.</p>
+                            <form role="form" id="form-site">
+                                <div class="form-group  row"><label class="col-sm-2 col-form-label">网站标题</label>
 
-                                                        <div class="layui-row  layui-form-item">
-                                                            <div class="layui-col-md12">
-                                                                <label class="layui-form-label"><span
-                                                                        class="text-red">*</span>站点名称：</label>
-                                                                <div class="layui-input-block">
-                                                                    <input type="text" name="sitename"
-                                                                           lay-verify="required" placeholder=""
-                                                                           autocomplete="off" class="layui-input"
-                                                                           value="GoD - admin！">
-                                                                    <div class="input-tip">全站显示Title位置</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="layui-row  layui-form-item">
-                                                            <div class="layui-col-md12">
-                                                                <label class="layui-form-label"><span
-                                                                        class="text-red">*</span>SEO关键字：</label>
-                                                                <div class="layui-input-block">
-                                                                    <input type="text" name="keyword"
-                                                                           lay-verify="required" placeholder="请输入关键字"
-                                                                           autocomplete="off" class="layui-input">
-                                                                    <div class="input-tip">请使用英文逗号分开</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="layui-row  layui-form-item">
-                                                            <div class="layui-col-md12">
-                                                                <label class="layui-form-label"><span
-                                                                        class="text-red">*</span>站点描述：</label>
-                                                                <div class="layui-input-block">
-                                                                    <textarea name="description" placeholder=""
-                                                                              class="layui-textarea"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="layui-row  layui-form-item">
-                                                            <div class="layui-col-md12">
-                                                                <label class="layui-form-label">站点状态：</label>
-                                                                <div class="layui-input-block">
-                                                                    <input type="checkbox" name="status"
-                                                                           lay-skin="switch" lay-text="已运行|已关闭"
-                                                                           value="1" checked>
-                                                                    <div class="input-tip">启用起来就很完美</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="layui-form-item">
-                                                            <div class="layui-input-block">
-                                                                <button class="layui-btn" lay-submit
-                                                                        lay-filter="forsetting">立即提交
-                                                                </button>
-                                                                <button type="reset"
-                                                                        class="layui-btn layui-btn-primary">重置
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col-sm-10"><input type="text" class="form-control" name="WebTitle"
+                                                                  value="{{sc "WebTitle"}}">
                                     </div>
                                 </div>
-                                <div class="layui-tab-item">
-                                    <div class="block-body">
-                                        <div class="block-table">
-                                            <div class="layui-row">
-                                                <div class="layui-col-md2">
-                                                    <div class="layui-form-group">七牛云密钥设置</div>
-                                                </div>
-                                                <div class="layui-col-md10">
-                                                    <form class="layui-form" action="" lay-filter="setting">
-
-                                                        <div class="layui-row  layui-form-item">
-                                                            <div class="layui-col-md12">
-                                                                <label class="layui-form-label"><span
-                                                                        class="text-red">*</span>AccessKey：</label>
-                                                                <div class="layui-input-block">
-                                                                    <input type="text" name="Accesskey"
-                                                                           lay-verify="required"
-                                                                           autocomplete="off" class="layui-input"
-                                                                           value="{{.Qiniu.Accesskey}}">
-                                                                    <div class="input-tip">访问密钥</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="layui-row  layui-form-item">
-                                                            <div class="layui-col-md12">
-                                                                <label class="layui-form-label"><span
-                                                                        class="text-red">*</span>SecretKey：</label>
-                                                                <div class="layui-input-block">
-                                                                    <input type="password" name="Secretkey"
-                                                                           lay-verify="required"
-                                                                           autocomplete="off" class="layui-input" value="{{.Qiniu.Secretkey}}">
-                                                                    <div class="input-tip">密钥</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="layui-row  layui-form-item">
-                                                            <div class="layui-col-md12">
-                                                                <label class="layui-form-label"><span
-                                                                        class="text-red">*</span>Bucket：</label>
-                                                                <div class="layui-input-block">
-                                                                    <input type="text" name="Bucket"
-                                                                           lay-verify="required"
-                                                                           autocomplete="off" class="layui-input" value="{{.Qiniu.Bucket}}">
-                                                                    <div class="input-tip">存储空间名称</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="layui-row  layui-form-item">
-                                                            <div class="layui-col-md12">
-                                                                <label class="layui-form-label"><span
-                                                                        class="text-red">*</span>Zone：</label>
-                                                                <div class="layui-input-block">
-                                                                    <select name="Zone" lay-verify="">
-                                                                        <option value="storage.ZoneHuadong">华东</option>
-                                                                        <option value="storage.ZoneHuabei" selected>华北</option>
-                                                                        <option value="storage.ZoneHuanan">华南</option>
-                                                                        <option value="storage.ZoneBeimei">北美</option>
-                                                                    </select>
-                                                                    <div class="input-tip">机房位置</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="layui-form-item">
-                                                            <div class="layui-input-block">
-                                                                <button class="layui-btn" lay-submit
-                                                                        lay-filter="setting">保存
-                                                                </button>
-                                                                <button type="reset"
-                                                                        class="layui-btn layui-btn-primary">重置
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">网站LOGO</label>
+                                    <div class="col-lg-10"><input type="text" placeholder="网站LOGO的资源地址" name="LogoUrl"
+                                                                  class="form-control" value="{{sc "LogoUrl"}}">
                                     </div>
                                 </div>
-                            </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">网站关键字</label>
+                                    <div class="col-sm-10"><input type="text" class="form-control" name="Keywords"
+                                                                  value="{{sc "Keywords"}}"> <span
+                                            class="form-text m-b-none">.</span>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-sm-2 col-form-label">版权信息</label>
+
+                                    <div class="col-sm-10"><input type="text" class="form-control"
+                                                                  value="{{sc "CopyRight"}}" name="CopyRight">
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">网站描述</label>
+
+                                    <div class="col-lg-10"><textarea class="form-control" rows="3"
+                                                                     name="Description">{{sc "Description"}}</textarea>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                        <button class="btn btn-primary btn-sm" type="button" id="siteInfo">提交</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>个人信息</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="form-user">
+                                <p>用户相关信息配置.</p>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">账号</label>
+                                    <div class="col-lg-10"><input type="text" placeholder="用户登陆账号" name="Author"
+                                                                  class="form-control" value="{{sc "Author"}}">
+                                    </div>
+                                </div>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">密码</label>
+                                    <div class="col-lg-10"><input type="password" placeholder="用户登陆密码" name="Password"
+                                                                  class="form-control" value="{{sc "Password"}}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button class="btn btn-sm btn-danger" type="button" id="userInfo">修改</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>七牛云配置</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="form-qiniu">
+                                <p>七牛云存储信息配置.</p>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">AccessKey：</label>
+                                    <div class="col-lg-10"><input type="text" placeholder="用户登陆账号" name="Accesskey"
+                                                                  class="form-control" value="{{sc "Accesskey"}}">
+                                    </div>
+                                </div>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">SecretKey：</label>
+                                    <div class="col-lg-10"><input type="password" placeholder="用户登陆密码" name="Secretkey"
+                                                                  class="form-control" value="{{sc "Secretkey"}}">
+                                    </div>
+                                </div>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">Bucket：</label>
+                                    <div class="col-lg-10"><input type="text" placeholder="用户登陆账号" name="Bucket"
+                                                                  class="form-control" value="{{sc "Bucket"}}">
+                                    </div>
+                                </div>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">Zone：</label>
+
+                                    <div class="col-lg-10">
+                                        <select data-placeholder="请选择一个分类" name="Zone"
+                                                class="chosen-select form-control"
+                                                tabindex="2">
+                                            <option></option>
+                                        {{with $zone := sc "Zone"}}
+                                        {{if eq $zone "storage.ZoneHuadong"}}
+                                            <option value="storage.ZoneHuadong" selected>华东</option>
+                                            <option value="storage.ZoneHuabei">华北</option>
+                                            <option value="storage.ZoneHuanan">华南</option>
+                                            <option value="storage.ZoneBeimei">北美</option>
+                                        {{else if eq $zone "storage.ZoneHuabei"}}
+                                            <option value="storage.ZoneHuadong">华东</option>
+                                            <option value="storage.ZoneHuabei" selected>华北</option>
+                                            <option value="storage.ZoneHuanan">华南</option>
+                                            <option value="storage.ZoneBeimei">北美</option>
+                                        {{else if eq $zone "storage.ZoneHuanan"}}
+                                            <option value="storage.ZoneHuadong">华东</option>
+                                            <option value="storage.ZoneHuabei">华北</option>
+                                            <option value="storage.ZoneHuanan" selected>华南</option>
+                                            <option value="storage.ZoneBeimei">北美</option>
+                                        {{else if eq $zone "storage.ZoneBeimei"}}
+                                            <option value="storage.ZoneHuadong">华东</option>
+                                            <option value="storage.ZoneHuabei">华北</option>
+                                            <option value="storage.ZoneHuanan">华南</option>
+                                            <option value="storage.ZoneBeimei" selected>北美</option>
+                                        {{else}}
+                                            <option value="storage.ZoneHuadong" selected>华东</option>
+                                            <option value="storage.ZoneHuabei">华北</option>
+                                            <option value="storage.ZoneHuanan">华南</option>
+                                            <option value="storage.ZoneBeimei">北美</option>
+                                        {{end}}
+                                        {{end}}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button class="btn btn-sm btn-danger" type="button" id="niniuInfo">修改</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-<script src="static/layui/layui.js"></script>
-<script type="text/javascript">
-    layui.use(['form'], function () {
-        // 操作对象
-        var form = layui.form;
-        form.on('submit(setting)', function(data){
-            //console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
-            //登录
-            //调用后台登录验证的方法
-            var xmlhttp;
-            if (window.XMLHttpRequest) {
-                //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
-                xmlhttp = new XMLHttpRequest();
-            } else {
-                // IE6, IE5 浏览器执行代码
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-
-            var Accesskey = data.field.Accesskey;
-            var Secretkey = data.field.Secretkey;
-            var Bucket = data.field.Bucket;
-            var Zone = data.field.Zone;
-            //console.log(Accesskey,Secretkey,Bucket,Zone);
-
-            xmlhttp.onreadystatechange = state_Change;
-            xmlhttp.open("POST", "/postSetting", true);
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send("Accesskey=" + Accesskey + "&Secretkey=" + Secretkey + "&Bucket=" + Bucket + "&Zone=" + Zone);
-
-            function state_Change() {
-                if (xmlhttp.readyState == 4) {// 4 = "loaded"
-                    if (xmlhttp.status == 200) {// 200 = "OK"
-                        var result = JSON.parse(xmlhttp.response);
-                        //输出弹窗 重定向到个人中心
-                        layer.open({
-                            title: result.Title
-                            , content: result.Msg,
-                            yes: function(index){
-                                if (result.Code==1){
-                                    window.location.href="/admin";
-                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
-                                }else{
-                                    layer.close(index); //如果设定了yes回调，需进行手工关闭
-                                }
-                            }
-                        });
-                    } else {
-                        layer.open({
-                            title: '服务器无响应'
-                            , content: "服务器开小差啦！！"
-                        });
+<!-- Chosen -->
+<script src="/static/js/plugins/chosen/chosen.jquery.js"></script>
+<!-- layer -->
+<script src="/static/layer/layer.js"></script>
+<script>
+    $('.chosen-select').chosen({width: "100%"});
+    $("#siteInfo").click(function () {
+        const postData = $("#form-site").serialize();
+        $.post("/api/site/config?submit=siteInfo", postData, function (res) {
+            if (res.Error === 0) {
+                layer.open({
+                    skin: 'layer-class',
+                    title: res.Title
+                    , content: res.Msg,
+                    yes: function (index) {
+                        window.location.href = "/admin/setting";
                     }
-                }
+                });
+            } else {
+                layer.msg(res.Title + res.Msg, {time: 2000});
             }
-            return false;
-        })
+        }, "json");
+        return false;
+    });
+    $("#userInfo").click(function () {
+        const postData = $("#form-user").serialize();
+        $.post("/api/site/config?submit=userInfo", postData, function (res) {
+            if (res.Error === 0) {
+                layer.open({
+                    skin: 'layer-class',
+                    title: res.Title
+                    , content: res.Msg,
+                    yes: function (index) {
+                        window.location.href = "/admin/setting";
+                    }
+                });
+            } else {
+                layer.msg(res.Title + res.Msg, {
+                    icon: 2,
+                    shade: [0.8, '#393D49'], // 透明度  颜色
+                    time: 2000
+                });
+            }
+        }, "json");
+        return false;
+    });
+    $("#niniuInfo").click(function () {
+        const postData = $("#form-qiniu").serialize();
+        $.post("/api/site/config?submit=niniuInfo", postData, function (res) {
+            if (res.Error === 0) {
+                layer.open({
+                    skin: 'layer-class',
+                    title: res.Title
+                    , content: res.Msg,
+                    yes: function (index) {
+                        window.location.href = "/admin/setting";
+                    }
+                });
+            } else {
+                layer.msg(res.Title + res.Msg, {
+                    icon: 2,
+                    shade: [0.8, '#393D49'], // 透明度  颜色
+                    time: 2000
+                });
+            }
+        }, "json");
+        return false;
     });
 </script>

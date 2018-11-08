@@ -1,29 +1,28 @@
 package tools
 
 import (
-	"github.com/qiniu/api.v7/storage"
-	"github.com/qiniu/api.v7/auth/qbox"
 	"context"
-	"net/http"
-	"os"
+	"github.com/qiniu/api.v7/auth/qbox"
+	"github.com/qiniu/api.v7/storage"
 	"io/ioutil"
 	"log"
+	"net/http"
+	"os"
 )
 
-
 //上传接口
-func QiniuApi(filePath,fileName string,config map[string]string) bool {
+func QiniuApi(filePath, fileName string, config map[string]string) bool {
 	var (
 		Accesskey = config["Accesskey"]
 		Secretkey = config["Secretkey"]
-		Bucket = config["Bucket"]
-		Zone = config["Zone"]
+		Bucket    = config["Bucket"]
+		Zone      = config["Zone"]
 	)
 	localFile := filePath
 	key := fileName
 
 	putPolicy := storage.PutPolicy{
-		Scope:Bucket,
+		Scope: Bucket,
 	}
 
 	mac := qbox.NewMac(Accesskey, Secretkey)
@@ -63,23 +62,46 @@ func QiniuApi(filePath,fileName string,config map[string]string) bool {
 }
 
 //管理凭证生成
-func GeneratingVoucher(data map[string]string) string{
+func GeneratingVoucher(data map[string]string) string {
 	var (
 		Accesskey = data["Accesskey"]
 		Secretkey = data["Secretkey"]
 	)
-
-	signingStr := data["Parameter"]+"\n"
+	signingStr := data["Parameter"] + "\n"
 	signByte := []byte(signingStr)
-	mac := qbox.NewMac(Accesskey,Secretkey)
+	mac := qbox.NewMac(Accesskey, Secretkey)
 	sign := mac.Sign(signByte)
 	return sign
 }
 
 //获取Bucket的数据
-func GetBucketData(data map[string]string) []byte{
+func GetBucketData(data map[string]string) []byte {
 	client := &http.Client{}
 	request, err := http.NewRequest("GET", data["Url"], nil) //建立一个请求
+	if err != nil {
+		log.Println("Fatal error ", err.Error())
+		os.Exit(0)
+	}
+	//获取凭证
+	sign := GeneratingVoucher(data)
+	//Add 头协议
+	request.Header.Add("Host", data["Host"])
+	request.Header.Add("User-Agent", "Go-http-client/1.1")
+	request.Header.Add("Authorization", "QBox "+sign)
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	response, err := client.Do(request) //提交
+	defer response.Body.Close()
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	return body //网页源码
+}
+
+//删除文件
+func DeleteFile(data map[string]string) []byte {
+	client := &http.Client{}
+	request, err := http.NewRequest("POST", data["Url"], nil) //建立一个请求
 	if err != nil {
 		log.Println("Fatal error ", err.Error())
 		os.Exit(0)
@@ -89,13 +111,12 @@ func GetBucketData(data map[string]string) []byte{
 	sign := GeneratingVoucher(data)
 
 	//Add 头协议
-	request.Header.Add("Host",data["Host"])
-	request.Header.Add("User-Agent","Go-http-client/1.1")
+	request.Header.Add("Host", data["Host"])
+	request.Header.Add("User-Agent", "Go-http-client/1.1")
 	request.Header.Add("Authorization", "QBox "+sign)
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	response, err := client.Do(request) //提交
 	defer response.Body.Close()
-
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		log.Fatal(err.Error())

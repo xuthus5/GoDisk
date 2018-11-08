@@ -2,172 +2,114 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>GoD - admin！ </title>
-    <link rel="shortcut icon" href="static/assets/favicon.ico" type="image/x-icon"/>
-    <link rel="icon" href="static/assets/favicon.ico" type="image/x-icon"/>
-    <meta name="keywords" content="GoD,beego,golang,layui,Simple">
-    <meta name="description" content="GoD - 一个基于beego构建的web存储应用！帮你快速部署存储服务">
-    <link rel="stylesheet" href="static/assets/css/s.css">
-    <link rel="stylesheet" href="static/assets/css/style.css">
-    <script src="static/assets/layui.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>GoMD | Admin</title>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!-- Gritter -->
+    <link href="/static/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
 </head>
+
 <body>
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <img alt="image" class="rounded-circle" src="{{sc "LogoUrl"}}"/>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="block m-t-xs font-bold">{{.master}}</span>
+                            <span class="text-muted text-xs block">管理员 <b class="caret"></b></span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        {{/*<li><a class="dropdown-item" href="#">个人信息</a></li>*/}}
+                        {{/*<li><a class="dropdown-item" href="#">好友</a></li>*/}}
+                        {{/*<li><a class="dropdown-item" href="#">信箱</a></li>*/}}
+                            <li class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">退出</a></li>
+                        </ul>
+                    </div>
+                    <div class="logo-element">
+                        GoMD
+                    </div>
+                </li>
+                <li class="active">
+                    <a href="/admin"><i class="fa fa-diamond"></i> <span class="nav-label">仪表盘</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">本地上传</span><span
+                            class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse">
+                        <li><a href="/admin/upload/local">上传文件</a></li>
+                        <li><a href="/admin/category">分类管理</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/admin/upload/qiniu"><i class="fa fa-flask"></i> <span class="nav-label">七牛云上传</span></a>
+                </li>
+                <li>
+                    <a href="/admin/setting"><i class="fa fa-desktop"></i> <span class="nav-label">网站配置</span></a>
+                </li>
+                <li class="special_link">
+                    <a href="/"><i class="fa fa-home"></i> <span class="nav-label">回首页</span></a>
+                </li>
+            </ul>
 
+        </div>
+    </nav>
 
-<div class="admin-header">
-    <div class="header-logo ">
-        <img src="static/assets/img/logo/logoadmin.png" alt="">
-    </div>
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i>
+                    </a>
 
-    <ul class="header-left">
-        <li><a href=""><i class="layui-icon layui-icon-website" ></i></a></li>
-        <li><a href=""><i class="layui-icon layui-icon-flag"></i></a></li>
-        <li><a href=""><i class="layui-icon layui-icon-search"></i></a></li>
-    </ul>
-
-
-    <ul class="layui-nav header-right">
-        <li class="layui-nav-item  header-right-item">
-            <a href="" ><img src="static/assets/img/faces/tx.png" class="layui-nav-img">{{.Username}}</a>
-            <dl class="layui-nav-child">
-                <dd><a href="#">修改密码</a></dd>
-                <dd><a href="/logout">退出</a></dd>
-            </dl>
-        </li>
-
-        <li class="layui-nav-item header-right-item">
-            <a href=""><i class="layui-icon layui-icon-close"></i></a>
-        </li>
-
-    </ul>
-    <div class="layui-clear"></div>
-</div>
-
-
-{{.LayoutContent}}
-
-
-<div class="admin-panel">
-    <div class="layui-collapse">
-
-        <div class="layui-colla-item">
-            <h2 class="layui-colla-title panel-item"><i class="layui-icon layui-icon-face-smile-fine"></i> <span class="sfqt">后台播报</span>   </h2>
-            <div class="layui-colla-content layui-show item-color">
-                <ul>
-                    <li>前端模板 <a href="https://gitee.com/bambi008/Simple">simple</a> </li>
-                    <li>网站框架 <a href="https://beego.me/">beego</a> </li>
-                    <li>使用数据库 sqlite3 </li>
-                    <li>作者 <a href="https://gitee.com/xuthus5/events">xuthus</a></li>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">欢迎使用GoDisk文件存储系统.</span>
+                    </li>
+                    <li>
+                        <a href="/logout">
+                            <i class="fa fa-sign-out"></i> 注销
+                        </a>
+                    </li>
                 </ul>
+
+            </nav>
+        </div>
+
+    {{.LayoutContent}}
+
+        <div class="footer">
+            <div class="float-right">
+                Made by <strong>GoDisk</strong> .
+            </div>
+            <div>
+                © 2018 <strong>{{sc "CopyRight"}}</strong> All Rights Reserved.
             </div>
         </div>
-
-        <div class="layui-colla-item ">
-            <h2 class="layui-colla-title panel-item"><i class="layui-icon layui-icon-notice"></i>  <span class="sfqt">系统更新</span></h2>
-            <div class="layui-colla-content item-color">
-                <ul>
-                    <li>暂无</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="layui-colla-item">
-            <h2 class="layui-colla-title panel-item"><i class="layui-icon layui-icon-about" ></i>  <span class="sfqt">联系我们</span></h2>
-            <div class="layui-colla-content item-color">作者 ： <a href="https://gitee.com/xuthus5/events">xuthus</a> </div>
-        </div>
     </div>
-
-    <div class="admin-panel-a">
-        <div id="admin-panel-c"><i class="layui-icon layui-icon-spread-left"></i> 收起面板</div>
-    </div>
-
 </div>
+<!-- 主体脚本 -->
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-<script>
-    layui.use(['element','form', 'layer', 'jquery'], function () {
+<!-- 自定义和插件 -->
+<script src="/static/js/inspinia.js"></script>
+<script src="/static/js/plugins/pace/pace.min.js"></script>
 
-        var element = layui.element;
-        var form = layui.form;
-        var $ = layui.jquery;
-        var layer = layui.layer;
+<!-- jQuery UI -->
+<script src="/static/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 
-
-
-        /* 左侧收缩hover效果 */
-        $('.menu-item').mouseover(function () {
-
-            if($('.admin-menu.fold').length>0){
-                $(this).find('.menu-item-tip').show();
-            }
-        });
-        $('.menu-item').mouseout(function () {
-
-            if($('.admin-menu.fold').length>0){
-                $(this).find('.menu-item-tip').hide();
-            }
-
-        });
-
-        /* 左菜单控制 */
-        $('#admin-menu-f').click(function () {
-            if ($('.admin-menu').hasClass('open')) {
-                $('.header-logo').toggleClass('open');
-                $('.admin-menu').toggleClass('open');
-                $('.admin-menu').addClass('fold');
-                if ($('.admin-submenu').hasClass('out')) {
-                    $('.admin-content').css({"margin-left": "60px"});
-                } else {
-                    $('.admin-content').css({"margin-left": "170px"});
-                }
-            } else {
-                $('.header-logo').toggleClass('open');
-                $('.admin-menu').toggleClass('open');
-                $('.admin-menu').removeClass('fold');
-                if ($('.admin-submenu').hasClass('out')) {
-                    $('.admin-content').css({"margin-left": "130px"});
-                } else {
-                    $('.admin-content').css({"margin-left": "240px"});
-                }
-            }
-        });
-
-        /* 子菜单控制 */
-        $('#admin-submenu-c').click(function () {
-            if (!$(this).hasClass('out')) {
-                $(this).toggleClass('out');
-                $('.admin-submenu').addClass('out');
-                if ($('.admin-menu').hasClass('fold')) {
-                    $('.admin-content').css({"margin-left": "60px"});
-                } else {
-                    $('.admin-content').css({"margin-left": "130px"});
-                }
-            } else {
-                $('.admin-submenu').removeClass('out');
-                $(this).toggleClass('out');
-                if ($('.admin-menu').hasClass('fold')) {
-                    $('.admin-content').css({"margin-left": "170px"});
-                } else {
-                    $('.admin-content').css({"margin-left": "240px"});
-                }
-            }
-        });
-
-        /* 侧边栏控制面板 */
-        $('#admin-panel-c').click(function () {
-            if (!$(this).hasClass('out')) {
-                $(this).html('<i class="layui-icon layui-icon-tips"></i> 消息看板');
-                $('.admin-panel').addClass('out');
-                $(this).toggleClass('out');
-                $('.admin-content').css({"margin-right": "0"});
-            } else {
-                $(this).html('<i class="layui-icon layui-icon-spread-left"></i> 收起面板');
-                $('.admin-panel').removeClass('out');
-                $(this).toggleClass('out');
-                $('.admin-content').css({"margin-right": "170px"});
-            }
-        });
-    });
-</script>
 </body>
 </html>

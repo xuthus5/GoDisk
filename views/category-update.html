@@ -1,0 +1,106 @@
+<link rel="stylesheet" href="/static/bootstrap-table/bootstrap-table.css">
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>分类链接管理</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">首页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/admin">后台</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>分类链接管理</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>修改链接信息
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12 b-r">
+                        {{range .category}}
+                            <form role="form">
+                                <div class="form-group"><label>名称</label> <input type="text"
+                                                                                 placeholder="例如 文章"
+                                                                                 class="form-control" name="Name"
+                                                                                 value="{{.Name}}"></div>
+                                <div class="form-group"><label>网址</label> <input type="text"
+                                                                                 placeholder="例如 article"
+                                                                                 class="form-control" name="Key"
+                                                                                 value="{{.Key}}"></div>
+                                <div class="form-group"><label for="inputPassword4">描述</label>
+                                    <textarea class="form-control" rows="3" name="Description"
+                                              placeholder="分类的作用">{{.Description}}</textarea></div>
+                                <div>
+                                    <button class="btn btn-sm btn-primary float-right m-t-n-xs" id="submit"
+                                            type="button">
+                                        <strong>提交</strong></button>
+                                </div>
+                            </form>
+                        {{end}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/layer/layer.js"></script>
+<script>
+    // 定义layer主题名称
+    layer.config({
+        skin: 'layer-class'
+    });
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    $("#submit").click(function () {
+        $(document).ready(function () {
+            const postData = $("form").serialize();
+            console.log(postData);
+            $.post("/api/category/update?id=" + GetQueryString("id"), postData, function (res) {
+                if (res.Error === 0) {
+                    layer.open({
+                        skin: 'layer-class',
+                        title: res.Title
+                        , content: res.Msg,
+                        yes: function (index) {
+                            window.location.href = "/admin/category";
+                        }
+                    });
+                } else {
+                    layer.msg(res.Title + res.Msg, {
+                        icon: 2,
+                        shade: [0.8, '#393D49'], // 透明度  颜色
+                        time: 2000
+                    });
+                }
+            }, "json");
+            return false;
+        });
+    });
+</script>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,16 +7,16 @@
     <title>GoD - 一个基于beego构建的web存储应用！ </title>
     <link rel="shortcut icon" href="static/assets/favicon.ico" type="image/x-icon"/>
     <link rel="icon" href="static/assets/favicon.ico" type="image/x-icon"/>
-    <meta name="keywords" content="GoD,beego,golang,layui,Simple">
+    <meta name="keywords" content="GoD,beego,golang,layui">
     <meta name="description" content="GoD - 一个基于beego构建的web存储应用！帮你快速部署存储服务">
-    <link rel="stylesheet" href="static/assets/css/s.css">
-    <script src="static/assets/layui.js"></script>
+    <link rel="stylesheet" href="/static/layui/css/s.css">
+    <script src="/static/layui/layui.js"></script>
 </head>
 <body>
 <div class="s-header">
     <div class="layui-container flex space-between">
-        <a class="s-header-a" href="./core.html">
-            <img src="static/assets/img/logo/god.png" alt="" class="s-header-logo">
+        <a class="s-header-a" href="/">
+            <img src="/static/images/god.png" alt="" class="s-header-logo">
         </a>
         <ul class="s-header-menu">
             <li><a href="./" class="active">首页</a></li>
@@ -113,33 +114,32 @@
     }
 
 </style>
-<div class="heading-block">
-
-    <h1>共享·文件列表</h1>
-</div>
 <div class="layui-container">
     <div class="layui-row">
-        <table class="layui-table" lay-skin="line">
-            <colgroup>
-                <col width="150">
-                <col width="200">
-                <col>
-            </colgroup>
-            <thead>
-            <tr>
-                <th>文件</th>
-                <th>链接</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{range .list}}
-            <tr>
-                <td>{{.Name}}</td>
-                <td><a href="./{{.Path}}" class="text-purple">{{.Path}}</a></td>
-            </tr>
-            {{end}}
-            </tbody>
-        </table>
+        <div class="layui-col-md12 main">
+            <span class="circle1"></span>
+            <span class="circle2"></span>
+            <span class="circle3"></span>
+            <span class="circle4"></span>
+            <div>
+                <img src="/static/images/god.png" alt="">
+            </div>
+            <div class="text-center">
+                <p class="fl">
+                    <span>一个基于beego构建的web存储应用</span>
+                    <br>
+                    <span class="sl">帮你快速部署存储服务</span>
+                </p>
+            </div>
+            <div class="bbtn">
+                <a class="layui-btn layui-btn-primary  layui-btn-lg layui-btn-radius" style="width: 170px" href="https://gitee.com/xuthus5/GoDisk" target="_blank"><i
+                        class="layui-icon">&#xe656;</i> 下载
+                </a>
+                <a class="layui-btn layui-btn-warm  layui-btn-lg layui-btn-radius" style="width: 170px" href="./login"><i
+                        class="layui-icon">&#xe656;</i> DEMO
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 <div class="layui-col-md12">
@@ -147,17 +147,14 @@
         <ul>
             <li><strong>GoDisk </strong></li>
             <li>Version: v0.1</li>
-            <li>Last Update:2018-8-3</li>
-            <li>
-                Template：<a href="https://gitee.com/bambi008/Simple">Simple</a>
-            </li>
+            <li>Last Update:2018-11-9</li>
         </ul>
     </div>
 </div>
 <script>
     layui.use(['element','form','jquery','upload'], function(){
         var $ = layui.jquery;
-        // 子菜单静态高亮
+
         $('.s-subheader a').each(function(){
             filename=location.href.substr(location.href.lastIndexOf('/')+1);
             if ($(this).attr("href") == filename ){

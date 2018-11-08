@@ -1,87 +1,179 @@
-<div class="admin-menu fold">
-    <p class="admin-menu-f" id="admin-menu-f"><i class="layui-icon layui-icon-more"></i></p>
-    <ul>
-        <li class="menu-item active">
-            <a href="/admin"><i class="layui-icon layui-icon-console " ></i><span class="wb-nav-title"> 仪表盘</span> </a>
-            <span class="menu-item-tip">仪表盘</span>
-        </li>
-        <li class="menu-item ">
-            <a href="/classify"><i class="layui-icon layui-icon-table" ></i> <span class="wb-nav-title"> 分类管理</span> </a>
-            <span class="menu-item-tip">分类管理</span>
-        </li>
-        <li class="menu-item">
-            <a href="/localUpload"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
-            <span class="menu-item-tip">本地上传</span>
-        </li>
-        <li class="menu-item">
-            <a href="/qiniu"><i class="layui-icon layui-icon-template-1 " ></i><span class="wb-nav-title"> 附件管理</span> </a>
-            <span class="menu-item-tip">上传七牛云</span>
-        </li>
-        <li class="menu-item" >
-            <a href="/setting"><i class="layui-icon  layui-icon-set" ></i><span class="wb-nav-title"> 系统设置</span></a>
-            <span class="menu-item-tip">系统设置</span>
-        </li>
-    </ul>
-</div>
-<div class="admin-submenu">
-    <div style="width: 100%; height: 100%">
-        <div class="submenu-scene">
-            仪表盘
-        </div>
-        <div class="submenu-item">统计</div>
-        <div id="admin-submenu-c">
-            <i class="layui-icon layui-icon-prev"></i>
-        </div>
+<link href="/static/css/plugins/dropzone/basic.css" rel="stylesheet">
+<link href="/static/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+<link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/bootstrap-table/bootstrap-table.css">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>仪表盘</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">首页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/admin">后台</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>快速开始</strong>
+            </li>
+        </ol>
     </div>
 </div>
-<div class="admin-content">
-    <div class="layui-row layui-col-space30">
-        <div class="layui-col-md12">
-            <div class="adminpageheader">
-                <h2 class="adminpagetitle">当前位置：<a href="">仪表盘</a></h2>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>快速上传</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <p>
+                        采用<strong>Dropzone.js</strong>上传控件，选择文件后将会自动上传.
+                    </p>
+
+                    <form action="#" class="dropzone" id="dropzoneForm">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple/>
+                        </div>
+                    </form>
+
+                </div>
             </div>
-            <div class="admin-block">
-                <div class="block">
-                    <div class="layui-row layui-col-space25">
-                        <div class="layui-col-md3">
-                            <a class="widget3" href="#">
-                                <div class="widget3-trending text-cyan ">
-                                    <i class="layui-icon layui-icon-upload-drag"></i>
-                                </div>
-                                <div class="widget3-value">{{range .File}}{{.Num}}{{end}}</div>
-                                <div class="widget3-label">附件数</div>
-                            </a>
-                        </div>
-                        <div class="layui-col-md3">
-                            <a class="widget3" href="#">
-                                <div class="widget3-trending  text-orange">
-                                    <i class="layui-icon layui-icon-download-circle"></i>
-                                </div>
-                                <div class="widget3-value">nil</div>
-                                <div class="widget3-label">下载数</div>
-                            </a>
-                        </div>
-                        <div class="layui-col-md3">
-                            <a class="widget3" href="#">
-                                <div class="widget3-trending text-green">
-                                    <i class="layui-icon layui-icon-component"></i>
-                                </div>
-                                <div class="widget3-value">{{range .Classify}}{{.Num}}{{end}}</div>
-                                <div class="widget3-label">分类数</div>
-                            </a>
-                        </div>
-                        <div class="layui-col-md3">
-                            <a class="widget3" href="#">
-                                <div class="widget3-trending text-cyan ">
-                                    <i class="layui-icon layui-icon-user"></i>
-                                </div>
-                                <div class="widget3-value">nil</div>
-                                <div class="widget3-label">访问数</div>
-                            </a>
-                        </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>附件操作</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table id="file-list"></table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script src="/static/bootstrap-table/bootstrap-table.js"></script>
+<script src="/static/layer/layer.js"></script>
+<!-- Jasny -->
+<script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+<!-- DROPZONE -->
+<script src="/static/js/plugins/dropzone/dropzone.js"></script>
+
+<script>
+    Dropzone.autoDiscover = false;
+    $("#dropzoneForm").dropzone({
+        url: "/api/file/upload",
+        maxFilesize: 20,
+        dictDefaultMessage: "<strong>拖拽文件到此处或者点击此处选择文件进行上传. </strong></br>"
+    });
+    $('#file-list').bootstrapTable({
+        url: '/api/file/list',
+        responseHandler: responseHandler,
+        onClickCell: dealOnClickCell,
+        columns: [{
+            field: 'Id',
+            title: 'ID'
+        }, {
+            field: 'Name',
+            title: '标题'
+        }, {
+            field: 'Path',
+            title: '路径(点击复制链接)'
+        }, {
+            field: 'Created',
+            title: '更新时间'
+        }, {
+            field: 'Option',
+            title: '操作',
+            align: 'center',
+            formatter: operateFormatter,
+            events: "operateEvents",
+        }],
+    });
+
+    function responseHandler(res) {
+        return res.data;
+    }
+
+    function dealOnClickCell(field, value, row, $element) {
+        if (field === "Path") {
+            var domain = window.location.host;
+            var url = "http://" + domain + "/" + row.Path;
+            var tag = document.createElement('input');
+            tag.setAttribute('id', 'cp_path_input');
+            tag.value = url;
+            document.getElementsByTagName('body')[0].appendChild(tag);
+            document.getElementById('cp_path_input').select();
+            document.execCommand('copy');
+            document.getElementById('cp_path_input').remove();
+            layer.msg('链接复制成功', {
+                icon: 1,
+                time: 1000
+            });
+        }
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<div class="operate-group">',
+            '<a class="update layui-layer-btn0" href="#">修改</a>',
+            '<a class="delete layui-layer-btn0" href="#">删除</a>',
+            '</div>'
+        ].join('');
+    }
+
+    window.operateEvents = {
+        'click .update': function (e, value, row, index) {
+            layer.open({
+                type: 2,
+                title: '修改分类信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['380px', '90%'],
+                content: '/admin/file/update?id=' + row.Id //iframe的url
+            });
+        },
+        'click .delete': function (e, value, row, index) {
+            layer.confirm('确定删除？',{icon: 3, skin: 'layer-class'}, function (index) {
+                $.get("/api/file/delete?id=" + row.Id, function (res) {
+                    if (res.Error === 0) {
+                        layer.open({
+                            skin: 'layer-class',
+                            title: res.Title
+                            , content: res.Msg,
+                            yes: function (index) {
+                                window.location.href = "/admin/upload/local";
+                                layer.close(index); //如果设定了yes回调，需进行手工关闭
+                            }
+                        });
+                    } else {
+                        layer.msg(res.Title + res.Msg, {
+                            icon: 2,
+                            shade: [0.8, '#393D49'], // 透明度  颜色
+                            time: 2000
+                        });
+                    }
+                }, "json");
+                layer.close(index);
+            });
+        }
+    };
+</script>

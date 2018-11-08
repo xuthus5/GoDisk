@@ -1,0 +1,235 @@
+<link href="/static/css/plugins/dropzone/basic.css" rel="stylesheet">
+<link href="/static/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+<link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+<link href="/static/css/style.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/bootstrap-table/bootstrap-table.css">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>附件管理</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">首页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/admin">后台</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>附件管理</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>七牛云上传
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12 b-r">
+                            <p>自定义文件属性.</p>
+                            <form role="form" id="form-upload">
+                                <div class="form-group  row"><label class="col-sm-2 col-form-label">自定义文件名称</label>
+
+                                    <div class="col-sm-10"><input type="text" class="form-control" name="name"
+                                                                  placeholder="不填写默认文件名">
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row"><label class="col-lg-2 col-form-label">选择文件</label>
+                                    <div class="col-lg-10">
+                                        <div class="custom-file">
+                                            <input id="attachment" type="file" class="custom-file-input"
+                                                   name="attachment">
+                                            <label for="attachment" class="custom-file-label">浏览文件..</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group row">
+                                    <div class="col-sm-4 col-sm-offset-2">
+                                        <button class="btn btn-primary btn-sm" type="button" id="upload">上传</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>七牛云附件管理</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table id="qiniu-list"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/bootstrap-table/bootstrap-table.js"></script>
+<script src="/static/layer/layer.js"></script>
+<!-- Jasny -->
+<script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+<!-- DROPZONE -->
+<script src="/static/js/plugins/dropzone/dropzone.js"></script>
+
+<script>
+    function wait(timeout) {
+        if (timeout === 0) {
+            window.location.href = "/admin/upload/qiniu";
+        } else {
+            setTimeout("wait(0)", 1000);
+        }
+    }
+
+    $('#qiniu-list').bootstrapTable({
+        url: '/api/file/qiniu/list',
+        responseHandler: responseHandler,
+        onClickCell: dealOnClickCell,
+        columns: [{
+            field: 'key',
+            title: '名称'
+        }, {
+            field: 'Path',
+            title: '路径(点击复制链接)'
+        }, {
+            field: 'putTime',
+            title: '更新时间'
+        }, {
+            field: 'fsize',
+            title: '文件大小'
+        }, {
+            field: 'Option',
+            title: '操作',
+            align: 'center',
+            formatter: operateFormatter,
+            events: "operateEvents",
+        }],
+    });
+
+    function responseHandler(res) {
+        var bucket = res.msg;
+        for (var i = 0; i < res.data.length; i++) {
+            res.data[i].fsize = Math.ceil(res.data[i].fsize / 1024) + "KB";
+            var time = res.data[i].putTime.toString();
+            time = time.substring(0, 10);
+            res.data[i].putTime = new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
+            res.data[i].Path = "http://" + bucket + "/" + res.data[i].key;
+        }
+        return res.data;
+    }
+
+    function dealOnClickCell(field, value, row, $element) {
+        if (field === "Path") {
+            var url = row.Path;
+            var tag = document.createElement('input');
+            tag.setAttribute('id', 'cp_path_input');
+            tag.value = url;
+            document.getElementsByTagName('body')[0].appendChild(tag);
+            document.getElementById('cp_path_input').select();
+            document.execCommand('copy');
+            document.getElementById('cp_path_input').remove();
+            layer.msg('链接复制成功', {
+                icon: 1,
+                time: 1000
+            });
+        }
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<div class="operate-group">',
+            '<a class="update layui-layer-btn0" href="#">浏览</a>',
+            '<a class="delete layui-layer-btn0" href="#">删除</a>',
+            '</div>'
+        ].join('');
+    }
+
+    window.operateEvents = {
+        'click .update': function (e, value, row, index) {
+            layer.ready(function () {
+                layer.open({
+                    type: 1,
+                    title: false,
+                    closeBtn: 0,
+                    area: ['516px'],
+                    offset: 'auto',
+                    skin: 'layui-layer-nobg', //没有背景色
+                    shadeClose: true,
+                    content: "<div><img src='" + row.Path + "' style='width: 100%'></div>"
+                });
+            });
+        },
+        'click .delete': function (e, value, row, index) {
+            layer.confirm('确定删除？',{icon: 3, skin: 'layer-class'}, function (index) {
+                $.get("/api/file/qiniu/delete?code=" + {{sc "Bucket"}}+":" + row.key, function (res) {
+                    if (res.data.length === 0) {
+                        layer.msg("删除成功", {time: 2000});
+                        wait(1);
+                    } else {
+                        layer.msg("出现了未知故障！", {
+                            icon: 2,
+                            shade: [0.8, '#393D49'], // 透明度  颜色
+                            time: 2000
+                        });
+                    }
+                    console.log(res);
+                }, "json");
+                layer.close(index);
+            });
+        }
+    };
+
+    $('.custom-file-input').on('change', function () {
+        let fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').addClass("selected").html(fileName);
+    });
+
+    $("#upload").click(function () {
+        const postData = $("#form-user").serialize();
+        var formData = new FormData();
+        formData.append("attachment", document.getElementById("attachment").files[0]);
+        var name = $(" input[ name='name' ] ").val();
+        formData.append("customName", name);
+        $.ajax({
+            type: "POST",
+            url: "/api/upload/qiniu",
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (res) {
+                layer.msg("上传成功", {time: 2000});
+            },
+            error: function () {
+                layer.msg("上传失败", {time: 2000});
+            }
+        });
+        return false;
+    });
+
+</script>

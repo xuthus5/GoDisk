@@ -1,0 +1,187 @@
+<link rel="stylesheet" href="/static/bootstrap-table/bootstrap-table.css">
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>分类管理</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">首页</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/admin">后台</a>
+            </li>
+            <li class="breadcrumb-item active">
+                <strong>分类管理</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>添加分类
+                        <small>在这里添加一个分类</small>
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12 b-r">
+                            <form role="form">
+                                <div class="form-group"><label>名称</label> <input type="text"
+                                                                                 placeholder="例如 图片"
+                                                                                 class="form-control" name="name"></div>
+                                <div class="form-group"><label>标识</label> <input type="text"
+                                                                                 placeholder="例如 pic"
+                                                                                 class="form-control" name="key"></div>
+                                <div class="form-group"><label for="inputPassword4">描述</label>
+                                    <textarea class="form-control" rows="3" name="description"
+                                              placeholder="简述这个分类的作用"></textarea></div>
+                                <div>
+                                    <button class="btn btn-sm btn-primary float-right m-t-n-xs" id="submit"
+                                            type="button">
+                                        <strong>提交</strong></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>分类管理
+                        <small>删除分类不会删除与之相关联的附件,附件将被过继到默认的分类</small>
+                    </h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table id="table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/bootstrap-table/bootstrap-table.js"></script>
+<script src="/static/layer/layer.js"></script>
+<script>
+    $('#table').bootstrapTable({
+        url: '/api/category/list',
+        responseHandler: responseHandler,
+        columns: [{
+            field: 'Id',
+            title: 'ID'
+        }, {
+            field: 'Name',
+            title: '名称'
+        }, {
+            field: 'Key',
+            title: '标识'
+        }, {
+            field: 'Description',
+            title: '描述'
+        }, {
+            field: 'Option',
+            title: '操作',
+            align: 'center',
+            formatter: operateFormatter,
+            events: "operateEvents",
+        }],
+    });
+
+    function responseHandler(res) {
+        return res.data;
+    }
+
+    function operateFormatter(value, row, index) {
+        return [
+            '<div class="operate-group">',
+            '<a class="update layui-layer-btn0" href="#">修改</a>',
+            '<a class="delete layui-layer-btn0" href="#">删除</a>',
+            '</div>'
+        ].join('');
+    }
+    window.operateEvents = {
+        'click .update': function (e, value, row, index) {
+            layer.open({
+                skin: 'layer-class',
+                type: 2,
+                title: '修改分类信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['380px', '90%'],
+                content: '/admin/category/update?id=' + row.Id //iframe的url
+            });
+        },
+        'click .delete': function (e, value, row, index) {
+            layer.confirm('确定删除？',{icon: 3, skin: 'layer-class'}, function (index) {
+                $.get("/api/category/delete?id=" + row.Id, function (res) {
+                    if (res.Error === 0) {
+                        layer.open({
+                            skin: 'layer-class',
+                            title: res.Title
+                            , content: res.Msg,
+                            yes: function (index) {
+                                window.location.href = "/admin/category";
+                            }
+                        });
+                    } else {
+                        layer.msg(res.Title + res.Msg, {
+                            icon: 2,
+                            shade: [0.8, '#393D49'], // 透明度  颜色
+                            time: 2000
+                        });
+                    }
+                }, "json");
+                layer.close(index);
+            });
+        }
+    };
+    $("#submit").click(function () {
+        $(document).ready(function () {
+            const postData = $("form").serialize();
+            $.post("/api/category/add", postData, function (res) {
+                if (res.Error === 0) {
+                    layer.open({
+                        skin: 'layer-class',
+                        title: res.Title
+                        , content: res.Msg,
+                        yes: function (index) {
+                            window.location.href = "/admin/category";
+                            layer.close(index); //如果设定了yes回调，需进行手工关闭
+                        }
+                    });
+                } else {
+                    layer.msg(res.Title + res.Msg, {
+                        icon: 2,
+                        shade: [0.8, '#393D49'], // 透明度  颜色
+                        time: 2000
+                    });
+                }
+            }, "json");
+            return false;
+        });
+    });
+</script>
