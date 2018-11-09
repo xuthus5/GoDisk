@@ -1,5 +1,3 @@
 GoDisk
 data.db
-/tests
-/static/db/*
-/data/*
+/file/*

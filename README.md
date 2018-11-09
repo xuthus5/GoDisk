@@ -24,7 +24,8 @@ go get github.com/beego/bee
 
 &ensp;&ensp; 进入项目 执行 ```go run main.go``` 启动项目，通过bee工具，在项目下执行 ```bee run```
 
-&ensp; 4. 访问
+&ensp; 4. 访问 (默认端口8080,更改端口，请修改 conf/app.conf 》httpport选项)
+
 &ensp;&ensp; 访问： http://ip:8080
 
 # 演示地址
