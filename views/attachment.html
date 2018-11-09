@@ -24,7 +24,7 @@
         <div class="col-lg-4">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>上传</h5>
+                    <h5>快速上传</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -78,9 +78,6 @@
 <script src="/static/js/plugins/dropzone/dropzone.js"></script>
 
 <script>
-    layer.config({
-        skin: 'layer-class'
-    });
     Dropzone.autoDiscover = false;
     $("#dropzoneForm").dropzone({
         url: "/api/file/upload",
@@ -127,10 +124,7 @@
             document.getElementById('cp_path_input').select();
             document.execCommand('copy');
             document.getElementById('cp_path_input').remove();
-            layer.msg('链接复制成功', {
-                icon: 1,
-                time: 1000
-            });
+            layer.msg("链接复制成功", {time: 2000});
         }
     }
 
@@ -159,11 +153,11 @@
                 $.get("/api/file/delete?id=" + row.Id, function (res) {
                     if (res.Error === 0) {
                         layer.open({
+                            skin: 'layer-class',
                             title: res.Title
                             , content: res.Msg,
                             yes: function (index) {
                                 window.location.href = "/admin/upload/local";
-                                layer.close(index); //如果设定了yes回调，需进行手工关闭
                             }
                         });
                     } else {

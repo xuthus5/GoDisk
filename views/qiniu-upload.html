@@ -153,10 +153,7 @@
             document.getElementById('cp_path_input').select();
             document.execCommand('copy');
             document.getElementById('cp_path_input').remove();
-            layer.msg('链接复制成功', {
-                icon: 1,
-                time: 1000
-            });
+            layer.msg("链接复制成功", {time: 2000});
         }
     }
 
@@ -224,6 +221,7 @@
             dataType: "json",
             success: function (res) {
                 layer.msg("上传成功", {time: 2000});
+                wait(1);
             },
             error: function () {
                 layer.msg("上传失败", {time: 2000});

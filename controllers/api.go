@@ -222,10 +222,7 @@ func (this *ApiController) QiniuList() {
 	data["Url"] = "http://" + data["Host"] + data["Parameter"]
 	body := tools.GetBucketData(data)
 	var res Response
-	err := json.Unmarshal([]byte(body), &res)
-	if err != nil {
-		log.Printf("err was %v", err)
-	}
+	json.Unmarshal([]byte(body), &res)
 	this.Data["json"] = JsonData{Msg: match, Data: res.Items}
 	this.ServeJSON()
 }
@@ -234,10 +231,14 @@ func (this *ApiController) QiniuList() {
 func (this *ApiController) QiniuDeleteFile() {
 	code := this.GetString("code")
 	code = base64.StdEncoding.EncodeToString([]byte(code))
+	code = strings.Replace(code, "/", "_", -1)
+	code = strings.Replace(code, "+", "-", -1)
 	data := models.SiteConfigMap()
 	data["Host"] = "rs.qiniu.com"
 	data["Parameter"] = "/delete/" + code
 	data["Url"] = "http://" + data["Host"] + data["Parameter"]
-	this.Data["json"] = JsonData{Data: tools.DeleteFile(data)}
+	var res ResponseError
+	json.Unmarshal([]byte(tools.DeleteFile(data)),&res)
+	this.Data["json"] = JsonData{Data: res.Error}
 	this.ServeJSON()
 }

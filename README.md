@@ -29,12 +29,12 @@ go get github.com/beego/bee
 
 # 演示地址
 
-[demo](http://xblogs.cn:8080/login)
++ [后台演示](http://xblogs.cn:8080/login)
++ 账号密码 admin/admin(请勿修改账户信息)
+
 
 # 演示截图
 
-![首页](./static/assets/img/preview/index.png)
-![首页](./static/assets/img/preview/admin.png)
-![首页](./static/assets/img/preview/classify.png)
-![首页](./static/assets/img/preview/upload.png)
-![首页](./static/assets/img/preview/qiniu.png)
+![本地上传](http://dl.xuthus.cc/godisk-local.pngg)
+![七牛云上传](http://dl.xuthus.cc/godisk-qiniu.png)
+![网站配置](http://dl.xuthus.cc/godisk-set.png)

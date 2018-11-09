@@ -42,3 +42,7 @@ type List struct {
 type Response struct {
 	Items []List `json:"items"`
 }
+// 七牛云删除响应
+type ResponseError struct {
+	Error 	string `json:"error"`
+}
