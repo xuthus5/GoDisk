@@ -35,6 +35,6 @@ go get github.com/beego/bee
 
 # 演示截图
 
-![本地上传](http://dl.xuthus.cc/godisk-local.pngg)
+![本地上传](http://dl.xuthus.cc/godisk-local.png)
 ![七牛云上传](http://dl.xuthus.cc/godisk-qiniu.png)
 ![网站配置](http://dl.xuthus.cc/godisk-set.png)
