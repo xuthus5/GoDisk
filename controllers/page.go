@@ -79,3 +79,14 @@ func (this *MainController) QiniuUpload() {
 	this.Layout = "layout.html"
 	this.TplName = "qiniu-upload.html"
 }
+
+// 七牛云上传页面  路由 /admin/upload/upyun
+func (this *MainController) UpyunUpload() {
+	master := this.GetSession("master")
+	if master == nil {
+		this.Redirect("/login", 302)
+	}
+	this.Data["master"] = master
+	this.Layout = "layout.html"
+	this.TplName = "upyun-upload.html"
+}

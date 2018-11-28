@@ -43,20 +43,28 @@ func init() {
 //安装初始化
 func Initialization() {
 	//配置表初始化
-	dbc.Insert(&Config{Option: "IsInstall", Value: "yes"})
-	dbc.Insert(&Config{Option: "WebTitle", Value: "GoDisk"})
-	dbc.Insert(&Config{Option: "Author", Value: "admin"})
-	dbc.Insert(&Config{Option: "Password", Value: "admin"})
-	dbc.Insert(&Config{Option: "CopyRight", Value: "GoDisk"})
-	dbc.Insert(&Config{Option: "LogoUrl", Value: "/static/images/user-head-image.jpeg"})
-	dbc.Insert(&Config{Option: "Keywords", Value: ""})
-	dbc.Insert(&Config{Option: "Description", Value: ""})
+	dbc.Insert(&Config{Option: "IsInstall", Value: "yes",Addition:""})
+	dbc.Insert(&Config{Option: "WebTitle", Value: "GoDisk",Addition:""})
+	dbc.Insert(&Config{Option: "Author", Value: "admin",Addition:""})
+	dbc.Insert(&Config{Option: "Password", Value: "admin",Addition:""})
+	dbc.Insert(&Config{Option: "CopyRight", Value: "GoDisk",Addition:""})
+	dbc.Insert(&Config{Option: "LogoUrl", Value: "/static/images/user-head-image.jpeg",Addition:""})
+	dbc.Insert(&Config{Option: "Keywords", Value: "",Addition:""})
+	dbc.Insert(&Config{Option: "Description", Value: "",Addition:""})
 	//默认七牛云配置信息写入数据库
 	qiniuConfig := QiniuConfigOption{}
 	t := reflect.TypeOf(qiniuConfig)
 	v := reflect.ValueOf(qiniuConfig)
 	for i := 0; i < t.NumField(); i++ {
 		dbc.Insert(&Config{Option: t.Field(i).Name, Value: v.Field(i).String(), Addition: "Qiniu"})
+	}
+
+	//默认又拍云配置信息写入数据库
+	upyunConfig := UpyunConfigOption{}
+	t = reflect.TypeOf(upyunConfig)
+	v = reflect.ValueOf(upyunConfig)
+	for i := 0; i < t.NumField(); i++ {
+		dbc.Insert(&Config{Option: t.Field(i).Name, Value: v.Field(i).String(), Addition: "Upyun"})
 	}
 
 	//分类表初始化

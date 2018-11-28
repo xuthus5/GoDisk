@@ -1,12 +1,11 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>GoD - 一个基于beego构建的web存储应用！ </title>
-    <meta name="keywords" content="GoD,beego,golang,layui">
-    <meta name="description" content="GoD - 一个基于beego构建的web存储应用！帮你快速部署存储服务">
+    <title>GoDisk - 一个基于beego构建的web存储应用！ </title>
+    <meta name="keywords" content="GoDisk,beego,golang,layui">
+    <meta name="description" content="GoDisk - 一个基于beego构建的web存储应用！帮你快速部署存储服务">
     <link rel="stylesheet" href="/static/layui/css/s.css">
     <script src="/static/layui/layui.js"></script>
 </head>
@@ -33,6 +32,7 @@
     body {
         height: 100vh;
     }
+
     .circle1, .circle2, .circle3, .circle4 {
         position: absolute;
         display: block;
@@ -40,6 +40,7 @@
         z-index: 1;
         animation: floatview 10s infinite;
     }
+
     .circle1 {
         top: 120px;
         left: 145px;
@@ -50,6 +51,7 @@
         background: linear-gradient(180deg, #00a6ff, #00e1ff);
         animation: floatview 8s infinite;
     }
+
     .circle2 {
         right: 175px;
         top: 30px;
@@ -58,6 +60,7 @@
         background: #2d3ee6;
         background: linear-gradient(180deg, #2d3ee6, #6a77ff);
     }
+
     .circle3 {
         left: 15px;
         bottom: 150px;
@@ -66,6 +69,7 @@
         background: #1548dc;
         background: linear-gradient(180deg, #1548dc, #2083fe);
     }
+
     .circle4 {
         right: 15px;
         bottom: 220px;
@@ -76,6 +80,7 @@
         background: linear-gradient(180deg, #f95c75, #f98e9f);
         animation: floatview 8s infinite;
     }
+
     @keyframes floatview {
         0% {
             transform: translateY(0)
@@ -87,6 +92,7 @@
             transform: translateY(0)
         }
     }
+
     .main {
         display: flex;
         flex-direction: column;
@@ -94,6 +100,7 @@
         justify-content: center;
         align-items: center;
     }
+
     .fl {
         text-align: center;
         color: rgba(51, 51, 51, 0.8);
@@ -103,10 +110,12 @@
         line-height: 1.5;
         font-weight: 300;
     }
+
     .sl {
         font-size: 18px;
         text-align: center;
     }
+
     .bbtn {
         margin-bottom: 30px;
     }
@@ -130,11 +139,13 @@
                 </p>
             </div>
             <div class="bbtn">
-                <a class="layui-btn layui-btn-primary  layui-btn-lg layui-btn-radius" style="width: 170px" href="https://gitee.com/xuthus5/GoDisk" target="_blank"><i
-                        class="layui-icon">&#xe656;</i> 下载
+                <a class="layui-btn layui-btn-primary  layui-btn-lg layui-btn-radius" style="width: 170px"
+                   href="https://gitee.com/xuthus5/GoDisk" target="_blank"><i
+                            class="layui-icon">&#xe656;</i> 下载
                 </a>
-                <a class="layui-btn layui-btn-warm  layui-btn-lg layui-btn-radius" style="width: 170px" href="./login"><i
-                        class="layui-icon">&#xe656;</i> DEMO
+                <a class="layui-btn layui-btn-warm  layui-btn-lg layui-btn-radius" style="width: 170px"
+                   href="./login"><i
+                            class="layui-icon">&#xe656;</i> DEMO
                 </a>
             </div>
         </div>
@@ -150,12 +161,12 @@
     </div>
 </div>
 <script>
-    layui.use(['element','form','jquery','upload'], function(){
+    layui.use(['element', 'form', 'jquery', 'upload'], function () {
         var $ = layui.jquery;
 
-        $('.s-subheader a').each(function(){
-            filename=location.href.substr(location.href.lastIndexOf('/')+1);
-            if ($(this).attr("href") == filename ){
+        $('.s-subheader a').each(function () {
+            filename = location.href.substr(location.href.lastIndexOf('/') + 1);
+            if ($(this).attr("href") == filename) {
                 $(this).addClass("active");
             }
         });

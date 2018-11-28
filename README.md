@@ -13,6 +13,7 @@ go get github.com/astaxie/beego
 go get github.com/mattn/go-sqlite3
 go get github.com/jmoiron/sqlx
 go get github.com/qiniu/api.v7
+go get github.com/upyun/go-sdk/upyun
 
 # 官方协助快速开发工具 bee
 go get github.com/beego/bee

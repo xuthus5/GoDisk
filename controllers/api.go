@@ -11,7 +11,9 @@ import (
 	"GoDisk/tools"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/upyun/go-sdk/upyun"
 	"log"
 	"os"
 	"path"
@@ -25,6 +27,9 @@ import (
 type ApiController struct {
 	beego.Controller
 }
+
+// 分类管理 分类管理用于对上传的文件进行分类 目前尚未对分类进行使用 后续的升级过程中 将会加入分类功能
+// 使文件管理变得更加的完美
 
 // 添加分类api  路由 /api/category/add
 func (this *ApiController) CategoryAdd() {
@@ -89,37 +94,8 @@ func (this *ApiController) CategoryList() {
 	this.ServeJSON()
 }
 
-// 网站设置页面  路由  /api/site/config
-func (this *ApiController) SiteConfig() {
-	// 判断提交类型 user为用户信息表单  site为网站配置表单
-	submit := this.GetString("submit")
-	info := &ResultData{}
-	var data interface{}
-	if submit == "userInfo" {
-		data = &models.UserConfigOption{}
-	} else if submit == "siteInfo" {
-		data = &models.SiteConfigOption{}
-	} else {
-		data = &models.QiniuConfigOption{}
-	}
-	if err := this.ParseForm(data); err != nil {
-		info = &ResultData{Error: 1, Title: "失败:", Msg: "接收表单数据出错！"}
-	} else {
-		t := reflect.TypeOf(data).Elem()  //类型
-		v := reflect.ValueOf(data).Elem() //值
-		for i := 0; i < t.NumField(); i++ {
-			config := &models.Config{Option: t.Field(i).Name, Value: v.Field(i).String()}
-			err := models.SiteConfig(config)
-			if err != nil {
-				info = &ResultData{Error: 1, Title: "失败:", Msg: "出现未知错误！"}
-			} else {
-				info = &ResultData{Error: 0, Title: "成功:", Msg: "信息重置成功！"}
-			}
-		}
-	}
-	this.Data["json"] = info
-	this.ServeJSON()
-}
+//文件部分的API 在这里 定义了后台的所有文件操作请求处理方法
+// 这是本地上传的
 
 // 文件上传api 路由 /api/file/upload 返回一个包含文件存储信息的json数据
 func (this *ApiController) FileUpload() {
@@ -178,6 +154,9 @@ func (this *ApiController) FileDelete() {
 	this.ServeJSON()
 }
 
+// 七牛云存储的API操作
+// 目前功能比较简单 实现了预览 删除操作
+
 // 七牛云文件上传接口 路由 /api/upload/qiniu
 func (this *ApiController) QiniuUpload() {
 	f, h, err := this.GetFile("attachment")
@@ -194,8 +173,8 @@ func (this *ApiController) QiniuUpload() {
 		saveName = fileName + fileSuffix
 	}
 	filePath := "file/" + saveName
-	this.SaveToFile("attachment", filePath)                           //保存文件到本地
-	res := tools.QiniuApi(filePath, saveName, models.SiteConfigMap()) //上传到七牛云
+	this.SaveToFile("attachment", filePath)                            //保存文件到本地
+	res := tools.QiniuApi(filePath, saveName, models.RetQiniuConfig()) //上传到七牛云
 	var data *ResultData
 	if res == true {
 		data = &ResultData{Error: 1, Title: "结果:", Msg: "上传成功！"}
@@ -209,7 +188,7 @@ func (this *ApiController) QiniuUpload() {
 
 // 七牛云文件列表接口 路由 /api/file/qiniu/list
 func (this *ApiController) QiniuList() {
-	data := models.SiteConfigMap()
+	data := models.RetQiniuConfig()
 	data["Host"] = "api.qiniu.com"
 	data["Parameter"] = "/v6/domain/list?tbl=" + data["Bucket"]
 	data["Url"] = "http://" + data["Host"] + data["Parameter"]
@@ -233,12 +212,127 @@ func (this *ApiController) QiniuDeleteFile() {
 	code = base64.StdEncoding.EncodeToString([]byte(code))
 	code = strings.Replace(code, "/", "_", -1)
 	code = strings.Replace(code, "+", "-", -1)
-	data := models.SiteConfigMap()
+	data := models.RetQiniuConfig()
 	data["Host"] = "rs.qiniu.com"
 	data["Parameter"] = "/delete/" + code
 	data["Url"] = "http://" + data["Host"] + data["Parameter"]
 	var res ResponseError
-	json.Unmarshal([]byte(tools.DeleteFile(data)),&res)
+	json.Unmarshal([]byte(tools.DeleteFile(data)), &res)
 	this.Data["json"] = JsonData{Data: res.Error}
+	this.ServeJSON()
+}
+
+// 又拍云系列API
+
+//又拍云文件列表 路由 /api/file/upyun/list
+func (this *ApiController) UpyunList() {
+	data := models.RetUpyunConfig()
+	up := upyun.NewUpYun(&upyun.UpYunConfig{
+		Bucket:   data["Bucket"],
+		Operator: data["Operator"],
+		Password: data["Password"],
+	})
+	list := tools.AllUpyunList(up, "/")
+	this.Data["json"] = JsonData{Data: list}
+	this.ServeJSON()
+}
+
+// 又拍云上传 路由 /api/upload/upyun
+func (this *ApiController) UpyunUpload() {
+	data := models.RetUpyunConfig()
+	up := upyun.NewUpYun(&upyun.UpYunConfig{
+		Bucket:   data["Bucket"],
+		Operator: data["Operator"],
+		Password: data["Password"],
+	})
+
+	f, h, err := this.GetFile("attachment")
+	if err != nil {
+		log.Fatal("error: ", err)
+	}
+	defer f.Close()
+	fileName := this.GetString("customName") //自定义文件名
+	saveName := ""                           //文件存储名
+	if fileName == "" {
+		saveName = h.Filename
+	} else {
+		fileSuffix := path.Ext(h.Filename) //得到文件后缀
+		saveName = fileName + fileSuffix
+	}
+	filePath := "file/" + saveName
+	this.SaveToFile("attachment", filePath) //保存文件到本地
+	//上传又拍云
+	err = up.Put(&upyun.PutObjectConfig{
+		Path:      "/" + saveName,
+		LocalPath: filePath,
+	})
+	var info *ResultData
+	if err == nil {
+		info = &ResultData{Error: 0, Title: "结果:", Msg: "上传成功！"}
+	} else {
+		info = &ResultData{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
+	}
+	os.Remove(filePath) //移除本地文件
+	this.Data["json"] = info
+	this.ServeJSON()
+}
+
+//又拍云删除 路由 /api/file/upyun/delete
+func (this *ApiController) UpyunDeleteFile() {
+	data := models.RetUpyunConfig()
+	up := upyun.NewUpYun(&upyun.UpYunConfig{
+		Bucket:   data["Bucket"],
+		Operator: data["Operator"],
+		Password: data["Password"],
+	})
+	fmt.Print(this.GetString("path"))
+	err := up.Delete(&upyun.DeleteObjectConfig{
+		Path:  this.GetString("path"),
+		Async: true,
+	})
+	info := JsonData{}
+	if err != nil {
+		info = JsonData{Code: 1}
+	} else {
+		info = JsonData{Code: 0}
+	}
+	this.Data["json"] = info
+	this.ServeJSON()
+}
+
+//网站配置页面的处理信息都在这里
+// 通过提交判断submit的值来判断是哪一个表单提交的
+
+// 网站设置页面  路由  /api/site/config
+func (this *ApiController) SiteConfig() {
+	// 判断提交类型 user为用户信息表单  site为网站配置表单
+	submit := this.GetString("submit")
+	info := &ResultData{}
+	var data interface{}
+	if submit == "userInfo" {
+		data = &models.UserConfigOption{}
+	} else if submit == "siteInfo" {
+		data = &models.SiteConfigOption{}
+	} else if submit == "niniuInfo" {
+		data = &models.QiniuConfigOption{}
+	} else if submit == "upyunInfo" {
+		data = &models.UpyunConfigOption{}
+	}
+	if err := this.ParseForm(data); err != nil {
+		info = &ResultData{Error: 1, Title: "失败:", Msg: "接收表单数据出错！"}
+	} else {
+		t := reflect.TypeOf(data).Elem()  //类型
+		v := reflect.ValueOf(data).Elem() //值
+		for i := 0; i < t.NumField(); i++ {
+			config := &models.Config{Option: t.Field(i).Name, Value: v.Field(i).String()}
+			err := models.SiteConfig(config)
+			if err != nil {
+				info = &ResultData{Error: 1, Title: "失败:", Msg: "出现未知错误！"}
+			} else {
+				info = &ResultData{Error: 0, Title: "成功:", Msg: "信息重置成功！"}
+			}
+		}
+	}
+	this.Data["json"] = info
 	this.ServeJSON()
 }

@@ -41,6 +41,14 @@ type QiniuConfigOption struct {
 	Zone      string
 }
 
+//又拍云配置
+type UpyunConfigOption struct {
+	Bucket   string
+	Operator string
+	Password string
+	Domain   string
+}
+
 //获取数据表数据
 type Count struct {
 	Num string

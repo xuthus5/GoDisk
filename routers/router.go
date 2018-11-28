@@ -33,4 +33,10 @@ func init() {
 	beego.Router("/api/upload/qiniu", &controllers.ApiController{}, "post:QiniuUpload")         //上传接口
 	beego.Router("/api/file/qiniu/list", &controllers.ApiController{}, "get:QiniuList")         //七牛文件列表
 	beego.Router("/api/file/qiniu/delete", &controllers.ApiController{}, "get:QiniuDeleteFile") //七牛文件删除
+
+	//又拍云模块
+	beego.Router("/admin/upload/upyun", &controllers.MainController{}, "get:UpyunUpload") //又拍云上传页面
+	beego.Router("/api/upload/upyun", &controllers.ApiController{}, "post:UpyunUpload")         //上传接口
+	beego.Router("/api/file/upyun/list", &controllers.ApiController{}, "get:UpyunList")         //七牛文件列表
+	beego.Router("/api/file/upyun/delete", &controllers.ApiController{}, "get:UpyunDeleteFile") //七牛文件删除
 }

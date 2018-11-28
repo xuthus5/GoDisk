@@ -6,6 +6,8 @@
 
 package controllers
 
+import "time"
+
 // 返回的数据结构
 type ResultData struct {
 	Error int
@@ -42,7 +44,15 @@ type List struct {
 type Response struct {
 	Items []List `json:"items"`
 }
+
 // 七牛云删除响应
 type ResponseError struct {
-	Error 	string `json:"error"`
+	Error string `json:"error"`
+}
+
+//又拍云文件列表
+type UpyunList struct {
+	Name string
+	Size int64
+	Time time.Time
 }

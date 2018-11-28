@@ -8,9 +8,9 @@ import (
 
 func main() {
 	// 自定义方法
-	beego.AddFuncMap("sc", SiteConfig) //调取网站配置 直接抽调数据库配置字段
+	_ = beego.AddFuncMap("sc", SiteConfig) //调取网站配置 直接抽调数据库配置字段
 
 	//自定义开放性资源路径
-	beego.SetStaticPath("/file", "storage")
+	beego.SetStaticPath("/file", "file")
 	beego.Run()
 }

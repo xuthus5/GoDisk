@@ -43,9 +43,9 @@ func AddConfig(info *Config) error {
 }
 
 // 用于获取网站配置信息
-func GetOneConfig(info string) string {
+func GetOneConfig(info, addition string) string {
 	data := []Config{}
-	err := dbx.Select(&data, "select * from config where Option=?", info)
+	err := dbx.Select(&data, "select * from config where Option='"+info+"' and addition='"+addition+"'")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -53,4 +53,32 @@ func GetOneConfig(info string) string {
 		return "undefined"
 	}
 	return data[0].Value
+}
+
+// 返回所有七牛云配置
+func RetQiniuConfig() map[string]string {
+	config := []Config{}
+	err := dbx.Select(&config, "select * from config where addition='Qiniu'")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	var data = make(map[string]string)
+	for _, v := range config {
+		data[v.Option] = v.Value
+	}
+	return data
+}
+
+// 返回所有又拍云配置
+func RetUpyunConfig() map[string]string {
+	config := []Config{}
+	err := dbx.Select(&config, "select * from config where addition='Upyun'")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	var data = make(map[string]string)
+	for _, v := range config {
+		data[v.Option] = v.Value
+	}
+	return data
 }
