@@ -20,11 +20,11 @@ func StringToMd5(str string, length int64) string {
 }
 
 /* 字节容量转换 */
-func ByteTransformation(data int64,method string) float64 {
+func ByteTransformation(data int64, method string) float64 {
 	var result float64
 	if method == "KB" {
 		result = float64(data) / 1024
-	}else {
+	} else {
 		result = float64(data) / (1024 * 1024)
 	}
 

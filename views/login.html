@@ -49,15 +49,11 @@
         $(document).ready(function () {
             const postData = $("form").serialize();
             $.post("/login", postData, function (res) {
-                if (res.Error === 0) {
+                if (res.error === 0) {
                     layer.msg("登陆成功", {time: 2000});
                     wait(1);
                 } else {
-                    layer.msg(res.Title + res.Msg, {
-                        icon: 2,
-                        shade: [0.8, '#393D49'], // 透明度  颜色
-                        time: 2000
-                    });
+                    layer.msg("登陆失败！请检查输入信息是否正确", {time: 2000});
                 }
             }, "json");
             return false;

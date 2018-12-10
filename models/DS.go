@@ -49,6 +49,14 @@ type UpyunConfigOption struct {
 	Domain   string
 }
 
+// 阿里云对象存储配置
+type OssConfigOption struct {
+	Bucket    string
+	Accesskey string
+	Secretkey string
+	Endpoint  string //地域节点
+}
+
 //获取数据表数据
 type Count struct {
 	Num string

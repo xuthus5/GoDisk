@@ -1,6 +1,6 @@
-# GoD
+# GoDisk
 
-> 一个基于beego构建的web存储应用，帮你快速部署存储服务
+> 一个基于beego构建的web存储应用，帮你快速部署存储服务。目前已集成七牛云，又拍云对象存储
 
 ##  1. 如何使用这个服务
 
@@ -9,11 +9,18 @@
 &ensp; 2. 执行一下命令，安装一些依赖包与框架(建议使用[gopm](https://gopm.io/)进行包管理)
 
 ```bash
+# 框架必要包
 go get github.com/astaxie/beego
 go get github.com/mattn/go-sqlite3
 go get github.com/jmoiron/sqlx
+# 七牛云API包
 go get github.com/qiniu/api.v7
+# 又拍云API包
 go get github.com/upyun/go-sdk/upyun
+# 腾讯云对象存储API包
+go get -u github.com/tencentcloud/tencentcloud-sdk-go
+# 阿里云对象存储OSS api包
+go get -u github.com/aliyun/aliyun-oss-go-sdk/oss
 
 # 官方协助快速开发工具 bee
 go get github.com/beego/bee

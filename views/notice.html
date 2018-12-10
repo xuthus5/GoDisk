@@ -141,17 +141,17 @@
         'click .delete': function (e, value, row, index) {
             layer.confirm('确定删除？', function (index) {
                 $.get("/api/article/delete?id=" + row.Id, function (res) {
-                    if (res.Error === 0) {
+                    if (res.error === 0) {
                         layer.open({
-                            title: res.Title
-                            , content: res.Msg,
+                            title: res.title
+                            , content: res.msg,
                             yes: function (index) {
                                 window.location.href = "/admin/article";
                                 layer.close(index); //如果设定了yes回调，需进行手工关闭
                             }
                         });
                     } else {
-                        layer.msg(res.Title + res.Msg, {time: 2000});
+                        layer.msg(res.title + res.msg, {time: 2000});
                     }
                 }, "json");
                 layer.close(index);
@@ -172,17 +172,17 @@
         'click .delete': function (e, value, row, index) {
             layer.confirm('确定删除？', function (index) {
                 $.get("/api/article/category/delete?id=" + row.Id, function (res) {
-                    if (res.Error === 0) {
+                    if (res.error === 0) {
                         layer.open({
-                            title: res.Title
-                            , content: res.Msg,
+                            title: res.title
+                            , content: res.msg,
                             yes: function (index) {
                                 window.location.href = "/admin/article/category";
                                 layer.close(index); //如果设定了yes回调，需进行手工关闭
                             }
                         });
                     } else {
-                        layer.msg(res.Title + res.Msg, {time: 2000});
+                        layer.msg(res.title + res.msg, {time: 2000});
                     }
                 }, "json");
                 layer.close(index);

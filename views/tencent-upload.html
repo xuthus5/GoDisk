@@ -101,7 +101,7 @@
 <script>
     function wait(timeout) {
         if (timeout === 0) {
-            window.location.href = "/admin/upload/upyun";
+            window.location.href = "/admin/upload/cors";
         } else {
             setTimeout("wait(0)", 1000);
         }
@@ -115,7 +115,7 @@
             field: 'Name',
             title: '名称'
         }, {
-            field: 'Path',
+            field: 'WebPath',
             title: '路径(点击复制链接)'
         }, {
             field: 'Time',
@@ -139,9 +139,7 @@
             var time = res.data[i].Time.toString();
             time = time.substring(0, 10);
             res.data[i].Time = new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
-            res.data[i].OPath = res.data[i].Path;   //用于删除操作的文件路径
-            res.data[i].Path = domain + res.data[i].Path;
-
+            res.data[i].WebPath = domain + res.data[i].Path;
         }
         return res.data;
     }
@@ -186,7 +184,7 @@
         },
         'click .delete': function (e, value, row, index) {
             layer.confirm('确定删除？', {icon: 3, skin: 'layer-class'}, function (index) {
-                $.get("/api/file/upyun/delete?path=" + row.OPath, function (res) {
+                $.get("/api/file/upyun/delete?path=" + row.Path, function (res) {
                     if (res.code === 0) {
                         layer.msg("删除成功", {time: 2000});
                         wait(1);

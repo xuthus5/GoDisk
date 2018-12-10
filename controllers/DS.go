@@ -10,9 +10,9 @@ import "time"
 
 // 返回的数据结构
 type ResultData struct {
-	Error int
-	Title string
-	Msg   string
+	Error int         `json:"error"`
+	Title string      `json:"title"`
+	Msg   string      `json:"msg"`
 	Data  interface{} `json:"data"` //数据
 }
 
@@ -56,3 +56,18 @@ type UpyunList struct {
 	Size int64
 	Time time.Time
 }
+
+// 腾讯云对象存储COS
+type TencentList struct {
+	APPID            string
+	SecretId         string
+	SecretKey        string
+	Bucket           string
+	Object           string
+	Region           string
+	ACL              string
+	CORS             string
+	MultipartUploads string
+}
+
+// 阿里云对象存储

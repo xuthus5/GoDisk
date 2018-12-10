@@ -6,7 +6,14 @@
 
 package controllers
 
-import "GoDisk/models"
+import (
+	"GoDisk/models"
+	"github.com/astaxie/beego"
+)
+
+type MainController struct {
+	beego.Controller
+}
 
 // 网站首页  路由 /
 func (this *MainController) Get() {
@@ -80,7 +87,7 @@ func (this *MainController) QiniuUpload() {
 	this.TplName = "qiniu-upload.html"
 }
 
-// 七牛云上传页面  路由 /admin/upload/upyun
+// 又拍云上传页面  路由 /admin/upload/upyun
 func (this *MainController) UpyunUpload() {
 	master := this.GetSession("master")
 	if master == nil {
@@ -89,4 +96,15 @@ func (this *MainController) UpyunUpload() {
 	this.Data["master"] = master
 	this.Layout = "layout.html"
 	this.TplName = "upyun-upload.html"
+}
+
+// 阿里云OSS上传页面  路由 /admin/upload/oss
+func (this *MainController) OssUpload() {
+	master := this.GetSession("master")
+	if master == nil {
+		this.Redirect("/login", 302)
+	}
+	this.Data["master"] = master
+	this.Layout = "layout.html"
+	this.TplName = "oss-upload.html"
 }

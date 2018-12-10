@@ -24,7 +24,7 @@
         <div class="col-lg-4">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>又拍云上传
+                    <h5>阿里云OSS上传
                     </h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
@@ -71,7 +71,7 @@
         <div class="col-lg-8">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>又拍云附件管理</h5>
+                    <h5>阿里云OSS附件管理</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -84,7 +84,7 @@
                 <div class="ibox-content">
                     <p>又拍云文件列表</p>
                     <div class="table-responsive">
-                        <table id="upyun-list"></table>
+                        <table id="oss-list"></table>
                     </div>
                 </div>
             </div>
@@ -101,24 +101,24 @@
 <script>
     function wait(timeout) {
         if (timeout === 0) {
-            window.location.href = "/admin/upload/upyun";
+            window.location.href = "/admin/upload/oss";
         } else {
             setTimeout("wait(0)", 1000);
         }
     }
 
-    $('#upyun-list').bootstrapTable({
-        url: '/api/file/upyun/list',
+    $('#oss-list').bootstrapTable({
+        url: '/api/file/oss/list',
         responseHandler: responseHandler,
         onClickCell: dealOnClickCell,
         columns: [{
-            field: 'Name',
+            field: 'Key',
             title: '名称'
         }, {
             field: 'Path',
             title: '路径(点击复制链接)'
         }, {
-            field: 'Time',
+            field: 'LastModified',
             title: '更新时间'
         }, {
             field: 'Size',
@@ -133,15 +133,16 @@
     });
 
     function responseHandler(res) {
-        var domain = {{sc "Domain" "Upyun"}};
+        var bucket = {{sc "Bucket" "OSS"}};
+        var endPoint = {{sc "Endpoint" "OSS"}}
+        var domain = "http://" + bucket + "." + endPoint + "/";
         for (var i = 0; i < res.data.length; i++) {
             res.data[i].Size = Math.ceil(res.data[i].Size / 1024) + "KB";
-            var time = res.data[i].Time.toString();
-            time = time.substring(0, 10);
-            res.data[i].Time = new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
-            res.data[i].OPath = res.data[i].Path;   //用于删除操作的文件路径
-            res.data[i].Path = domain + res.data[i].Path;
-
+            var time = res.data[i].LastModified;
+            res.data[i].LastModified = time.substring(0, 10);
+            // res.data[i].LastModisied = res.data[i].LastModisied.substring(1,10)
+            // res.data[i].Time = new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
+            res.data[i].Path = domain + res.data[i].Key;
         }
         return res.data;
     }
@@ -186,8 +187,8 @@
         },
         'click .delete': function (e, value, row, index) {
             layer.confirm('确定删除？', {icon: 3, skin: 'layer-class'}, function (index) {
-                $.get("/api/file/upyun/delete?path=" + row.OPath, function (res) {
-                    if (res.code === 0) {
+                $.get("/api/file/oss/delete?key=" + row.Key, function (res) {
+                    if (res.error === 0) {
                         layer.msg("删除成功", {time: 2000});
                         wait(1);
                     } else {
@@ -217,7 +218,7 @@
         formData.append("customName", name);
         $.ajax({
             type: "POST",
-            url: "/api/upload/upyun",
+            url: "/api/upload/oss",
             data: formData,
             contentType: false,
             processData: false,

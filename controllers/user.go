@@ -21,8 +21,8 @@ func (this *UserController) Login() {
 	if Username == "" || Password == "" {
 		this.TplName = "login.html"
 	} else {
-		user := &models.Config{Option: "Author", Value: Username}
-		pass := &models.Config{Option: "Password", Value: Password}
+		user := &models.Config{Option: "Author", Value: Username, Addition: ""}
+		pass := &models.Config{Option: "Password", Value: Password, Addition: ""}
 		err := models.Login(user, pass)
 		var data *ResultData
 		if err == nil {

@@ -12,6 +12,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/astaxie/beego"
 	"github.com/upyun/go-sdk/upyun"
 	"log"
@@ -173,8 +174,8 @@ func (this *ApiController) QiniuUpload() {
 		saveName = fileName + fileSuffix
 	}
 	filePath := "file/" + saveName
-	this.SaveToFile("attachment", filePath)                            //保存文件到本地
-	res := tools.QiniuApi(filePath, saveName, models.RetQiniuConfig()) //上传到七牛云
+	this.SaveToFile("attachment", filePath)                                   //保存文件到本地
+	res := tools.QiniuApi(filePath, saveName, models.RetGroupConfig("Qiniu")) //上传到七牛云
 	var data *ResultData
 	if res == true {
 		data = &ResultData{Error: 1, Title: "结果:", Msg: "上传成功！"}
@@ -188,7 +189,7 @@ func (this *ApiController) QiniuUpload() {
 
 // 七牛云文件列表接口 路由 /api/file/qiniu/list
 func (this *ApiController) QiniuList() {
-	data := models.RetQiniuConfig()
+	data := models.RetGroupConfig("Qiniu")
 	data["Host"] = "api.qiniu.com"
 	data["Parameter"] = "/v6/domain/list?tbl=" + data["Bucket"]
 	data["Url"] = "http://" + data["Host"] + data["Parameter"]
@@ -212,7 +213,7 @@ func (this *ApiController) QiniuDeleteFile() {
 	code = base64.StdEncoding.EncodeToString([]byte(code))
 	code = strings.Replace(code, "/", "_", -1)
 	code = strings.Replace(code, "+", "-", -1)
-	data := models.RetQiniuConfig()
+	data := models.RetGroupConfig("Qiniu")
 	data["Host"] = "rs.qiniu.com"
 	data["Parameter"] = "/delete/" + code
 	data["Url"] = "http://" + data["Host"] + data["Parameter"]
@@ -226,7 +227,7 @@ func (this *ApiController) QiniuDeleteFile() {
 
 //又拍云文件列表 路由 /api/file/upyun/list
 func (this *ApiController) UpyunList() {
-	data := models.RetUpyunConfig()
+	data := models.RetGroupConfig("Upyun")
 	up := upyun.NewUpYun(&upyun.UpYunConfig{
 		Bucket:   data["Bucket"],
 		Operator: data["Operator"],
@@ -239,7 +240,7 @@ func (this *ApiController) UpyunList() {
 
 // 又拍云上传 路由 /api/upload/upyun
 func (this *ApiController) UpyunUpload() {
-	data := models.RetUpyunConfig()
+	data := models.RetGroupConfig("Upyun")
 	up := upyun.NewUpYun(&upyun.UpYunConfig{
 		Bucket:   data["Bucket"],
 		Operator: data["Operator"],
@@ -279,13 +280,12 @@ func (this *ApiController) UpyunUpload() {
 
 //又拍云删除 路由 /api/file/upyun/delete
 func (this *ApiController) UpyunDeleteFile() {
-	data := models.RetUpyunConfig()
+	data := models.RetGroupConfig("Upyun")
 	up := upyun.NewUpYun(&upyun.UpYunConfig{
 		Bucket:   data["Bucket"],
 		Operator: data["Operator"],
 		Password: data["Password"],
 	})
-	fmt.Print(this.GetString("path"))
 	err := up.Delete(&upyun.DeleteObjectConfig{
 		Path:  this.GetString("path"),
 		Async: true,
@@ -300,6 +300,116 @@ func (this *ApiController) UpyunDeleteFile() {
 	this.ServeJSON()
 }
 
+// 腾讯云存储API //
+
+// 腾讯云文件列表
+
+// 腾讯云文件上传
+
+//腾讯云文件删除
+
+// 阿里云存储API //
+
+// 阿里云文件列表 路由 /api/file/oss/list
+func (this *ApiController) OssList() {
+	data := models.RetGroupConfig("OSS")
+	// 创建OSSClient实例。
+	client, err := oss.New(data["Endpoint"], data["Accesskey"], data["Secretkey"])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 获取存储空间。
+	bucketName := data["Bucket"]
+	bucket, err := client.Bucket(bucketName)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// 列举所有文件。
+	marker := ""
+	lsRes, err := bucket.ListObjects(oss.Marker(marker))
+	this.Data["json"] = JsonData{Data: lsRes.Objects}
+	this.ServeJSON()
+}
+
+// 阿里云文件上传 路由 /api/upload/oss
+func (this *ApiController) OssUpload() {
+	data := models.RetGroupConfig("OSS")
+	info := &ResultData{}
+	//上传的文件示例
+	f, h, err := this.GetFile("attachment")
+	if err != nil {
+		log.Fatal("error: ", err)
+	}
+	defer f.Close()
+	fileName := this.GetString("customName") //自定义文件名
+	saveName := ""                           //文件存储名
+	if fileName == "" {
+		saveName = h.Filename
+	} else {
+		fileSuffix := path.Ext(h.Filename) //得到文件后缀
+		saveName = fileName + fileSuffix
+	}
+	filePath := "file/" + saveName
+	this.SaveToFile("attachment", filePath) //保存文件到本地
+
+	// 创建OSSClient实例。
+	client, err := oss.New(data["Endpoint"], data["Accesskey"], data["Secretkey"])
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(-1)
+	}
+
+	// 获取存储空间。
+	bucket, err := client.Bucket(data["Bucket"])
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(-1)
+	}
+
+	// 上传本地文件。
+	err = bucket.PutObjectFromFile(saveName, filePath)
+	if err != nil {
+		info = &ResultData{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
+	} else {
+		info = &ResultData{Error: 0, Title: "结果:", Msg: "上传成功！"}
+	}
+	os.Remove(filePath) //移除本地文件
+	this.Data["json"] = info
+	this.ServeJSON()
+}
+
+//阿里云文件删除
+func (this *ApiController) OssDeleteFile() {
+	data := models.RetGroupConfig("OSS")
+	info := &ResultData{Error: 0}
+	// 创建OSSClient实例。
+	client, err := oss.New(data["Endpoint"], data["Accesskey"], data["Secretkey"])
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(-1)
+	}
+
+	bucketName := data["Bucket"]
+	objectName := this.GetString("key")
+
+	// 获取存储空间。
+	bucket, err := client.Bucket(bucketName)
+	if err != nil {
+		info = &ResultData{Error: 1}
+	}
+
+	// 删除单个文件。
+	err = bucket.DeleteObject(objectName)
+	if err != nil {
+		info = &ResultData{Error: 1}
+	}
+
+	this.Data["json"] = info
+	this.ServeJSON()
+}
+
 //网站配置页面的处理信息都在这里
 // 通过提交判断submit的值来判断是哪一个表单提交的
 
@@ -307,16 +417,24 @@ func (this *ApiController) UpyunDeleteFile() {
 func (this *ApiController) SiteConfig() {
 	// 判断提交类型 user为用户信息表单  site为网站配置表单
 	submit := this.GetString("submit")
-	info := &ResultData{}
+	info := &ResultData{Error: 0, Title: "成功:", Msg: "信息重置成功！"}
+	Addition := ""
 	var data interface{}
 	if submit == "userInfo" {
 		data = &models.UserConfigOption{}
+		Addition = ""
 	} else if submit == "siteInfo" {
 		data = &models.SiteConfigOption{}
+		Addition = ""
 	} else if submit == "niniuInfo" {
 		data = &models.QiniuConfigOption{}
+		Addition = "Qiniu"
 	} else if submit == "upyunInfo" {
 		data = &models.UpyunConfigOption{}
+		Addition = "Upyun"
+	} else if submit == "ossInfo" {
+		data = &models.OssConfigOption{}
+		Addition = "OSS"
 	}
 	if err := this.ParseForm(data); err != nil {
 		info = &ResultData{Error: 1, Title: "失败:", Msg: "接收表单数据出错！"}
@@ -324,12 +442,11 @@ func (this *ApiController) SiteConfig() {
 		t := reflect.TypeOf(data).Elem()  //类型
 		v := reflect.ValueOf(data).Elem() //值
 		for i := 0; i < t.NumField(); i++ {
-			config := &models.Config{Option: t.Field(i).Name, Value: v.Field(i).String()}
+			config := &models.Config{Option: t.Field(i).Name, Value: v.Field(i).String(), Addition: Addition}
 			err := models.SiteConfig(config)
 			if err != nil {
 				info = &ResultData{Error: 1, Title: "失败:", Msg: "出现未知错误！"}
-			} else {
-				info = &ResultData{Error: 0, Title: "成功:", Msg: "信息重置成功！"}
+				break
 			}
 		}
 	}

@@ -35,8 +35,14 @@ func init() {
 	beego.Router("/api/file/qiniu/delete", &controllers.ApiController{}, "get:QiniuDeleteFile") //七牛文件删除
 
 	//又拍云模块
-	beego.Router("/admin/upload/upyun", &controllers.MainController{}, "get:UpyunUpload") //又拍云上传页面
+	beego.Router("/admin/upload/upyun", &controllers.MainController{}, "get:UpyunUpload")       //又拍云上传页面
 	beego.Router("/api/upload/upyun", &controllers.ApiController{}, "post:UpyunUpload")         //上传接口
-	beego.Router("/api/file/upyun/list", &controllers.ApiController{}, "get:UpyunList")         //七牛文件列表
-	beego.Router("/api/file/upyun/delete", &controllers.ApiController{}, "get:UpyunDeleteFile") //七牛文件删除
+	beego.Router("/api/file/upyun/list", &controllers.ApiController{}, "get:UpyunList")         //又拍云文件列表
+	beego.Router("/api/file/upyun/delete", &controllers.ApiController{}, "get:UpyunDeleteFile") //又拍云文件删除
+
+	//阿里云oss模块
+	beego.Router("/admin/upload/oss", &controllers.MainController{}, "get:OssUpload")       //阿里云上传页面
+	beego.Router("/api/upload/oss", &controllers.ApiController{}, "post:OssUpload")         //阿里云上传接口
+	beego.Router("/api/file/oss/list", &controllers.ApiController{}, "get:OssList")         //阿里云文件列表
+	beego.Router("/api/file/oss/delete", &controllers.ApiController{}, "get:OssDeleteFile") //阿里云文件删除
 }

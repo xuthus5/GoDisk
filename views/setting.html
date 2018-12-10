@@ -21,64 +21,131 @@
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-6">
-            <div class="ibox ">
-                <div class="ibox-title">
-                    <h5>网站配置
-                    </h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox ">
+                        <div class="ibox-title">
+                            <h5>网站配置
+                            </h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-sm-12 b-r">
+                                    <p>网站全局配置.</p>
+                                    <form role="form" id="form-site">
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">网站标题</label>
+
+                                            <div class="col-sm-10"><input type="text" class="form-control"
+                                                                          name="WebTitle"
+                                                                          value="{{sc "WebTitle" ""}}">
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label
+                                                    class="col-lg-2 col-form-label">网站LOGO</label>
+                                            <div class="col-lg-10"><input type="text" placeholder="网站LOGO的资源地址"
+                                                                          name="LogoUrl"
+                                                                          class="form-control"
+                                                                          value="{{sc "LogoUrl" ""}}">
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">网站关键字</label>
+                                            <div class="col-sm-10"><input type="text" class="form-control"
+                                                                          name="Keywords"
+                                                                          value="{{sc "Keywords" ""}}"> <span
+                                                        class="form-text m-b-none">.</span>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">版权信息</label>
+
+                                            <div class="col-sm-10"><input type="text" class="form-control"
+                                                                          value="{{sc "CopyRight" ""}}"
+                                                                          name="CopyRight">
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row"><label class="col-lg-2 col-form-label">网站描述</label>
+
+                                            <div class="col-lg-10"><textarea class="form-control" rows="3"
+                                                                             name="Description">{{sc "Description" ""}}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-4 col-sm-offset-2">
+                                                <button class="btn btn-primary btn-sm" type="button" id="siteInfo">提交
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-sm-12 b-r">
-                            <p>网站全局配置.</p>
-                            <form role="form" id="form-site">
-                                <div class="form-group  row"><label class="col-sm-2 col-form-label">网站标题</label>
-
-                                    <div class="col-sm-10"><input type="text" class="form-control" name="WebTitle"
-                                                                  value="{{sc "WebTitle" ""}}">
-                                    </div>
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-title">
+                                <h5>阿里云OSS配置</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
                                 </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-lg-2 col-form-label">网站LOGO</label>
-                                    <div class="col-lg-10"><input type="text" placeholder="网站LOGO的资源地址" name="LogoUrl"
-                                                                  class="form-control" value="{{sc "LogoUrl" ""}}">
+                            </div>
+                            <div class="ibox-content">
+                                <form id="form-oss">
+                                    <p>阿里云OSS配置，请确保密钥输入正确.Bucket ACL需修改为公共读 否则文件将无法访问</p>
+                                    <div class="form-group row"><label class="col-lg-2 col-form-label">Bucket</label>
+                                        <div class="col-lg-10"><input type="text" placeholder="填写存储空间名称" name="Bucket"
+                                                                      class="form-control"
+                                                                      value="{{sc "Bucket" "OSS"}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">网站关键字</label>
-                                    <div class="col-sm-10"><input type="text" class="form-control" name="Keywords"
-                                                                  value="{{sc "Keywords" ""}}"> <span
-                                                class="form-text m-b-none">.</span>
+                                    <div class="form-group row"><label class="col-lg-2 col-form-label">Accesskey</label>
+                                        <div class="col-lg-10"><input type="text" placeholder="AccessKey ID"
+                                                                      name="Accesskey"
+                                                                      class="form-control"
+                                                                      value="{{sc "Accesskey" "OSS"}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-sm-2 col-form-label">版权信息</label>
-
-                                    <div class="col-sm-10"><input type="text" class="form-control"
-                                                                  value="{{sc "CopyRight" ""}}" name="CopyRight">
+                                    <div class="form-group row"><label class="col-lg-2 col-form-label">Secretkey</label>
+                                        <div class="col-lg-10"><input type="password" placeholder="Access Key Secret"
+                                                                      name="Secretkey"
+                                                                      class="form-control"
+                                                                      value="{{sc "Secretkey" "OSS"}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row"><label class="col-lg-2 col-form-label">网站描述</label>
-
-                                    <div class="col-lg-10"><textarea class="form-control" rows="3"
-                                                                     name="Description">{{sc "Description" ""}}</textarea>
+                                    <div class="form-group row"><label
+                                                class="col-lg-2 col-form-label">地域节点EndPoint</label>
+                                        <div class="col-lg-10"><input type="text" placeholder="外网访问的地域节点"
+                                                                      name="Endpoint"
+                                                                      class="form-control"
+                                                                      value="{{sc "Endpoint" "OSS"}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="hr-line-dashed"></div>
-                                <div class="form-group row">
-                                    <div class="col-sm-4 col-sm-offset-2">
-                                        <button class="btn btn-primary btn-sm" type="button" id="siteInfo">提交</button>
+                                    <div class="form-group row">
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-sm btn-danger" type="button" id="ossInfo">修改
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -264,17 +331,17 @@
     $("#siteInfo").click(function () {
         const postData = $("#form-site").serialize();
         $.post("/api/site/config?submit=siteInfo", postData, function (res) {
-            if (res.Error === 0) {
+            if (res.error === 0) {
                 layer.open({
                     skin: 'layer-class',
-                    title: res.Title
-                    , content: res.Msg,
+                    title: res.title
+                    , content: res.msg,
                     yes: function (index) {
                         window.location.href = "/admin/setting";
                     }
                 });
             } else {
-                layer.msg(res.Title + res.Msg, {time: 2000});
+                layer.msg(res.title + res.msg, {time: 2000});
             }
         }, "json");
         return false;
@@ -282,17 +349,17 @@
     $("#userInfo").click(function () {
         const postData = $("#form-user").serialize();
         $.post("/api/site/config?submit=userInfo", postData, function (res) {
-            if (res.Error === 0) {
+            if (res.error === 0) {
                 layer.open({
                     skin: 'layer-class',
-                    title: res.Title
-                    , content: res.Msg,
+                    title: res.title
+                    , content: res.msg,
                     yes: function (index) {
                         window.location.href = "/admin/setting";
                     }
                 });
             } else {
-                layer.msg(res.Title + res.Msg, {
+                layer.msg(res.title + res.msg, {
                     icon: 2,
                     shade: [0.8, '#393D49'], // 透明度  颜色
                     time: 2000
@@ -304,17 +371,17 @@
     $("#qiniuInfo").click(function () {
         const postData = $("#form-qiniu").serialize();
         $.post("/api/site/config?submit=niniuInfo", postData, function (res) {
-            if (res.Error === 0) {
+            if (res.error === 0) {
                 layer.open({
                     skin: 'layer-class',
-                    title: res.Title
-                    , content: res.Msg,
+                    title: res.title
+                    , content: res.msg,
                     yes: function (index) {
                         window.location.href = "/admin/setting";
                     }
                 });
             } else {
-                layer.msg(res.Title + res.Msg, {
+                layer.msg(res.title + res.msg, {
                     icon: 2,
                     shade: [0.8, '#393D49'], // 透明度  颜色
                     time: 2000
@@ -326,17 +393,39 @@
     $("#upyunInfo").click(function () {
         const postData = $("#form-upyun").serialize();
         $.post("/api/site/config?submit=upyunInfo", postData, function (res) {
-            if (res.Error === 0) {
+            if (res.error === 0) {
                 layer.open({
                     skin: 'layer-class',
-                    title: res.Title
-                    , content: res.Msg,
+                    title: res.title
+                    , content: res.msg,
                     yes: function (index) {
                         window.location.href = "/admin/setting";
                     }
                 });
             } else {
-                layer.msg(res.Title + res.Msg, {
+                layer.msg(res.title + res.msg, {
+                    icon: 2,
+                    shade: [0.8, '#393D49'], // 透明度  颜色
+                    time: 2000
+                });
+            }
+        }, "json");
+        return false;
+    });
+    $("#ossInfo").click(function () {
+        const postData = $("#form-oss").serialize();
+        $.post("/api/site/config?submit=ossInfo", postData, function (res) {
+            if (res.error === 0) {
+                layer.open({
+                    skin: 'layer-class',
+                    title: res.title
+                    , content: res.msg,
+                    yes: function (index) {
+                        window.location.href = "/admin/setting";
+                    }
+                });
+            } else {
+                layer.msg(res.title + res.msg, {
                     icon: 2,
                     shade: [0.8, '#393D49'], // 透明度  颜色
                     time: 2000

@@ -83,17 +83,17 @@
             const postData = $("form").serialize();
             console.log(postData);
             $.post("/api/category/update?id=" + GetQueryString("id"), postData, function (res) {
-                if (res.Error === 0) {
+                if (res.error === 0) {
                     layer.open({
                         skin: 'layer-class',
-                        title: res.Title
-                        , content: res.Msg,
+                        title: res.title
+                        , content: res.msg,
                         yes: function (index) {
                             window.location.href = "/admin/category";
                         }
                     });
                 } else {
-                    layer.msg(res.Title + res.Msg, {
+                    layer.msg(res.title + res.msg, {
                         icon: 2,
                         shade: [0.8, '#393D49'], // 透明度  颜色
                         time: 2000

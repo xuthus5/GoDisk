@@ -151,17 +151,17 @@
         'click .delete': function (e, value, row, index) {
             layer.confirm('确定删除？', function (index) {
                 $.get("/api/file/delete?id=" + row.Id, function (res) {
-                    if (res.Error === 0) {
+                    if (res.error === 0) {
                         layer.open({
                             skin: 'layer-class',
-                            title: res.Title
-                            , content: res.Msg,
+                            title: res.title
+                            , content: res.msg,
                             yes: function (index) {
                                 window.location.href = "/admin/upload/local";
                             }
                         });
                     } else {
-                        layer.msg(res.Title + res.Msg, {
+                        layer.msg(res.title + res.msg, {
                             icon: 2,
                             shade: [0.8, '#393D49'], // 透明度  颜色
                             time: 2000
