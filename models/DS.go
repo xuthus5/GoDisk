@@ -57,6 +57,15 @@ type OssConfigOption struct {
 	Endpoint  string //地域节点
 }
 
+//腾讯云对象存储配置
+type CosConfigOption struct {
+	Bucket    string
+	APPID     string
+	Region    string
+	SecretID  string
+	SecretKey string
+}
+
 //获取数据表数据
 type Count struct {
 	Num string

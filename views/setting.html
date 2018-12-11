@@ -149,6 +149,68 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-12">
+                    <div class="col-lg-12">
+                        <div class="ibox ">
+                            <div class="ibox-title">
+                                <h5>腾讯云COS配置</h5>
+                                <div class="ibox-tools">
+                                    <a class="collapse-link">
+                                        <i class="fa fa-chevron-up"></i>
+                                    </a>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="ibox-content">
+                                <form id="form-cos">
+                                    <p>腾讯云COS配置，请确保密钥输入正确.Bucket ACL需修改为公共读 否则文件将无法访问</p>
+                                    <div class="form-group row"><label class="col-lg-2 col-form-label">Bucket</label>
+                                        <div class="col-lg-10"><input type="text" placeholder="填写存储空间名称" name="Bucket"
+                                                                      class="form-control"
+                                                                      value="{{sc "Bucket" "COS"}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row"><label class="col-lg-2 col-form-label">APPID</label>
+                                        <div class="col-lg-10"><input type="text" placeholder="填写个人APPID" name="APPID"
+                                                                      class="form-control"
+                                                                      value="{{sc "APPID" "COS"}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row"><label class="col-lg-2 col-form-label">SecretID</label>
+                                        <div class="col-lg-10"><input type="text" placeholder="SecretID"
+                                                                      name="SecretID"
+                                                                      class="form-control"
+                                                                      value="{{sc "SecretID" "COS"}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row"><label class="col-lg-2 col-form-label">SecretKey</label>
+                                        <div class="col-lg-10"><input type="password" placeholder="SecretKey"
+                                                                      name="SecretKey"
+                                                                      class="form-control"
+                                                                      value="{{sc "SecretKey" "COS"}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row"><label
+                                                class="col-lg-2 col-form-label">地域节点Region</label>
+                                        <div class="col-lg-10"><input type="text" placeholder="所属地域 例如：ap-beijing"
+                                                                      name="Region"
+                                                                      class="form-control"
+                                                                      value="{{sc "Region" "COS"}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-offset-2 col-lg-10">
+                                            <button class="btn btn-sm btn-danger" type="button" id="cosInfo">修改
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-lg-5">
@@ -415,6 +477,28 @@
     $("#ossInfo").click(function () {
         const postData = $("#form-oss").serialize();
         $.post("/api/site/config?submit=ossInfo", postData, function (res) {
+            if (res.error === 0) {
+                layer.open({
+                    skin: 'layer-class',
+                    title: res.title
+                    , content: res.msg,
+                    yes: function (index) {
+                        window.location.href = "/admin/setting";
+                    }
+                });
+            } else {
+                layer.msg(res.title + res.msg, {
+                    icon: 2,
+                    shade: [0.8, '#393D49'], // 透明度  颜色
+                    time: 2000
+                });
+            }
+        }, "json");
+        return false;
+    });
+    $("#cosInfo").click(function () {
+        const postData = $("#form-cos").serialize();
+        $.post("/api/site/config?submit=cosInfo", postData, function (res) {
             if (res.error === 0) {
                 layer.open({
                     skin: 'layer-class',

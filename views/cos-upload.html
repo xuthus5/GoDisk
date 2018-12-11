@@ -24,7 +24,7 @@
         <div class="col-lg-4">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>阿里云OSS上传
+                    <h5>腾讯云COS上传
                     </h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
@@ -71,7 +71,7 @@
         <div class="col-lg-8">
             <div class="ibox">
                 <div class="ibox-title">
-                    <h5>阿里云OSS附件管理</h5>
+                    <h5>腾讯云COS附件管理</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <p>阿里云文件列表</p>
+                    <p>腾讯云文件列表</p>
                     <div class="table-responsive">
                         <table id="oss-list"></table>
                     </div>
@@ -101,14 +101,14 @@
 <script>
     function wait(timeout) {
         if (timeout === 0) {
-            window.location.href = "/admin/upload/oss";
+            window.location.href = "/admin/upload/cos";
         } else {
             setTimeout("wait(0)", 1000);
         }
     }
 
     $('#oss-list').bootstrapTable({
-        url: '/api/file/oss/list',
+        url: '/api/file/cos/list',
         responseHandler: responseHandler,
         onClickCell: dealOnClickCell,
         columns: [{
@@ -133,15 +133,14 @@
     });
 
     function responseHandler(res) {
-        var bucket = {{sc "Bucket" "OSS"}};
-        var endPoint = {{sc "Endpoint" "OSS"}}
-        var domain = "http://" + bucket + "." + endPoint + "/";
+        var bucket = {{sc "Bucket" "COS"}};
+        var appid = {{sc "APPID" "COS"}};
+        var region = {{sc "Region" "COS"}}
+        var domain = "https://" + bucket + "-" + appid + ".cos." + region + ".myqcloud.com/";
         for (var i = 0; i < res.data.length; i++) {
             res.data[i].Size = Math.ceil(res.data[i].Size / 1024) + "KB";
             var time = res.data[i].LastModified;
             res.data[i].LastModified = time.substring(0, 10);
-            // res.data[i].LastModisied = res.data[i].LastModisied.substring(1,10)
-            // res.data[i].Time = new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
             res.data[i].Path = domain + res.data[i].Key;
         }
         return res.data;
@@ -187,7 +186,7 @@
         },
         'click .delete': function (e, value, row, index) {
             layer.confirm('确定删除？', {icon: 3, skin: 'layer-class'}, function (index) {
-                $.get("/api/file/oss/delete?key=" + row.Key, function (res) {
+                $.get("/api/file/cos/delete?key=" + row.Key, function (res) {
                     if (res.error === 0) {
                         layer.msg("删除成功", {time: 2000});
                         wait(1);
@@ -218,7 +217,7 @@
         formData.append("customName", name);
         $.ajax({
             type: "POST",
-            url: "/api/upload/oss",
+            url: "/api/upload/cos",
             data: formData,
             contentType: false,
             processData: false,

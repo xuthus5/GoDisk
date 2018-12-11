@@ -9,13 +9,17 @@ package controllers
 import (
 	"GoDisk/models"
 	"GoDisk/tools"
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/astaxie/beego"
+	"github.com/tencentyun/cos-go-sdk-v5"
 	"github.com/upyun/go-sdk/upyun"
 	"log"
+	"net/http"
+	"net/url"
 	"os"
 	"path"
 	"reflect"
@@ -302,11 +306,107 @@ func (this *ApiController) UpyunDeleteFile() {
 
 // 腾讯云存储API //
 
-// 腾讯云文件列表
+// 腾讯云文件列表 路由 /api/file/cos/list
+func (this *ApiController) CosList() {
+	data := models.RetGroupConfig("COS")
+	info := &ResultData{Error: 0}
+	u, _ := url.Parse("http://" + data["Bucket"] + "-" + data["APPID"] + ".cos." + data["Region"] + ".myqcloud.com")
+	b := &cos.BaseURL{BucketURL: u}
+	c := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			//如实填写账号和密钥，也可以设置为环境变量
+			SecretID:  data["SecretID"],
+			SecretKey: data["SecretKey"],
+		},
+	})
 
-// 腾讯云文件上传
+	opt := &cos.BucketGetOptions{
+		MaxKeys: 1000,
+	}
+	v, _, err := c.Bucket.Get(context.Background(), opt)
+	if err != nil {
+		info = &ResultData{Error: 1}
+	} else {
+		info = &ResultData{Data: v.Contents}
+	}
 
-//腾讯云文件删除
+	this.Data["json"] = info
+	this.ServeJSON()
+}
+
+// 腾讯云文件上传 路由 /api/upload/cos
+func (this *ApiController) CosUpload() {
+	data := models.RetGroupConfig("COS")
+	info := &ResultData{Error: 0}
+	//上传的文件示例
+	f, h, err := this.GetFile("attachment")
+	if err != nil {
+		info = &ResultData{Error: 1}
+	}
+	defer f.Close()
+	fileName := this.GetString("customName") //自定义文件名
+	saveName := ""                           //文件存储名
+	if fileName == "" {
+		saveName = h.Filename
+	} else {
+		fileSuffix := path.Ext(h.Filename) //得到文件后缀
+		saveName = fileName + fileSuffix
+	}
+	filePath := "file/" + saveName
+	this.SaveToFile("attachment", filePath) //保存文件到本地
+
+	// 创建COS Client实例。
+	u, _ := url.Parse("http://" + data["Bucket"] + "-" + data["APPID"] + ".cos." + data["Region"] + ".myqcloud.com")
+	b := &cos.BaseURL{BucketURL: u}
+	c := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			//如实填写账号和密钥，也可以设置为环境变量
+			SecretID:  data["SecretID"],
+			SecretKey: data["SecretKey"],
+		},
+	})
+
+	// 上传本地文件。
+	//对象键（Key）是对象在存储桶中的唯一标识。
+	//例如，在对象的访问域名 ` bucket1-1250000000.cos.ap-guangzhou.myqcloud.com/test/objectPut.go ` 中，对象键为 test/objectPut.go
+	stream, err := os.Open(filePath)
+	if err != nil {
+		info = &ResultData{Error: 1}
+	}
+	_, err = c.Object.Put(context.Background(), saveName, stream, nil)
+
+	if err != nil {
+		info = &ResultData{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
+	}
+	os.Remove(filePath) //移除本地文件
+	this.Data["json"] = info
+	this.ServeJSON()
+}
+
+//腾讯云文件删除 路由 /api/file/cos/delete
+func (this *ApiController) CosDeleteFile() {
+	data := models.RetGroupConfig("COS")
+	info := &ResultData{Error: 0}
+	u, _ := url.Parse("http://" + data["Bucket"] + "-" + data["APPID"] + ".cos." + data["Region"] + ".myqcloud.com")
+	b := &cos.BaseURL{BucketURL: u}
+	c := cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			//如实填写账号和密钥，也可以设置为环境变量
+			SecretID:  data["SecretID"],
+			SecretKey: data["SecretKey"],
+		},
+	})
+
+	objectName := this.GetString("key")
+	_, err := c.Object.Delete(context.Background(), objectName)
+	if err != nil {
+		info = &ResultData{Error: 1}
+	}
+
+	this.Data["json"] = info
+	this.ServeJSON()
+
+}
 
 // 阿里云存储API //
 
@@ -435,6 +535,9 @@ func (this *ApiController) SiteConfig() {
 	} else if submit == "ossInfo" {
 		data = &models.OssConfigOption{}
 		Addition = "OSS"
+	} else if submit == "cosInfo" {
+		data = &models.CosConfigOption{}
+		Addition = "COS"
 	}
 	if err := this.ParseForm(data); err != nil {
 		info = &ResultData{Error: 1, Title: "失败:", Msg: "接收表单数据出错！"}

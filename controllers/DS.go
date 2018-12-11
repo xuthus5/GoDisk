@@ -69,5 +69,3 @@ type TencentList struct {
 	CORS             string
 	MultipartUploads string
 }
-
-// 阿里云对象存储

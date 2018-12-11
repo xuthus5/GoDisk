@@ -75,6 +75,14 @@ func Initialization() {
 		dbc.Insert(&Config{Option: t.Field(i).Name, Value: v.Field(i).String(), Addition: "OSS"})
 	}
 
+	//默认腾讯云配置信息写入数据库
+	CosConfig := CosConfigOption{}
+	t = reflect.TypeOf(CosConfig)
+	v = reflect.ValueOf(CosConfig)
+	for i := 0; i < t.NumField(); i++ {
+		dbc.Insert(&Config{Option: t.Field(i).Name, Value: v.Field(i).String(), Addition: "COS"})
+	}
+
 	//分类表初始化
 	dbc.Insert(&Category{
 		Name:        "默认",

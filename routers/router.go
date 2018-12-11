@@ -45,4 +45,10 @@ func init() {
 	beego.Router("/api/upload/oss", &controllers.ApiController{}, "post:OssUpload")         //阿里云上传接口
 	beego.Router("/api/file/oss/list", &controllers.ApiController{}, "get:OssList")         //阿里云文件列表
 	beego.Router("/api/file/oss/delete", &controllers.ApiController{}, "get:OssDeleteFile") //阿里云文件删除
+
+	//腾讯云cos模块
+	beego.Router("/admin/upload/cos", &controllers.MainController{}, "get:CosUpload")       //腾讯云上传页面
+	beego.Router("/api/upload/cos", &controllers.ApiController{}, "post:CosUpload")         //腾讯云上传接口
+	beego.Router("/api/file/cos/list", &controllers.ApiController{}, "get:CosList")         //腾讯云文件列表
+	beego.Router("/api/file/cos/delete", &controllers.ApiController{}, "get:CosDeleteFile") //腾讯云文件删除
 }

@@ -108,3 +108,14 @@ func (this *MainController) OssUpload() {
 	this.Layout = "layout.html"
 	this.TplName = "oss-upload.html"
 }
+
+// 腾讯云COS上传页面  路由 /admin/upload/cos
+func (this *MainController) CosUpload() {
+	master := this.GetSession("master")
+	if master == nil {
+		this.Redirect("/login", 302)
+	}
+	this.Data["master"] = master
+	this.Layout = "layout.html"
+	this.TplName = "cos-upload.html"
+}
