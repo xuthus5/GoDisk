@@ -55,7 +55,7 @@ func UpdateCategory(data *Category) error {
 // 获得一个分类信息 主要用于更新分类信息
 func GetOneCategoryInfo(id string) *[]Category {
 	list := []Category{}
-	dbx.Select(&list, "select * from category where id=?", id)
+	_ = dbx.Select(&list, "select * from category where id=?", id)
 	return &list
 }
 
@@ -90,7 +90,7 @@ func FileInfo(id int64) *[]Attachment {
 // 文件删除
 func FileDelete(id int) (string, error) {
 	data := &Attachment{Id: id}
-	dbc.Read(data)
+	_ = dbc.Read(data)
 	_, err := dbc.Delete(data)
 	return data.Path, err
 }

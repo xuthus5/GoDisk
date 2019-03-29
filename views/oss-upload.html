@@ -133,8 +133,8 @@
     });
 
     function responseHandler(res) {
-        var bucket = {{sc "Bucket" "OSS"}};
-        var endPoint = {{sc "Endpoint" "OSS"}}
+        var bucket = {{sc "OssBucket" "oss"}};
+        var endPoint = {{sc "OssEndpoint" "oss"}}
         var domain = "http://" + bucket + "." + endPoint + "/";
         for (var i = 0; i < res.data.length; i++) {
             res.data[i].Size = Math.ceil(res.data[i].Size / 1024) + "KB";

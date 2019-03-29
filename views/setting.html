@@ -111,31 +111,32 @@
                                 <form id="form-oss">
                                     <p>阿里云OSS配置，请确保密钥输入正确.Bucket ACL需修改为公共读 否则文件将无法访问</p>
                                     <div class="form-group row"><label class="col-lg-2 col-form-label">Bucket</label>
-                                        <div class="col-lg-10"><input type="text" placeholder="填写存储空间名称" name="Bucket"
+                                        <div class="col-lg-10"><input type="text" placeholder="填写存储空间名称"
+                                                                      name="OssBucket"
                                                                       class="form-control"
-                                                                      value="{{sc "Bucket" "OSS"}}">
+                                                                      value="{{sc "OssBucket" "oss"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row"><label class="col-lg-2 col-form-label">Accesskey</label>
                                         <div class="col-lg-10"><input type="text" placeholder="AccessKey ID"
-                                                                      name="Accesskey"
+                                                                      name="OssAk"
                                                                       class="form-control"
-                                                                      value="{{sc "Accesskey" "OSS"}}">
+                                                                      value="{{sc "OssAk" "oss"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row"><label class="col-lg-2 col-form-label">Secretkey</label>
                                         <div class="col-lg-10"><input type="password" placeholder="Access Key Secret"
-                                                                      name="Secretkey"
+                                                                      name="OssSk"
                                                                       class="form-control"
-                                                                      value="{{sc "Secretkey" "OSS"}}">
+                                                                      value="{{sc "OssSk" "oss"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row"><label
                                                 class="col-lg-2 col-form-label">地域节点EndPoint</label>
                                         <div class="col-lg-10"><input type="text" placeholder="外网访问的地域节点"
-                                                                      name="Endpoint"
+                                                                      name="OssEndpoint"
                                                                       class="form-control"
-                                                                      value="{{sc "Endpoint" "OSS"}}">
+                                                                      value="{{sc "OssEndpoint" "oss"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -167,37 +168,39 @@
                                 <form id="form-cos">
                                     <p>腾讯云COS配置，请确保密钥输入正确.Bucket ACL需修改为公共读 否则文件将无法访问</p>
                                     <div class="form-group row"><label class="col-lg-2 col-form-label">Bucket</label>
-                                        <div class="col-lg-10"><input type="text" placeholder="填写存储空间名称" name="Bucket"
+                                        <div class="col-lg-10"><input type="text" placeholder="填写存储空间名称"
+                                                                      name="CosBucket"
                                                                       class="form-control"
-                                                                      value="{{sc "Bucket" "COS"}}">
+                                                                      value="{{sc "CosBucket" "cos"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row"><label class="col-lg-2 col-form-label">APPID</label>
-                                        <div class="col-lg-10"><input type="text" placeholder="填写个人APPID" name="APPID"
+                                        <div class="col-lg-10"><input type="text" placeholder="填写个人APPID"
+                                                                      name="CosAppid"
                                                                       class="form-control"
-                                                                      value="{{sc "APPID" "COS"}}">
+                                                                      value="{{sc "CosAppid" "cos"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row"><label class="col-lg-2 col-form-label">SecretID</label>
                                         <div class="col-lg-10"><input type="text" placeholder="SecretID"
-                                                                      name="SecretID"
+                                                                      name="CosSkid"
                                                                       class="form-control"
-                                                                      value="{{sc "SecretID" "COS"}}">
+                                                                      value="{{sc "CosSkid" "cos"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row"><label class="col-lg-2 col-form-label">SecretKey</label>
                                         <div class="col-lg-10"><input type="password" placeholder="SecretKey"
-                                                                      name="SecretKey"
+                                                                      name="CosSk"
                                                                       class="form-control"
-                                                                      value="{{sc "SecretKey" "COS"}}">
+                                                                      value="{{sc "CosSk" "cos"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row"><label
                                                 class="col-lg-2 col-form-label">地域节点Region</label>
                                         <div class="col-lg-10"><input type="text" placeholder="所属地域 例如：ap-beijing"
-                                                                      name="Region"
+                                                                      name="CosRegion"
                                                                       class="form-control"
-                                                                      value="{{sc "Region" "COS"}}">
+                                                                      value="{{sc "CosRegion" "cos"}}">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -267,20 +270,20 @@
                             <form id="form-qiniu">
                                 <p>七牛云存储信息配置.</p>
                                 <div class="form-group row"><label class="col-lg-2 col-form-label">AccessKey：</label>
-                                    <div class="col-lg-10"><input type="text" placeholder="七牛云AK" name="Accesskey"
+                                    <div class="col-lg-10"><input type="text" placeholder="七牛云AK" name="QnAk"
                                                                   class="form-control"
-                                                                  value="{{sc "Accesskey" "Qiniu"}}">
+                                                                  value="{{sc "QnAk" "qn"}}">
                                     </div>
                                 </div>
                                 <div class="form-group row"><label class="col-lg-2 col-form-label">SecretKey：</label>
-                                    <div class="col-lg-10"><input type="password" placeholder="七牛云SK" name="Secretkey"
+                                    <div class="col-lg-10"><input type="password" placeholder="七牛云SK" name="QnSk"
                                                                   class="form-control"
-                                                                  value="{{sc "Secretkey" "Qiniu"}}">
+                                                                  value="{{sc "QnSk" "qn"}}">
                                     </div>
                                 </div>
                                 <div class="form-group row"><label class="col-lg-2 col-form-label">Bucket：</label>
-                                    <div class="col-lg-10"><input type="text" placeholder="空间Bucket" name="Bucket"
-                                                                  class="form-control" value="{{sc "Bucket" "Qiniu"}}">
+                                    <div class="col-lg-10"><input type="text" placeholder="空间Bucket" name="QnBucket"
+                                                                  class="form-control" value="{{sc "QnBucket" "qn"}}">
                                     </div>
                                 </div>
                                 <div class="form-group row"><label class="col-lg-2 col-form-label">Zone：</label>
@@ -290,7 +293,7 @@
                                                 class="chosen-select form-control"
                                                 tabindex="2">
                                             <option></option>
-                                            {{with $zone := sc "Zone" "Qiniu"}}
+                                            {{with $zone := sc "QnZone" "qn"}}
                                                 {{if eq $zone "storage.ZoneHuadong"}}
                                                     <option value="storage.ZoneHuadong" selected>华东</option>
                                                     <option value="storage.ZoneHuabei">华北</option>
@@ -348,26 +351,26 @@
                             <form id="form-upyun">
                                 <p>又拍云配置，请确保操作员有读写删除操作.</p>
                                 <div class="form-group row"><label class="col-lg-2 col-form-label">服务名称</label>
-                                    <div class="col-lg-10"><input type="text" placeholder="填写服务名称" name="Bucket"
-                                                                  class="form-control" value="{{sc "Bucket" "Upyun"}}">
+                                    <div class="col-lg-10"><input type="text" placeholder="填写服务名称" name="UpBucket"
+                                                                  class="form-control" value="{{sc "UpBucket" "up"}}">
                                     </div>
                                 </div>
                                 <div class="form-group row"><label class="col-lg-2 col-form-label">操作员</label>
-                                    <div class="col-lg-10"><input type="text" placeholder="操作员名称" name="Operator"
+                                    <div class="col-lg-10"><input type="text" placeholder="操作员名称" name="UpOperator"
                                                                   class="form-control"
-                                                                  value="{{sc "Operator" "Upyun"}}">
+                                                                  value="{{sc "UpOperator" "up"}}">
                                     </div>
                                 </div>
                                 <div class="form-group row"><label class="col-lg-2 col-form-label">操作员密码</label>
-                                    <div class="col-lg-10"><input type="password" placeholder="操作员密码" name="Password"
+                                    <div class="col-lg-10"><input type="password" placeholder="操作员密码" name="UpPassword"
                                                                   class="form-control"
-                                                                  value="{{sc "Password" "Upyun"}}">
+                                                                  value="{{sc "UpPassword" "up"}}">
                                     </div>
                                 </div>
                                 <div class="form-group row"><label class="col-lg-2 col-form-label">服务域名</label>
                                     <div class="col-lg-10"><input type="text" placeholder="用于生成完整的可访问链接"
-                                                                  name="Domain"
-                                                                  class="form-control" value="{{sc "Domain" "Upyun"}}">
+                                                                  name="UpDomain"
+                                                                  class="form-control" value="{{sc "UpDomain" "up"}}">
                                     </div>
                                 </div>
                                 <div class="form-group row">

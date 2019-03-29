@@ -35,40 +35,35 @@ type Config struct {
 
 //七牛云配置
 type QiniuConfigOption struct {
-	Accesskey string
-	Secretkey string
-	Bucket    string
-	Zone      string
+	QnAk     string //Accesskey
+	QnSk     string //Secretkey
+	QnBucket string //Bucket
+	QnZone   string //Zone
 }
 
 //又拍云配置
 type UpyunConfigOption struct {
-	Bucket   string
-	Operator string
-	Password string
-	Domain   string
+	UpBucket   string //Bucket
+	UpOperator string //Operator
+	UpPassword string //Password
+	UpDomain   string //Domain
 }
 
 // 阿里云对象存储配置
 type OssConfigOption struct {
-	Bucket    string
-	Accesskey string
-	Secretkey string
-	Endpoint  string //地域节点
+	OssBucket   string //Bucket
+	OssAk       string //Accesskey
+	OssSk       string //Secretkey
+	OssEndpoint string //地域节点
 }
 
 //腾讯云对象存储配置
 type CosConfigOption struct {
-	Bucket    string
-	APPID     string
-	Region    string
-	SecretID  string
-	SecretKey string
-}
-
-//获取数据表数据
-type Count struct {
-	Num string
+	CosBucket string //Bucket
+	CosAppid  string //APPID
+	CosRegion string //Region
+	CosSkid   string //SecretID
+	CosSk     string //SecretKey
 }
 
 // 网站后台提交的表单字段 映射到此结构体 需要持续添加

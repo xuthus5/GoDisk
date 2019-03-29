@@ -21,15 +21,15 @@ func (this *UserController) Login() {
 	if Username == "" || Password == "" {
 		this.TplName = "login.html"
 	} else {
-		user := &models.Config{Option: "Author", Value: Username, Addition: ""}
-		pass := &models.Config{Option: "Password", Value: Password, Addition: ""}
+		user := &models.Config{Option: "Author", Value: Username}
+		pass := &models.Config{Option: "Password", Value: Password}
 		err := models.Login(user, pass)
-		var data *ResultData
+		var data *Result
 		if err == nil {
 			this.SetSession("master", Username)
-			data = &ResultData{Error: 0, Title: "你好啊", Msg: "欢迎回来！"}
+			data = &Result{Error: 0, Title: "你好啊", Msg: "欢迎回来！"}
 		} else {
-			data = &ResultData{Error: 1, Title: "不好啦", Msg: "账号或密码输入有误！"}
+			data = &Result{Error: 1, Title: "不好啦", Msg: "账号或密码输入有误！"}
 		}
 		this.Data["json"] = data
 		this.ServeJSON()

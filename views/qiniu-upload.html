@@ -183,8 +183,8 @@
         },
         'click .delete': function (e, value, row, index) {
             layer.confirm('确定删除？',{icon: 3, skin: 'layer-class'}, function (index) {
-                $.get("/api/file/qiniu/delete?code=" + {{sc "Bucket" "Qiniu"}}+":" + row.key, function (res) {
-                    if (res.data.length === 0) {
+                $.get("/api/file/qiniu/delete?code=" + {{sc "QnBucket" "qn"}}+":" + row.key, function (res) {
+                    if (res.error === 0) {
                         layer.msg("删除成功", {time: 2000});
                         wait(1);
                     } else {

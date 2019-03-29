@@ -9,23 +9,13 @@ package controllers
 import (
 	"GoDisk/models"
 	"GoDisk/tools"
-	"context"
-	"encoding/base64"
 	"encoding/json"
-	"fmt"
-	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/astaxie/beego"
-	"github.com/tencentyun/cos-go-sdk-v5"
-	"github.com/upyun/go-sdk/upyun"
 	"log"
-	"net/http"
-	"net/url"
 	"os"
 	"path"
 	"reflect"
-	"regexp"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -43,11 +33,11 @@ func (this *ApiController) CategoryAdd() {
 	description := this.GetString("description")
 	info := &models.Category{Name: name, Key: key, Description: description}
 	err := models.AddCategory(info)
-	var data *ResultData
+	var data *Result
 	if err != nil {
-		data = &ResultData{Error: 1, Title: "失败:", Msg: "添加失败！"}
+		data = &Result{Error: 1, Title: "失败:", Msg: "添加失败！"}
 	} else {
-		data = &ResultData{Error: 0, Title: "成功:", Msg: "添加成功！"}
+		data = &Result{Error: 0, Title: "成功:", Msg: "添加成功！"}
 	}
 	this.Data["json"] = data
 	this.ServeJSON()
@@ -57,16 +47,16 @@ func (this *ApiController) CategoryAdd() {
 func (this *ApiController) CategoryUpdate() {
 	id := this.GetString("id")
 	data := &models.Category{}
-	info := &ResultData{}
+	info := &Result{}
 	if err := this.ParseForm(data); err != nil {
-		info = &ResultData{Error: 1, Title: "失败:", Msg: "接收表单数据出错！"}
+		info = &Result{Error: 1, Title: "失败:", Msg: "接收表单数据出错！"}
 	} else {
 		data.Id = tools.StringToInt(id)
 		err := models.UpdateCategory(data)
 		if err != nil {
-			info = &ResultData{Error: 1, Title: "失败:", Msg: "数据库操作出错！"}
+			info = &Result{Error: 1, Title: "失败:", Msg: "数据库操作出错！"}
 		} else {
-			info = &ResultData{Error: 0, Title: "成功:", Msg: "修改成功！"}
+			info = &Result{Error: 0, Title: "成功:", Msg: "修改成功！"}
 		}
 	}
 	this.Data["json"] = info
@@ -75,18 +65,18 @@ func (this *ApiController) CategoryUpdate() {
 
 // 删除分类api  路由 /api/category/delete
 func (this *ApiController) CategoryDelete() {
-	info := &ResultData{}
+	info := &Result{}
 	//先判断分类数目 为1时，不允许删除
 	count, _ := models.TableNumber("category")
 	if count == 1 {
-		info = &ResultData{Error: 1, Title: "失败:", Msg: "必须保留一个分类！"}
+		info = &Result{Error: 1, Title: "失败:", Msg: "必须保留一个分类！"}
 	} else {
 		id, _ := strconv.Atoi(this.GetString("id"))
 		err := models.DeleteCategory(id)
 		if err != nil {
-			info = &ResultData{Error: 1, Title: "失败:", Msg: "数据库操作出错！"}
+			info = &Result{Error: 1, Title: "失败:", Msg: "数据库操作出错！"}
 		} else {
-			info = &ResultData{Error: 0, Title: "成功:", Msg: "删除成功！"}
+			info = &Result{Error: 0, Title: "成功:", Msg: "删除成功！"}
 		}
 	}
 	this.Data["json"] = info
@@ -95,7 +85,7 @@ func (this *ApiController) CategoryDelete() {
 
 // 分类列表 路由 /api/category/list
 func (this *ApiController) CategoryList() {
-	this.Data["json"] = &JsonData{Code: 0, Count: 100, Msg: "", Data: models.GetCategoryJson()}
+	this.Data["json"] = &Result{Error: 0, Count: 100, Msg: "", Data: models.GetCategoryJson()}
 	this.ServeJSON()
 }
 
@@ -104,7 +94,7 @@ func (this *ApiController) CategoryList() {
 
 // 文件上传api 路由 /api/file/upload 返回一个包含文件存储信息的json数据
 func (this *ApiController) FileUpload() {
-	info := &ResultData{Error: 1, Title: "失败:", Msg: "上传失败！"}
+	info := &Result{Error: 1, Title: "失败:", Msg: "上传失败！"}
 	f, h, err := this.GetFile("file")
 	if err != nil {
 		log.Fatal("error: ", err)
@@ -114,7 +104,7 @@ func (this *ApiController) FileUpload() {
 	year, month, _ := tools.EnumerateDate()
 	savePath := "file/" + year + "/" + month + "/"
 	//创建存储目录
-	tools.DirCreate(savePath)
+	_, _ = tools.DirCreate(savePath)
 	//重命名文件名称
 	tempFileName := tools.StringToMd5(h.Filename, 5)
 	suffix := tools.GetFileSuffix(h.Filename)
@@ -127,9 +117,9 @@ func (this *ApiController) FileUpload() {
 		data := &models.Attachment{Name: saveName, Path: savePath + saveName, Created: tools.Int64ToString(time.Now().Unix())}
 		id, code := models.FileSave(data)
 		if code != nil {
-			info = &ResultData{Error: 1, Title: "结果:", Msg: "上传失败！"}
+			info = &Result{Error: 1, Title: "结果:", Msg: "上传失败！"}
 		} else {
-			info = &ResultData{Error: 0, Title: "结果:", Msg: "上传成功！", Data: models.FileInfo(id)}
+			info = &Result{Error: 0, Title: "结果:", Msg: "上传成功！", Data: models.FileInfo(id)}
 		}
 	}
 	this.Data["json"] = info
@@ -138,23 +128,23 @@ func (this *ApiController) FileUpload() {
 
 //文件列表api 路由 /api/file/list
 func (this *ApiController) FileList() {
-	this.Data["json"] = &JsonData{Code: 0, Count: 100, Msg: "", Data: models.GetFileJson()}
+	this.Data["json"] = &Result{Error: 0, Count: 100, Msg: "", Data: models.GetFileJson()}
 	this.ServeJSON()
 }
 
 // 文件删除 路由 /api/file/delete
 func (this *ApiController) FileDelete() {
-	info := &ResultData{}
+	info := &Result{}
 	id, _ := strconv.Atoi(this.GetString("id"))
 	//数据库文件删除
 	filePath, err := models.FileDelete(id)
 	if err != nil {
-		info = &ResultData{Error: 1, Title: "失败:", Msg: "数据库操作出错！"}
+		info = &Result{Error: 1, Title: "失败:", Msg: "数据库操作出错！"}
 	} else {
-		info = &ResultData{Error: 0, Title: "成功:", Msg: "删除成功！"}
+		info = &Result{Error: 0, Title: "成功:", Msg: "删除成功！"}
 	}
 	//本地文件删除
-	tools.FileRemove(filePath)
+	_ = tools.FileRemove(filePath)
 	this.Data["json"] = info
 	this.ServeJSON()
 }
@@ -164,66 +154,85 @@ func (this *ApiController) FileDelete() {
 
 // 七牛云文件上传接口 路由 /api/upload/qiniu
 func (this *ApiController) QiniuUpload() {
+	//文件上传
 	f, h, err := this.GetFile("attachment")
-	if err != nil {
-		log.Fatal("error: ", err)
-	}
 	defer f.Close()
-	fileName := this.GetString("customName") //自定义文件名
-	saveName := ""                           //文件存储名
-	if fileName == "" {
-		saveName = h.Filename
+	if err != nil {
+		this.Data["json"] = &Result{Error: 0, Title: "结果:", Msg: err.Error()}
+		this.ServeJSON()
 	} else {
-		fileSuffix := path.Ext(h.Filename) //得到文件后缀
-		saveName = fileName + fileSuffix
+		fileName := this.GetString("customName") //自定义文件名
+		saveName := ""                           //文件存储名
+		if fileName == "" {
+			saveName = h.Filename
+		} else {
+			fileSuffix := path.Ext(h.Filename) //得到文件后缀
+			saveName = fileName + fileSuffix
+		}
+		filePath := "file/" + saveName
+		_ = this.SaveToFile("attachment", filePath) //保存文件到本地
+		//文件转储成功 上传远端
+		config := models.RetGroupConfig("qn")
+		factory := tools.EntityFactory{}
+		qn := factory.Create("qn", tools.Qiniu{Accesskey: config["QnAk"], Secretkey: config["QnSk"], Zone: config["QnZone"], Bucket: config["QnBucket"]})
+		//qn := tools.Qiniu{Accesskey: config["QnAk"], Secretkey: config["QnSk"], Zone: config["QnZone"], Bucket: config["QnBucket"]}
+		//err := qn.Upload(filePath, saveName)
+		err := qn.Upload(filePath, saveName)
+		var data *Result
+		_ = os.Remove(filePath) //移除本地文件
+		if err == nil {
+			data = &Result{Error: 1, Title: "结果:", Msg: "上传成功！"}
+		} else {
+			data = &Result{Error: 0, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
+		}
+		this.Data["json"] = data
+		this.ServeJSON()
 	}
-	filePath := "file/" + saveName
-	this.SaveToFile("attachment", filePath)                                   //保存文件到本地
-	res := tools.QiniuApi(filePath, saveName, models.RetGroupConfig("Qiniu")) //上传到七牛云
-	var data *ResultData
-	if res == true {
-		data = &ResultData{Error: 1, Title: "结果:", Msg: "上传成功！"}
-	} else {
-		data = &ResultData{Error: 0, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
-	}
-	os.Remove(filePath) //移除本地文件
-	this.Data["json"] = data
-	this.ServeJSON()
 }
 
 // 七牛云文件列表接口 路由 /api/file/qiniu/list
 func (this *ApiController) QiniuList() {
-	data := models.RetGroupConfig("Qiniu")
-	data["Host"] = "api.qiniu.com"
-	data["Parameter"] = "/v6/domain/list?tbl=" + data["Bucket"]
-	data["Url"] = "http://" + data["Host"] + data["Parameter"]
-	Bucket := tools.GetBucketData(data)
-	r, _ := regexp.Compile("\"([^\"]*)\"")
-	match := r.FindString(string(Bucket))
-	match = strings.Replace(match, "\"", "", -1)
-	data["Host"] = "rsf.qbox.me"
-	data["Parameter"] = "/list?bucket=" + data["Bucket"]
-	data["Url"] = "http://" + data["Host"] + data["Parameter"]
-	body := tools.GetBucketData(data)
+	config := models.RetGroupConfig("qn")
+	qn := tools.Qiniu{
+		Accesskey: config["QnAk"],
+		Secretkey: config["QnSk"],
+		Zone:      config["QnZone"],
+		Bucket:    config["QnBucket"],
+	}
 	var res Response
-	json.Unmarshal([]byte(body), &res)
-	this.Data["json"] = JsonData{Msg: match, Data: res.Items}
+	var info Result
+	err, body, bucket := qn.List()
+	if err != nil {
+		info = Result{Error: 0, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
+	} else {
+		_ = json.Unmarshal([]byte(body), &res)
+		info = Result{Error: 1, Title: "结果:", Msg: bucket, Data: res.Items}
+	}
+	this.Data["json"] = info
 	this.ServeJSON()
 }
 
 // 七牛云文件删除 路由 /api/file/qiniu/delete
 func (this *ApiController) QiniuDeleteFile() {
-	code := this.GetString("code")
-	code = base64.StdEncoding.EncodeToString([]byte(code))
-	code = strings.Replace(code, "/", "_", -1)
-	code = strings.Replace(code, "+", "-", -1)
-	data := models.RetGroupConfig("Qiniu")
-	data["Host"] = "rs.qiniu.com"
-	data["Parameter"] = "/delete/" + code
-	data["Url"] = "http://" + data["Host"] + data["Parameter"]
-	var res ResponseError
-	json.Unmarshal([]byte(tools.DeleteFile(data)), &res)
-	this.Data["json"] = JsonData{Data: res.Error}
+	config := models.RetGroupConfig("qn")
+	//qn := tools.Qiniu{
+	//	Accesskey: config["QnAk"],
+	//	Secretkey: config["QnSk"],
+	//	Zone:      config["QnZone"],
+	//	Bucket:    config["QnBucket"],
+	//	Host:      "rs.qiniu.com",
+	//}
+	//err := qn.Delete(this.GetString("code"))
+	factory := tools.EntityFactory{}
+	qn := factory.Create("qn", tools.Qiniu{Accesskey: config["QnAk"], Secretkey: config["QnSk"], Zone: config["QnZone"], Bucket: config["QnBucket"], Host: "rs.qiniu.com"})
+	err := qn.Delete(this.GetString("code"))
+	info := Result{}
+	if err.Error() != "" {
+		info = Result{Error: 1, Msg: err.Error()}
+	} else {
+		info = Result{Error: 0}
+	}
+	this.Data["json"] = info
 	this.ServeJSON()
 }
 
@@ -231,29 +240,19 @@ func (this *ApiController) QiniuDeleteFile() {
 
 //又拍云文件列表 路由 /api/file/upyun/list
 func (this *ApiController) UpyunList() {
-	data := models.RetGroupConfig("Upyun")
-	up := upyun.NewUpYun(&upyun.UpYunConfig{
-		Bucket:   data["Bucket"],
-		Operator: data["Operator"],
-		Password: data["Password"],
-	})
-	list := tools.AllUpyunList(up, "/")
-	this.Data["json"] = JsonData{Data: list}
+	data := models.RetGroupConfig("up")
+	up := tools.Upyun{Bucket: data["UpBucket"], Operator: data["UpOperator"], Password: data["UpPassword"]}
+	list := up.List("/")
+	this.Data["json"] = Result{Data: list}
 	this.ServeJSON()
 }
 
 // 又拍云上传 路由 /api/upload/upyun
 func (this *ApiController) UpyunUpload() {
-	data := models.RetGroupConfig("Upyun")
-	up := upyun.NewUpYun(&upyun.UpYunConfig{
-		Bucket:   data["Bucket"],
-		Operator: data["Operator"],
-		Password: data["Password"],
-	})
-
 	f, h, err := this.GetFile("attachment")
 	if err != nil {
-		log.Fatal("error: ", err)
+		this.Data["json"] = &Result{Error: 0, Title: "结果:", Msg: err.Error()}
+		this.ServeJSON()
 	}
 	defer f.Close()
 	fileName := this.GetString("customName") //自定义文件名
@@ -265,40 +264,32 @@ func (this *ApiController) UpyunUpload() {
 		saveName = fileName + fileSuffix
 	}
 	filePath := "file/" + saveName
-	this.SaveToFile("attachment", filePath) //保存文件到本地
+	_ = this.SaveToFile("attachment", filePath) //保存文件到本地
+	data := models.RetGroupConfig("up")
+	up := tools.Upyun{Bucket: data["UpBucket"], Operator: data["UpOperator"], Password: data["UpPassword"]}
 	//上传又拍云
-	err = up.Put(&upyun.PutObjectConfig{
-		Path:      "/" + saveName,
-		LocalPath: filePath,
-	})
-	var info *ResultData
+	err = up.Upload("/"+saveName, filePath)
+	var info *Result
 	if err == nil {
-		info = &ResultData{Error: 0, Title: "结果:", Msg: "上传成功！"}
+		info = &Result{Error: 0, Title: "结果:", Msg: "上传成功！"}
 	} else {
-		info = &ResultData{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
+		info = &Result{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
 	}
-	os.Remove(filePath) //移除本地文件
+	_ = os.Remove(filePath) //移除本地文件
 	this.Data["json"] = info
 	this.ServeJSON()
 }
 
 //又拍云删除 路由 /api/file/upyun/delete
 func (this *ApiController) UpyunDeleteFile() {
-	data := models.RetGroupConfig("Upyun")
-	up := upyun.NewUpYun(&upyun.UpYunConfig{
-		Bucket:   data["Bucket"],
-		Operator: data["Operator"],
-		Password: data["Password"],
-	})
-	err := up.Delete(&upyun.DeleteObjectConfig{
-		Path:  this.GetString("path"),
-		Async: true,
-	})
-	info := JsonData{}
+	data := models.RetGroupConfig("up")
+	up := tools.Upyun{Bucket: data["UpBucket"], Operator: data["UpOperator"], Password: data["UpPassword"]}
+	err := up.Delete(this.GetString("path"))
+	info := Result{}
 	if err != nil {
-		info = JsonData{Code: 1}
+		info = Result{Error: 1}
 	} else {
-		info = JsonData{Code: 0}
+		info = Result{Error: 0}
 	}
 	this.Data["json"] = info
 	this.ServeJSON()
@@ -308,40 +299,30 @@ func (this *ApiController) UpyunDeleteFile() {
 
 // 腾讯云文件列表 路由 /api/file/cos/list
 func (this *ApiController) CosList() {
-	data := models.RetGroupConfig("COS")
-	info := &ResultData{Error: 0}
-	u, _ := url.Parse("http://" + data["Bucket"] + "-" + data["APPID"] + ".cos." + data["Region"] + ".myqcloud.com")
-	b := &cos.BaseURL{BucketURL: u}
-	c := cos.NewClient(b, &http.Client{
-		Transport: &cos.AuthorizationTransport{
-			//如实填写账号和密钥，也可以设置为环境变量
-			SecretID:  data["SecretID"],
-			SecretKey: data["SecretKey"],
-		},
-	})
-
-	opt := &cos.BucketGetOptions{
-		MaxKeys: 1000,
-	}
-	v, _, err := c.Bucket.Get(context.Background(), opt)
+	data := models.RetGroupConfig("cos")
+	ten := tools.Cos{Bucket: data["CosBucket"], Appid: data["CosAppid"], Region: data["CosRegion"], Sk: data["CosSk"], Skid: data["CosSkid"]}
+	err, body := ten.List()
+	info := &Result{Error: 0}
 	if err != nil {
-		info = &ResultData{Error: 1}
+		info = &Result{Error: 1}
 	} else {
-		info = &ResultData{Data: v.Contents}
+		info = &Result{Data: body.Contents}
 	}
-
 	this.Data["json"] = info
 	this.ServeJSON()
 }
 
 // 腾讯云文件上传 路由 /api/upload/cos
 func (this *ApiController) CosUpload() {
-	data := models.RetGroupConfig("COS")
-	info := &ResultData{Error: 0}
+	data := models.RetGroupConfig("cos")
+	ten := tools.Cos{Bucket: data["CosBucket"], Appid: data["CosAppid"], Region: data["CosRegion"], Sk: data["CosSk"], Skid: data["CosSkid"]}
+	info := &Result{Error: 0}
 	//上传的文件示例
 	f, h, err := this.GetFile("attachment")
 	if err != nil {
-		info = &ResultData{Error: 1}
+		info = &Result{Error: 1}
+		this.Data["json"] = info
+		this.ServeJSON()
 	}
 	defer f.Close()
 	fileName := this.GetString("customName") //自定义文件名
@@ -353,56 +334,25 @@ func (this *ApiController) CosUpload() {
 		saveName = fileName + fileSuffix
 	}
 	filePath := "file/" + saveName
-	this.SaveToFile("attachment", filePath) //保存文件到本地
-
-	// 创建COS Client实例。
-	u, _ := url.Parse("http://" + data["Bucket"] + "-" + data["APPID"] + ".cos." + data["Region"] + ".myqcloud.com")
-	b := &cos.BaseURL{BucketURL: u}
-	c := cos.NewClient(b, &http.Client{
-		Transport: &cos.AuthorizationTransport{
-			//如实填写账号和密钥，也可以设置为环境变量
-			SecretID:  data["SecretID"],
-			SecretKey: data["SecretKey"],
-		},
-	})
-
-	// 上传本地文件。
-	//对象键（Key）是对象在存储桶中的唯一标识。
-	//例如，在对象的访问域名 ` bucket1-1250000000.cos.ap-guangzhou.myqcloud.com/test/objectPut.go ` 中，对象键为 test/objectPut.go
-	stream, err := os.Open(filePath)
+	_ = this.SaveToFile("attachment", filePath) //保存文件到本地
+	err = ten.Upload(filePath, saveName)
 	if err != nil {
-		info = &ResultData{Error: 1}
+		info = &Result{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
 	}
-	_, err = c.Object.Put(context.Background(), saveName, stream, nil)
-
-	if err != nil {
-		info = &ResultData{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
-	}
-	os.Remove(filePath) //移除本地文件
+	_ = os.Remove(filePath) //移除本地文件
 	this.Data["json"] = info
 	this.ServeJSON()
 }
 
 //腾讯云文件删除 路由 /api/file/cos/delete
 func (this *ApiController) CosDeleteFile() {
-	data := models.RetGroupConfig("COS")
-	info := &ResultData{Error: 0}
-	u, _ := url.Parse("http://" + data["Bucket"] + "-" + data["APPID"] + ".cos." + data["Region"] + ".myqcloud.com")
-	b := &cos.BaseURL{BucketURL: u}
-	c := cos.NewClient(b, &http.Client{
-		Transport: &cos.AuthorizationTransport{
-			//如实填写账号和密钥，也可以设置为环境变量
-			SecretID:  data["SecretID"],
-			SecretKey: data["SecretKey"],
-		},
-	})
-
-	objectName := this.GetString("key")
-	_, err := c.Object.Delete(context.Background(), objectName)
+	data := models.RetGroupConfig("cos")
+	ten := tools.Cos{Bucket: data["CosBucket"], Appid: data["CosAppid"], Region: data["CosRegion"], Sk: data["CosSk"], Skid: data["CosSkid"]}
+	info := &Result{Error: 0}
+	err := ten.Delete(this.GetString("key"))
 	if err != nil {
-		info = &ResultData{Error: 1}
+		info = &Result{Error: 1}
 	}
-
 	this.Data["json"] = info
 	this.ServeJSON()
 
@@ -412,37 +362,32 @@ func (this *ApiController) CosDeleteFile() {
 
 // 阿里云文件列表 路由 /api/file/oss/list
 func (this *ApiController) OssList() {
-	data := models.RetGroupConfig("OSS")
+	info := &Result{Error: 0}
+	data := models.RetGroupConfig("oss")
 	// 创建OSSClient实例。
-	client, err := oss.New(data["Endpoint"], data["Accesskey"], data["Secretkey"])
+	ali := tools.Oss{Bucket: data["OssBucket"], Ak: data["OssAk"], Sk: data["OssSk"], Endpoint: data["OssEndpoint"]}
+	list, err := ali.List()
 	if err != nil {
-		log.Fatal(err)
+		info = &Result{Error: 1}
+	} else {
+		info = &Result{Data: list.Objects}
 	}
-
-	// 获取存储空间。
-	bucketName := data["Bucket"]
-	bucket, err := client.Bucket(bucketName)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// 列举所有文件。
-	marker := ""
-	lsRes, err := bucket.ListObjects(oss.Marker(marker))
-	this.Data["json"] = JsonData{Data: lsRes.Objects}
+	this.Data["json"] = info
 	this.ServeJSON()
 }
 
 // 阿里云文件上传 路由 /api/upload/oss
 func (this *ApiController) OssUpload() {
-	data := models.RetGroupConfig("OSS")
-	info := &ResultData{}
 	//上传的文件示例
 	f, h, err := this.GetFile("attachment")
 	if err != nil {
 		log.Fatal("error: ", err)
 	}
 	defer f.Close()
+	info := &Result{Error: 0}
+	data := models.RetGroupConfig("oss")
+	// 创建OSSClient实例。
+	ali := tools.Oss{Bucket: data["OssBucket"], Ak: data["OssAk"], Sk: data["OssSk"], Endpoint: data["OssEndpoint"]}
 	fileName := this.GetString("customName") //自定义文件名
 	saveName := ""                           //文件存储名
 	if fileName == "" {
@@ -452,60 +397,29 @@ func (this *ApiController) OssUpload() {
 		saveName = fileName + fileSuffix
 	}
 	filePath := "file/" + saveName
-	this.SaveToFile("attachment", filePath) //保存文件到本地
-
-	// 创建OSSClient实例。
-	client, err := oss.New(data["Endpoint"], data["Accesskey"], data["Secretkey"])
-	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(-1)
-	}
-
-	// 获取存储空间。
-	bucket, err := client.Bucket(data["Bucket"])
-	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(-1)
-	}
-
+	_ = this.SaveToFile("attachment", filePath) //保存文件到本地
 	// 上传本地文件。
-	err = bucket.PutObjectFromFile(saveName, filePath)
+	err = ali.Upload(saveName, filePath)
 	if err != nil {
-		info = &ResultData{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
+		info = &Result{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
 	} else {
-		info = &ResultData{Error: 0, Title: "结果:", Msg: "上传成功！"}
+		info = &Result{Error: 0, Title: "结果:", Msg: "上传成功！"}
 	}
-	os.Remove(filePath) //移除本地文件
+	_ = os.Remove(filePath) //移除本地文件
 	this.Data["json"] = info
 	this.ServeJSON()
 }
 
 //阿里云文件删除
 func (this *ApiController) OssDeleteFile() {
-	data := models.RetGroupConfig("OSS")
-	info := &ResultData{Error: 0}
+	info := &Result{Error: 0}
+	data := models.RetGroupConfig("oss")
 	// 创建OSSClient实例。
-	client, err := oss.New(data["Endpoint"], data["Accesskey"], data["Secretkey"])
+	ali := tools.Oss{Bucket: data["OssBucket"], Ak: data["OssAk"], Sk: data["OssSk"], Endpoint: data["OssEndpoint"]}
+	err := ali.Delete(this.GetString("key"))
 	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(-1)
+		info = &Result{Error: 1}
 	}
-
-	bucketName := data["Bucket"]
-	objectName := this.GetString("key")
-
-	// 获取存储空间。
-	bucket, err := client.Bucket(bucketName)
-	if err != nil {
-		info = &ResultData{Error: 1}
-	}
-
-	// 删除单个文件。
-	err = bucket.DeleteObject(objectName)
-	if err != nil {
-		info = &ResultData{Error: 1}
-	}
-
 	this.Data["json"] = info
 	this.ServeJSON()
 }
@@ -517,7 +431,7 @@ func (this *ApiController) OssDeleteFile() {
 func (this *ApiController) SiteConfig() {
 	// 判断提交类型 user为用户信息表单  site为网站配置表单
 	submit := this.GetString("submit")
-	info := &ResultData{Error: 0, Title: "成功:", Msg: "信息重置成功！"}
+	info := &Result{Error: 0, Title: "成功:", Msg: "信息重置成功！"}
 	Addition := ""
 	var data interface{}
 	if submit == "userInfo" {
@@ -528,19 +442,19 @@ func (this *ApiController) SiteConfig() {
 		Addition = ""
 	} else if submit == "niniuInfo" {
 		data = &models.QiniuConfigOption{}
-		Addition = "Qiniu"
+		Addition = "qn"
 	} else if submit == "upyunInfo" {
 		data = &models.UpyunConfigOption{}
-		Addition = "Upyun"
+		Addition = "up"
 	} else if submit == "ossInfo" {
 		data = &models.OssConfigOption{}
-		Addition = "OSS"
+		Addition = "oss"
 	} else if submit == "cosInfo" {
 		data = &models.CosConfigOption{}
-		Addition = "COS"
+		Addition = "cos"
 	}
 	if err := this.ParseForm(data); err != nil {
-		info = &ResultData{Error: 1, Title: "失败:", Msg: "接收表单数据出错！"}
+		info = &Result{Error: 1, Title: "失败:", Msg: "接收表单数据出错！"}
 	} else {
 		t := reflect.TypeOf(data).Elem()  //类型
 		v := reflect.ValueOf(data).Elem() //值
@@ -548,7 +462,7 @@ func (this *ApiController) SiteConfig() {
 			config := &models.Config{Option: t.Field(i).Name, Value: v.Field(i).String(), Addition: Addition}
 			err := models.SiteConfig(config)
 			if err != nil {
-				info = &ResultData{Error: 1, Title: "失败:", Msg: "出现未知错误！"}
+				info = &Result{Error: 1, Title: "失败:", Msg: "出现未知错误！"}
 				break
 			}
 		}

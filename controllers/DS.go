@@ -9,18 +9,11 @@ package controllers
 import "time"
 
 // 返回的数据结构
-type ResultData struct {
-	Error int         `json:"error"`
-	Title string      `json:"title"`
-	Msg   string      `json:"msg"`
-	Data  interface{} `json:"data"` //数据
-}
-
-// 返回json列表 数据格式
-type JsonData struct {
-	Code  int         `json:"code"`  //错误代码
-	Count int         `json:"count"` // 数据数量
-	Msg   string      `json:"msg"`   //输出信息
+type Result struct {
+	Error int         `json:"error"` //错误代码
+	Title string      `json:"title"` //标题
+	Msg   string      `json:"msg"`   //返回信息
+	Count int         `json:"count"` //数据数量
 	Data  interface{} `json:"data"`  //数据
 }
 

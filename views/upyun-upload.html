@@ -133,7 +133,7 @@
     });
 
     function responseHandler(res) {
-        var domain = {{sc "Domain" "Upyun"}};
+        var domain = {{sc "UpDomain" "up"}};
         for (var i = 0; i < res.data.length; i++) {
             res.data[i].Size = Math.ceil(res.data[i].Size / 1024) + "KB";
             var time = res.data[i].Time.toString();
@@ -141,7 +141,6 @@
             res.data[i].Time = new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
             res.data[i].OPath = res.data[i].Path;   //用于删除操作的文件路径
             res.data[i].Path = domain + res.data[i].Path;
-
         }
         return res.data;
     }
@@ -180,14 +179,14 @@
                     offset: 'auto',
                     skin: 'layui-layer-nobg', //没有背景色
                     shadeClose: true,
-                    content: "<div><img src='" + row.Path + "' style='width: 100%'></div>"
+                    content: "<div><img src='//" + row.Path + "' style='width: 100%'></div>"
                 });
             });
         },
         'click .delete': function (e, value, row, index) {
             layer.confirm('确定删除？', {icon: 3, skin: 'layer-class'}, function (index) {
                 $.get("/api/file/upyun/delete?path=" + row.OPath, function (res) {
-                    if (res.code === 0) {
+                    if (res.error === 0) {
                         layer.msg("删除成功", {time: 2000});
                         wait(1);
                     } else {
