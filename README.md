@@ -1,15 +1,15 @@
 # GoDisk
 
-> 一个基于beego构建的web存储应用，帮你快速部署存储服务。目前已集成七牛云,又拍云,阿里云OSS,腾讯云COS对象存储
+> GoDisk是一个基于beego框架构建的web存储应用，能帮你快速部署存储服务。目前已集成七牛云,又拍云,阿里云OSS,腾讯云COS等对象存储
 
-##  1. 如何使用这个服务
+## 如何使用这个服务
 
-&ensp; 1. 首先，确认已经安装好golang语言环境
+### 1. 安装好golang环境
 
-&ensp; 2. 执行一下命令，安装一些依赖包与框架(建议使用[gopm](https://gopm.io/)进行包管理)
+### 2. 执行以下命令
 
 ```bash
-# 框架必要包 以下包的安装都是必要的 否则编译不会通过
+# 确保已安装如下包
 go get github.com/astaxie/beego
 go get github.com/mattn/go-sqlite3
 go get github.com/jmoiron/sqlx
@@ -22,28 +22,24 @@ go get -u github.com/tencentyun/cos-go-sdk-v5
 # 阿里云对象存储API包
 go get -u github.com/aliyun/aliyun-oss-go-sdk/oss
 
-# 官方协助快速开发工具 bee
+# 官方协助快速开发工具 bee[非必须]
 go get github.com/beego/bee
 ```
 
-假若网络原因，无法使用以上命令，请单独下载[master.zip](https://gitee.com/xuthus5/GoDisk/attach_files)资源包，直接解压放到 ```$GOPATH/``` 目录下即可，里面包含有所有的依赖
+### 3. 启动项目
 
-&ensp; 3. 启动项目
+```
+#直接运行
+go run main.go
+#通过bee工具快速运行
+bee run
+```
 
-&ensp;&ensp; 进入项目 执行 ```go run main.go``` 启动项目，通过bee工具，在项目下执行 ```bee run```
-
-&ensp; 4. 访问 (默认端口8080,更改端口，请修改 conf/app.conf 》httpport选项)
-
-&ensp;&ensp; 访问： http://ip:8080
+### 4. 访问
+ 
+默认端口80,更改端口，请修改 conf/app.conf -> runmode 选项;prod:80  dev:8080
 
 # 演示地址
 
-+ [后台演示](http://xblogs.cn:8080/login)
++ [演示](http://xblogs.cn:8080)
 + 账号密码 admin/admin(请勿修改账户信息)
-
-
-# 演示截图
-
-![本地上传](http://dl.xuthus.cc/godisk-local.png)
-![七牛云上传](http://dl.xuthus.cc/godisk-qiniu.png)
-![网站配置](http://dl.xuthus.cc/godisk-set.png)
