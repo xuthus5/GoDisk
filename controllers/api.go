@@ -174,10 +174,7 @@ func (this *ApiController) QiniuUpload() {
 		//文件转储成功 上传远端
 		config := models.RetGroupConfig("qn")
 		factory := tools.EntityFactory{}
-		qn := factory.Create("qn", tools.Qiniu{Accesskey: config["QnAk"], Secretkey: config["QnSk"], Zone: config["QnZone"], Bucket: config["QnBucket"]})
-		//qn := tools.Qiniu{Accesskey: config["QnAk"], Secretkey: config["QnSk"], Zone: config["QnZone"], Bucket: config["QnBucket"]}
-		//err := qn.Upload(filePath, saveName)
-		err := qn.Upload(filePath, saveName)
+		err := factory.Create("qn", tools.Qiniu{Accesskey: config["QnAk"], Secretkey: config["QnSk"], Zone: config["QnZone"], Bucket: config["QnBucket"]}).Upload(filePath, saveName)
 		var data *Result
 		_ = os.Remove(filePath) //移除本地文件
 		if err == nil {
@@ -215,14 +212,6 @@ func (this *ApiController) QiniuList() {
 // 七牛云文件删除 路由 /api/file/qiniu/delete
 func (this *ApiController) QiniuDeleteFile() {
 	config := models.RetGroupConfig("qn")
-	//qn := tools.Qiniu{
-	//	Accesskey: config["QnAk"],
-	//	Secretkey: config["QnSk"],
-	//	Zone:      config["QnZone"],
-	//	Bucket:    config["QnBucket"],
-	//	Host:      "rs.qiniu.com",
-	//}
-	//err := qn.Delete(this.GetString("code"))
 	factory := tools.EntityFactory{}
 	qn := factory.Create("qn", tools.Qiniu{Accesskey: config["QnAk"], Secretkey: config["QnSk"], Zone: config["QnZone"], Bucket: config["QnBucket"], Host: "rs.qiniu.com"})
 	err := qn.Delete(this.GetString("code"))
@@ -266,9 +255,9 @@ func (this *ApiController) UpyunUpload() {
 	filePath := "file/" + saveName
 	_ = this.SaveToFile("attachment", filePath) //保存文件到本地
 	data := models.RetGroupConfig("up")
-	up := tools.Upyun{Bucket: data["UpBucket"], Operator: data["UpOperator"], Password: data["UpPassword"]}
+	factory := tools.EntityFactory{}
+	err = factory.Create("up", tools.Upyun{Bucket: data["UpBucket"], Operator: data["UpOperator"], Password: data["UpPassword"]}).Upload("/"+saveName, filePath)
 	//上传又拍云
-	err = up.Upload("/"+saveName, filePath)
 	var info *Result
 	if err == nil {
 		info = &Result{Error: 0, Title: "结果:", Msg: "上传成功！"}
@@ -283,8 +272,8 @@ func (this *ApiController) UpyunUpload() {
 //又拍云删除 路由 /api/file/upyun/delete
 func (this *ApiController) UpyunDeleteFile() {
 	data := models.RetGroupConfig("up")
-	up := tools.Upyun{Bucket: data["UpBucket"], Operator: data["UpOperator"], Password: data["UpPassword"]}
-	err := up.Delete(this.GetString("path"))
+	factory := tools.EntityFactory{}
+	err := factory.Create("up", tools.Upyun{Bucket: data["UpBucket"], Operator: data["UpOperator"], Password: data["UpPassword"]}).Delete(this.GetString("path"))
 	info := Result{}
 	if err != nil {
 		info = Result{Error: 1}
@@ -314,8 +303,6 @@ func (this *ApiController) CosList() {
 
 // 腾讯云文件上传 路由 /api/upload/cos
 func (this *ApiController) CosUpload() {
-	data := models.RetGroupConfig("cos")
-	ten := tools.Cos{Bucket: data["CosBucket"], Appid: data["CosAppid"], Region: data["CosRegion"], Sk: data["CosSk"], Skid: data["CosSkid"]}
 	info := &Result{Error: 0}
 	//上传的文件示例
 	f, h, err := this.GetFile("attachment")
@@ -335,7 +322,9 @@ func (this *ApiController) CosUpload() {
 	}
 	filePath := "file/" + saveName
 	_ = this.SaveToFile("attachment", filePath) //保存文件到本地
-	err = ten.Upload(filePath, saveName)
+	data := models.RetGroupConfig("cos")
+	factory := tools.EntityFactory{}
+	err = factory.Create("cos", tools.Cos{Bucket: data["CosBucket"], Appid: data["CosAppid"], Region: data["CosRegion"], Sk: data["CosSk"], Skid: data["CosSkid"]}).Upload(filePath, saveName)
 	if err != nil {
 		info = &Result{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
 	}
@@ -347,9 +336,9 @@ func (this *ApiController) CosUpload() {
 //腾讯云文件删除 路由 /api/file/cos/delete
 func (this *ApiController) CosDeleteFile() {
 	data := models.RetGroupConfig("cos")
-	ten := tools.Cos{Bucket: data["CosBucket"], Appid: data["CosAppid"], Region: data["CosRegion"], Sk: data["CosSk"], Skid: data["CosSkid"]}
+	factory := tools.EntityFactory{}
+	err := factory.Create("cos", tools.Cos{Bucket: data["CosBucket"], Appid: data["CosAppid"], Region: data["CosRegion"], Sk: data["CosSk"], Skid: data["CosSkid"]}).Delete(this.GetString("key"))
 	info := &Result{Error: 0}
-	err := ten.Delete(this.GetString("key"))
 	if err != nil {
 		info = &Result{Error: 1}
 	}
@@ -385,9 +374,7 @@ func (this *ApiController) OssUpload() {
 	}
 	defer f.Close()
 	info := &Result{Error: 0}
-	data := models.RetGroupConfig("oss")
 	// 创建OSSClient实例。
-	ali := tools.Oss{Bucket: data["OssBucket"], Ak: data["OssAk"], Sk: data["OssSk"], Endpoint: data["OssEndpoint"]}
 	fileName := this.GetString("customName") //自定义文件名
 	saveName := ""                           //文件存储名
 	if fileName == "" {
@@ -399,7 +386,9 @@ func (this *ApiController) OssUpload() {
 	filePath := "file/" + saveName
 	_ = this.SaveToFile("attachment", filePath) //保存文件到本地
 	// 上传本地文件。
-	err = ali.Upload(saveName, filePath)
+	data := models.RetGroupConfig("oss")
+	factory := tools.EntityFactory{}
+	err = factory.Create("oss", tools.Oss{Bucket: data["OssBucket"], Ak: data["OssAk"], Sk: data["OssSk"], Endpoint: data["OssEndpoint"]}).Upload(saveName, filePath)
 	if err != nil {
 		info = &Result{Error: 1, Title: "结果:", Msg: "认证失败！请确保配置信息正确"}
 	} else {
@@ -414,9 +403,8 @@ func (this *ApiController) OssUpload() {
 func (this *ApiController) OssDeleteFile() {
 	info := &Result{Error: 0}
 	data := models.RetGroupConfig("oss")
-	// 创建OSSClient实例。
-	ali := tools.Oss{Bucket: data["OssBucket"], Ak: data["OssAk"], Sk: data["OssSk"], Endpoint: data["OssEndpoint"]}
-	err := ali.Delete(this.GetString("key"))
+	factory := tools.EntityFactory{}
+	err := factory.Create("oss", tools.Oss{Bucket: data["OssBucket"], Ak: data["OssAk"], Sk: data["OssSk"], Endpoint: data["OssEndpoint"]}).Delete(this.GetString("key"))
 	if err != nil {
 		info = &Result{Error: 1}
 	}

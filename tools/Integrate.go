@@ -72,7 +72,6 @@ type ResponseError struct {
 	Errors string `json:"error"`
 }
 
-//上传实现
 func (this *Qiniu) Upload(filePath, key string) error {
 	putPolicy := storage.PutPolicy{
 		Scope: this.Bucket,
@@ -108,8 +107,6 @@ func (this *Qiniu) Upload(filePath, key string) error {
 	}
 	return formUploader.PutFile(context.Background(), &ret, upToken, key, filePath, &putExtra)
 }
-
-//删除实现
 func (this *Qiniu) Delete(code string) error {
 	code = base64.StdEncoding.EncodeToString([]byte(code))
 	code = strings.Replace(code, "/", "_", -1)
@@ -138,8 +135,6 @@ func (this *Qiniu) Delete(code string) error {
 	_ = json.Unmarshal(body, &res)
 	return errors.New(res.Errors)
 }
-
-//列表
 func (this *Qiniu) List() (error, []byte, string) {
 	this.Host = "api.qiniu.com"
 	this.Parameter = "/v6/domain/list?tbl=" + this.Bucket

@@ -24,7 +24,7 @@ func init() {
 	// 需要在init中注册定义的model
 	orm.RegisterModel(new(Category), new(Attachment), new(Config))
 	// 开启 orm 调试模式：开发过程中建议打开，release时需要关闭
-	orm.Debug = true
+	orm.Debug = false
 	// 自动建表
 	_ = orm.RunSyncdb("default", false, true)
 
